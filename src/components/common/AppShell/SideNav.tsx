@@ -1,0 +1,61 @@
+import { Box, VStack, Button, useColorModeValue } from '@chakra-ui/react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { FiHome, FiBook, FiBarChart2, FiSettings } from 'react-icons/fi'
+import { useTranslation } from '../../../hooks/useTranslation'
+import type { IconType } from 'react-icons'
+
+interface NavItem {
+  path: string
+  labelKey: 'home' | 'practice' | 'progress' | 'settings'
+  icon: IconType
+}
+
+const navItems: NavItem[] = [
+  { path: '/', labelKey: 'home', icon: FiHome },
+  { path: '/practice', labelKey: 'practice', icon: FiBook },
+  { path: '/progress', labelKey: 'progress', icon: FiBarChart2 },
+  { path: '/settings', labelKey: 'settings', icon: FiSettings },
+]
+
+export default function SideNav() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { t } = useTranslation()
+  const bg = useColorModeValue('white', 'gray.800')
+  const borderColor = useColorModeValue('gray.200', 'gray.700')
+
+  return (
+    <Box
+      as="aside"
+      w="220px"
+      minH="calc(100vh - 60px)"
+      bg={bg}
+      borderRight="1px"
+      borderColor={borderColor}
+      py={4}
+      px={3}
+      display={{ base: 'none', md: 'block' }}
+    >
+      <VStack spacing={2} align="stretch">
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.path
+          const label = t.nav[item.labelKey]
+          return (
+            <Button
+              key={item.path}
+              leftIcon={<item.icon />}
+              justifyContent="flex-start"
+              variant={isActive ? 'solid' : 'ghost'}
+              colorScheme={isActive ? 'blue' : 'gray'}
+              onClick={() => navigate(item.path)}
+              size="md"
+              w="100%"
+            >
+              {label}
+            </Button>
+          )
+        })}
+      </VStack>
+    </Box>
+  )
+}
