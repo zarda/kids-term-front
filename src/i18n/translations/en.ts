@@ -103,8 +103,12 @@ const en: Translations = {
     notifications: 'Notifications',
     dailyReminders: 'Daily Reminders',
     about: 'About',
-    version: 'KitsTerm',
+    version: 'KidsTerm',
     appDescription: 'A mobile-first language learning application',
+    dangerZone: 'Danger Zone',
+    clearAllData: 'Clear All Data',
+    clearAllDataDesc: 'This will delete all your progress, settings, and downloaded language packs.',
+    clearAllDataConfirm: 'Are you sure? This action cannot be undone.',
   },
 }
 

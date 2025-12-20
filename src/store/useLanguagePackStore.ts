@@ -151,7 +151,7 @@ export const useLanguagePackStore = create<LanguagePackState>()(
         }),
     })),
     {
-      name: 'kitsterm-language-packs-v1',
+      name: 'kidsterm-language-packs-v1',
       partialize: (state) => ({
         availablePacks: state.availablePacks,
         downloadedData: state.downloadedData,

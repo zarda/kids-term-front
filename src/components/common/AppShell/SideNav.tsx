@@ -1,21 +1,7 @@
 import { Box, VStack, Button, useColorModeValue } from '@chakra-ui/react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { FiHome, FiBook, FiBarChart2, FiSettings } from 'react-icons/fi'
 import { useTranslation } from '../../../hooks/useTranslation'
-import type { IconType } from 'react-icons'
-
-interface NavItem {
-  path: string
-  labelKey: 'home' | 'practice' | 'progress' | 'settings'
-  icon: IconType
-}
-
-const navItems: NavItem[] = [
-  { path: '/', labelKey: 'home', icon: FiHome },
-  { path: '/practice', labelKey: 'practice', icon: FiBook },
-  { path: '/progress', labelKey: 'progress', icon: FiBarChart2 },
-  { path: '/settings', labelKey: 'settings', icon: FiSettings },
-]
+import { navItems } from '../../../config/navigation'
 
 export default function SideNav() {
   const location = useLocation()

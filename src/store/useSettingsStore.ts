@@ -55,7 +55,7 @@ export const useSettingsStore = create<SettingsState>()(
       setReminderTime: (time) => set({ reminderTime: time }),
     }),
     {
-      name: 'kitsterm-settings-v2',
+      name: 'kidsterm-settings-v1',
     }
   )
 )

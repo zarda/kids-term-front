@@ -134,7 +134,7 @@ export const useProgressStore = create<ProgressState>()(
         }),
     })),
     {
-      name: 'kitsterm-progress-v1',
+      name: 'kidsterm-progress-v1',
     }
   )
 )

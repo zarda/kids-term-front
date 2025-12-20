@@ -42,7 +42,7 @@ export default function TopNav() {
           bgClip="text"
           fontWeight="bold"
         >
-          KitsTerm
+          KidsTerm
         </Heading>
 
         <Flex align="center" gap={4}>

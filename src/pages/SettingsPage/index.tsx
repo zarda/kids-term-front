@@ -1,5 +1,13 @@
+import { useRef } from 'react'
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Box,
+  Button,
   Card,
   CardBody,
   FormControl,
@@ -18,10 +26,11 @@ import {
   Text,
   useColorMode,
   useColorModeValue,
+  useDisclosure,
   VStack,
   Badge,
 } from '@chakra-ui/react'
-import { FiDownload, FiCheck, FiTrash2, FiRefreshCw } from 'react-icons/fi'
+import { FiDownload, FiCheck, FiTrash2, FiRefreshCw, FiAlertTriangle } from 'react-icons/fi'
 import { useSettingsStore } from '../../store/useSettingsStore'
 import { useProgressStore } from '../../store/useProgressStore'
 import { useLanguagePackStore } from '../../store/useLanguagePackStore'
@@ -32,6 +41,8 @@ export default function SettingsPage() {
   const { t } = useTranslation()
   const cardBg = useColorModeValue('white', 'gray.800')
   const activePackBg = useColorModeValue('blue.50', 'blue.900')
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const cancelRef = useRef<HTMLButtonElement>(null)
 
   const speechRate = useSettingsStore((s) => s.speechRate)
   const speechVolume = useSettingsStore((s) => s.speechVolume)
@@ -337,14 +348,74 @@ export default function SettingsPage() {
           <CardBody>
             <VStack align="stretch" spacing={2}>
               <Heading size="md">{t.settings.about}</Heading>
-              <Text color="gray.500">{t.settings.version} v0.0.1</Text>
+              <Text color="gray.500">{t.settings.version} v0.1.3</Text>
               <Text fontSize="sm" color="gray.500">
                 {t.settings.appDescription}
               </Text>
             </VStack>
           </CardBody>
         </Card>
+
+        {/* Danger Zone */}
+        <Card bg={cardBg} shadow="card" borderColor="red.300" borderWidth={1}>
+          <CardBody>
+            <VStack align="stretch" spacing={4}>
+              <HStack>
+                <FiAlertTriangle color="red" />
+                <Heading size="md" color="red.500">
+                  {t.settings.dangerZone}
+                </Heading>
+              </HStack>
+
+              <Text fontSize="sm" color="gray.500">
+                {t.settings.clearAllDataDesc}
+              </Text>
+
+              <Button
+                colorScheme="red"
+                variant="outline"
+                leftIcon={<FiTrash2 />}
+                onClick={onOpen}
+              >
+                {t.settings.clearAllData}
+              </Button>
+            </VStack>
+          </CardBody>
+        </Card>
       </VStack>
+
+      {/* Clear Data Confirmation Dialog */}
+      <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              {t.settings.clearAllData}
+            </AlertDialogHeader>
+
+            <AlertDialogBody>{t.settings.clearAllDataConfirm}</AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                {t.common.cancel}
+              </Button>
+              <Button
+                colorScheme="red"
+                onClick={() => {
+                  // Clear all localStorage keys for KidsTerm
+                  localStorage.removeItem('kidsterm-settings-v1')
+                  localStorage.removeItem('kidsterm-language-packs-v1')
+                  localStorage.removeItem('kidsterm-progress-v1')
+                  // Reload the page to reset all stores
+                  window.location.reload()
+                }}
+                ml={3}
+              >
+                {t.common.delete}
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Box>
   )
 }

@@ -103,8 +103,12 @@ const zh: Translations = {
     notifications: '通知',
     dailyReminders: '每日提醒',
     about: '關於',
-    version: 'KitsTerm',
+    version: 'KidsTerm',
     appDescription: '語言學習應用程式',
+    dangerZone: '危險區域',
+    clearAllData: '清除所有資料',
+    clearAllDataDesc: '這將刪除您的所有進度、設定和已下載的語言包。',
+    clearAllDataConfirm: '確定要執行嗎？此操作無法復原。',
   },
 }
 

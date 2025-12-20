@@ -1,21 +1,7 @@
 import { Box, Flex, IconButton, Text, VStack, useColorModeValue } from '@chakra-ui/react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { FiHome, FiBook, FiBarChart2, FiSettings } from 'react-icons/fi'
 import { useTranslation } from '../../../hooks/useTranslation'
-import type { IconType } from 'react-icons'
-
-interface TabItem {
-  path: string
-  labelKey: 'home' | 'practice' | 'progress' | 'settings'
-  icon: IconType
-}
-
-const tabs: TabItem[] = [
-  { path: '/', labelKey: 'home', icon: FiHome },
-  { path: '/practice', labelKey: 'practice', icon: FiBook },
-  { path: '/progress', labelKey: 'progress', icon: FiBarChart2 },
-  { path: '/settings', labelKey: 'settings', icon: FiSettings },
-]
+import { navItems } from '../../../config/navigation'
 
 export default function BottomTabBar() {
   const location = useLocation()
@@ -38,23 +24,23 @@ export default function BottomTabBar() {
       pb="env(safe-area-inset-bottom)"
     >
       <Flex justify="space-around" align="center" py={2}>
-        {tabs.map((tab) => {
-          const isActive = location.pathname === tab.path
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.path
           const color = isActive ? 'brand.500' : 'gray.500'
-          const label = t.nav[tab.labelKey]
+          const label = t.nav[item.labelKey]
 
           return (
             <VStack
-              key={tab.path}
+              key={item.path}
               spacing={0.5}
               cursor="pointer"
-              onClick={() => navigate(tab.path)}
+              onClick={() => navigate(item.path)}
               role="button"
               aria-label={label}
             >
               <IconButton
                 aria-label={label}
-                icon={<tab.icon size={22} />}
+                icon={<item.icon size={22} />}
                 variant="ghost"
                 color={color}
                 size="sm"

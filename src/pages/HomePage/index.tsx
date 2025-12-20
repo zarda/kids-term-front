@@ -19,7 +19,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { FiBook, FiTarget, FiTrendingUp, FiZap } from 'react-icons/fi'
 import { useProgressStore } from '../../store/useProgressStore'
-import { useWordStore } from '../../store/useWordStore'
+import { useActiveLanguagePack } from '../../hooks/useActiveLanguagePack'
 import { useTranslation } from '../../hooks/useTranslation'
 
 export default function HomePage() {
@@ -31,7 +31,9 @@ export default function HomePage() {
   const totalWordsLearned = useProgressStore((s) => s.totalWordsLearned)
   const dailyGoal = useProgressStore((s) => s.dailyGoal)
   const todayWordsLearned = useProgressStore((s) => s.todayWordsLearned)
-  const words = useWordStore((s) => s.words)
+  const achievements = useProgressStore((s) => s.achievements)
+
+  const { words } = useActiveLanguagePack()
 
   const progressPercent = Math.min((todayWordsLearned / dailyGoal) * 100, 100)
   const wordsToGo = Math.max(dailyGoal - todayWordsLearned, 0)
@@ -129,7 +131,7 @@ export default function HomePage() {
                     <Text>{t.progress.achievements}</Text>
                   </HStack>
                 </StatLabel>
-                <StatNumber>{words.filter((w) => w.masteryLevel >= 80).length}</StatNumber>
+                <StatNumber>{achievements.length}</StatNumber>
               </Stat>
             </CardBody>
           </Card>

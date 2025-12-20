@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import {
   Box,
   Card,
@@ -17,9 +17,9 @@ import { animated, useSpring } from 'react-spring'
 import { useDrag } from '@use-gesture/react'
 import { FiChevronLeft, FiChevronRight, FiHeart, FiVolume2 } from 'react-icons/fi'
 import { useProgressStore } from '../../store/useProgressStore'
-import { useLanguagePackStore } from '../../store/useLanguagePackStore'
 import { useSpeech } from '../../hooks/useSpeech'
 import { useTranslation } from '../../hooks/useTranslation'
+import { useActiveLanguagePack } from '../../hooks/useActiveLanguagePack'
 
 const AnimatedCard = animated(Card)
 
@@ -32,14 +32,7 @@ export default function WordLearningPage() {
   const { speak, isSpeaking } = useSpeech()
 
   // Get words from active language pack
-  const getActivePackWords = useLanguagePackStore((s) => s.getActivePackWords)
-  const activePackId = useLanguagePackStore((s) => s.activePackId)
-  const getPackById = useLanguagePackStore((s) => s.getPackById)
-
-  // activePackId is used to trigger re-memoization when pack changes
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const words = useMemo(() => getActivePackWords(), [activePackId])
-  const activePack = getPackById(activePackId)
+  const { words, activePack } = useActiveLanguagePack()
 
   const incrementWordsLearned = useProgressStore((s) => s.incrementWordsLearned)
 

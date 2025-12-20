@@ -1,4 +1,4 @@
-# KitsTerm
+# KidsTerm
 
 A mobile-first language learning application to help kids learn words and phrases interactively.
 

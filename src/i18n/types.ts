@@ -110,6 +110,10 @@ export interface Translations {
     about: string
     version: string
     appDescription: string
+    dangerZone: string
+    clearAllData: string
+    clearAllDataDesc: string
+    clearAllDataConfirm: string
   }
 }
 
