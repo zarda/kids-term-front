@@ -21,8 +21,6 @@ import { useSpeech } from '../../hooks/useSpeech'
 import { useTranslation } from '../../hooks/useTranslation'
 import { useActiveLanguagePack } from '../../hooks/useActiveLanguagePack'
 
-const AnimatedCard = animated(Card)
-
 export default function WordLearningPage() {
   const [isFlipped, setIsFlipped] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -40,7 +38,7 @@ export default function WordLearningPage() {
   const progress = words.length > 0 ? ((currentIndex + 1) / words.length) * 100 : 0
 
   // Card flip animation
-  const { transform, opacity } = useSpring({
+  const { transform } = useSpring({
     opacity: isFlipped ? 1 : 0,
     transform: `perspective(1000px) rotateY(${isFlipped ? 180 : 0}deg)`,
     config: { mass: 5, tension: 500, friction: 80 },
@@ -128,14 +126,23 @@ export default function WordLearningPage() {
 
   const isFavorite = favorites.has(currentWord.id)
 
+  // Determine if content is long
+  const isLongContent = currentWord.term.length > 30 || currentWord.definition.length > 20
+
   return (
     <Box pb={8}>
       <VStack spacing={6}>
         {/* Header with language info */}
         {activePack && (
           <HStack w="100%" justify="center">
-            <Badge colorScheme="blue" fontSize="md" px={3} py={1}>
-              {activePack.flag} {t.common.learning} {activePack.name}
+            <Badge
+              colorScheme="blue"
+              fontSize={{ base: 'xs', md: 'sm' }}
+              px={{ base: 2, md: 3 }}
+              py={1}
+              maxW={{ base: '200px', md: '300px' }}
+            >
+              {activePack.flag} {activePack.name}
             </Badge>
           </HStack>
         )}
@@ -154,74 +161,105 @@ export default function WordLearningPage() {
         </Box>
 
         {/* Flashcard */}
-        <Box position="relative" w="100%" maxW="400px" h="300px" mx="auto" sx={{ perspective: '1000px' }}>
-          <AnimatedCard
+        <Box w="100%" maxW="400px" h={isLongContent ? '380px' : '300px'} mx="auto" sx={{ perspective: '1000px' }}>
+          <animated.div
             {...bind()}
             style={{
               x,
               rotateZ: rotate,
+              transform,
               touchAction: 'none',
+              width: '100%',
+              height: '100%',
+              transformStyle: 'preserve-3d',
+              cursor: 'pointer',
             }}
-            position="absolute"
-            w="100%"
-            h="100%"
-            bg={cardBg}
-            shadow="lg"
-            borderRadius="2xl"
-            cursor="pointer"
             onClick={handleFlip}
           >
             {/* Front of card */}
-            <animated.div
-              style={{
-                opacity: opacity.to((o) => 1 - o),
-                transform,
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
+            <Card
+              position="absolute"
+              w="100%"
+              h="100%"
+              bg={cardBg}
+              shadow="lg"
+              borderRadius="2xl"
+              sx={{
                 backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
               }}
             >
-              <CardBody h="100%">
-                <Flex direction="column" align="center" justify="center" h="100%">
-                  <Text fontSize="3xl" fontWeight="bold" textAlign="center" mb={2}>
+              <CardBody h="100%" display="flex" alignItems="center" justifyContent="center">
+                <Flex direction="column" align="center" justify="center" py={4} px={4} maxW="100%">
+                  <Text
+                    fontSize={currentWord.term.length > 40 ? 'sm' : currentWord.term.length > 25 ? 'md' : currentWord.term.length > 15 ? 'lg' : '2xl'}
+                    fontWeight="bold"
+                    textAlign="center"
+                    mb={2}
+                    wordBreak="break-word"
+                    lineHeight="1.4"
+                  >
                     {currentWord.term}
                   </Text>
-                  <Text fontSize="lg" color="gray.500" mb={4}>
+                  <Text
+                    fontSize={currentWord.pronunciation.length > 50 ? 'xs' : 'sm'}
+                    color="gray.500"
+                    mb={3}
+                    textAlign="center"
+                    wordBreak="break-word"
+                  >
                     {currentWord.pronunciation}
                   </Text>
-                  <Text fontSize="sm" color="gray.400">
+                  <Text fontSize="xs" color="gray.400">
                     {t.learn.tapToFlip}
                   </Text>
                 </Flex>
               </CardBody>
-            </animated.div>
+            </Card>
 
             {/* Back of card */}
-            <animated.div
-              style={{
-                opacity,
-                transform: transform.to((t) => `${t} rotateY(180deg)`),
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
+            <Card
+              position="absolute"
+              w="100%"
+              h="100%"
+              bg={cardBg}
+              shadow="lg"
+              borderRadius="2xl"
+              sx={{
                 backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
+                transform: 'rotateY(180deg)',
               }}
             >
-              <CardBody h="100%">
-                <Flex direction="column" align="center" justify="center" h="100%">
-                  <Text fontSize="2xl" fontWeight="bold" textAlign="center" color="brand.500" mb={4}>
+              <CardBody h="100%" display="flex" alignItems="center" justifyContent="center">
+                <Flex direction="column" align="center" justify="center" py={4} px={4} maxW="100%">
+                  <Text
+                    fontSize={currentWord.definition.length > 30 ? 'sm' : currentWord.definition.length > 15 ? 'md' : 'lg'}
+                    fontWeight="bold"
+                    textAlign="center"
+                    color="brand.500"
+                    mb={3}
+                    wordBreak="break-word"
+                    lineHeight="1.4"
+                  >
                     {currentWord.definition}
                   </Text>
                   {currentWord.examples[0] && (
-                    <Text fontSize="sm" color="gray.500" textAlign="center" fontStyle="italic">
+                    <Text
+                      fontSize="xs"
+                      color="gray.500"
+                      textAlign="center"
+                      fontStyle="italic"
+                      wordBreak="break-word"
+                      lineHeight="1.3"
+                    >
                       "{currentWord.examples[0]}"
                     </Text>
                   )}
                 </Flex>
               </CardBody>
-            </animated.div>
-          </AnimatedCard>
+            </Card>
+          </animated.div>
         </Box>
 
         {/* Swipe instructions */}

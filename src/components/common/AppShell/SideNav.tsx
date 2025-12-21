@@ -29,13 +29,18 @@ export default function SideNav() {
           return (
             <Button
               key={item.path}
-              leftIcon={<item.icon />}
+              leftIcon={<item.icon size={18} />}
               justifyContent="flex-start"
               variant={isActive ? 'solid' : 'ghost'}
               colorScheme={isActive ? 'blue' : 'gray'}
               onClick={() => navigate(item.path)}
-              size="md"
+              size="sm"
               w="100%"
+              fontSize="sm"
+              px={3}
+              overflow="hidden"
+              textOverflow="ellipsis"
+              whiteSpace="nowrap"
             >
               {label}
             </Button>

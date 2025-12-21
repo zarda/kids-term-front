@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+export type DifficultyLevel = 'all' | 'beginner' | 'intermediate' | 'advanced'
+
 interface SettingsState {
   // Language settings
   sourceLang: string
@@ -14,6 +16,7 @@ interface SettingsState {
   // Practice settings
   exerciseTimeLimit: number // seconds
   dailyGoal: number
+  selectedDifficulty: DifficultyLevel
 
   // Notification settings
   notificationsEnabled: boolean
@@ -27,6 +30,7 @@ interface SettingsState {
   setAutoPlayAudio: (enabled: boolean) => void
   setExerciseTimeLimit: (seconds: number) => void
   setDailyGoal: (goal: number) => void
+  setSelectedDifficulty: (difficulty: DifficultyLevel) => void
   setNotificationsEnabled: (enabled: boolean) => void
   setReminderTime: (time: string) => void
 }
@@ -41,6 +45,7 @@ export const useSettingsStore = create<SettingsState>()(
       autoPlayAudio: true,
       exerciseTimeLimit: 30,
       dailyGoal: 10,
+      selectedDifficulty: 'all',
       notificationsEnabled: true,
       reminderTime: '09:00',
 
@@ -51,6 +56,7 @@ export const useSettingsStore = create<SettingsState>()(
       setAutoPlayAudio: (enabled) => set({ autoPlayAudio: enabled }),
       setExerciseTimeLimit: (seconds) => set({ exerciseTimeLimit: seconds }),
       setDailyGoal: (goal) => set({ dailyGoal: goal }),
+      setSelectedDifficulty: (difficulty) => set({ selectedDifficulty: difficulty }),
       setNotificationsEnabled: (enabled) => set({ notificationsEnabled: enabled }),
       setReminderTime: (time) => set({ reminderTime: time }),
     }),

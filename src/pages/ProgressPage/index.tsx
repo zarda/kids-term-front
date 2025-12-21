@@ -13,8 +13,6 @@ import {
   Text,
   useColorModeValue,
   VStack,
-  Wrap,
-  WrapItem,
 } from '@chakra-ui/react'
 import { FiBook, FiTarget, FiTrendingUp, FiZap } from 'react-icons/fi'
 import {
@@ -65,59 +63,59 @@ export default function ProgressPage() {
         <Heading size="lg">{t.progress.title}</Heading>
 
         {/* Stats Grid */}
-        <SimpleGrid columns={{ base: 2, md: 4 }} spacing={4}>
+        <SimpleGrid columns={{ base: 2, lg: 4 }} spacing={{ base: 2, md: 3, lg: 4 }}>
           <Card bg={cardBg} shadow="card">
-            <CardBody>
+            <CardBody px={{ base: 2, md: 4 }} py={{ base: 2, md: 4 }}>
               <Stat>
                 <StatLabel>
-                  <HStack>
-                    <Icon as={FiZap} color="orange.400" />
-                    <Text>{t.progress.currentStreak}</Text>
+                  <HStack spacing={1}>
+                    <Icon as={FiZap} color="orange.400" boxSize={{ base: 3, lg: 4 }} flexShrink={0} />
+                    <Text fontSize={{ base: '2xs', md: 'xs', lg: 'sm' }} noOfLines={1}>{t.progress.currentStreak}</Text>
                   </HStack>
                 </StatLabel>
-                <StatNumber>{currentStreak} {t.home.days}</StatNumber>
+                <StatNumber fontSize={{ base: 'md', md: 'lg', lg: 'xl' }}>{currentStreak} {t.home.days}</StatNumber>
               </Stat>
             </CardBody>
           </Card>
 
           <Card bg={cardBg} shadow="card">
-            <CardBody>
+            <CardBody px={{ base: 2, md: 4 }} py={{ base: 2, md: 4 }}>
               <Stat>
                 <StatLabel>
-                  <HStack>
-                    <Icon as={FiTrendingUp} color="purple.500" />
-                    <Text>{t.home.streak}</Text>
+                  <HStack spacing={1}>
+                    <Icon as={FiTrendingUp} color="purple.500" boxSize={{ base: 3, lg: 4 }} flexShrink={0} />
+                    <Text fontSize={{ base: '2xs', md: 'xs', lg: 'sm' }} noOfLines={1}>{t.home.streak}</Text>
                   </HStack>
                 </StatLabel>
-                <StatNumber>{longestStreak} {t.home.days}</StatNumber>
+                <StatNumber fontSize={{ base: 'md', md: 'lg', lg: 'xl' }}>{longestStreak} {t.home.days}</StatNumber>
               </Stat>
             </CardBody>
           </Card>
 
           <Card bg={cardBg} shadow="card">
-            <CardBody>
+            <CardBody px={{ base: 2, md: 4 }} py={{ base: 2, md: 4 }}>
               <Stat>
                 <StatLabel>
-                  <HStack>
-                    <Icon as={FiBook} color="brand.500" />
-                    <Text>{t.progress.wordsLearned}</Text>
+                  <HStack spacing={1}>
+                    <Icon as={FiBook} color="brand.500" boxSize={{ base: 3, lg: 4 }} flexShrink={0} />
+                    <Text fontSize={{ base: '2xs', md: 'xs', lg: 'sm' }} noOfLines={1}>{t.progress.wordsLearned}</Text>
                   </HStack>
                 </StatLabel>
-                <StatNumber>{totalWordsLearned}</StatNumber>
+                <StatNumber fontSize={{ base: 'md', md: 'lg', lg: 'xl' }}>{totalWordsLearned}</StatNumber>
               </Stat>
             </CardBody>
           </Card>
 
           <Card bg={cardBg} shadow="card">
-            <CardBody>
+            <CardBody px={{ base: 2, md: 4 }} py={{ base: 2, md: 4 }}>
               <Stat>
                 <StatLabel>
-                  <HStack>
-                    <Icon as={FiTarget} color="green.500" />
-                    <Text>{t.practice.accuracy}</Text>
+                  <HStack spacing={1}>
+                    <Icon as={FiTarget} color="green.500" boxSize={{ base: 3, lg: 4 }} flexShrink={0} />
+                    <Text fontSize={{ base: '2xs', md: 'xs', lg: 'sm' }} noOfLines={1}>{t.practice.accuracy}</Text>
                   </HStack>
                 </StatLabel>
-                <StatNumber>{accuracy}%</StatNumber>
+                <StatNumber fontSize={{ base: 'md', md: 'lg', lg: 'xl' }}>{accuracy}%</StatNumber>
               </Stat>
             </CardBody>
           </Card>
@@ -152,79 +150,77 @@ export default function ProgressPage() {
 
         {/* Achievements */}
         <Box>
-          <HStack justify="space-between" mb={4}>
+          <HStack justify="space-between" mb={4} flexWrap="wrap" gap={2}>
             <Heading size="md">{t.progress.achievements}</Heading>
-            <Text color="gray.500">
+            <Text color="gray.500" fontSize={{ base: 'xs', md: 'sm' }}>
               {unlockedAchievements.length} / {achievements.length}
             </Text>
           </HStack>
 
-          <Wrap spacing={3}>
+          <SimpleGrid columns={{ base: 2, md: 3, lg: 4 }} spacing={{ base: 2, md: 3 }}>
             {achievements.map((achievement) => {
               const isUnlocked = unlockedAchievements.includes(achievement.id)
               return (
-                <WrapItem key={achievement.id}>
-                  <Card
-                    bg={cardBg}
-                    shadow="card"
-                    opacity={isUnlocked ? 1 : 0.5}
-                    filter={isUnlocked ? 'none' : 'grayscale(100%)'}
-                    minW="140px"
-                  >
-                    <CardBody py={3} px={4}>
-                      <VStack spacing={1}>
-                        <Text fontSize="2xl">{achievement.icon}</Text>
-                        <Text fontSize="sm" fontWeight="medium" textAlign="center">
-                          {achievement.title}
-                        </Text>
-                        <Text fontSize="xs" color="gray.500" textAlign="center">
-                          {achievement.description}
-                        </Text>
-                      </VStack>
-                    </CardBody>
-                  </Card>
-                </WrapItem>
+                <Card
+                  key={achievement.id}
+                  bg={cardBg}
+                  shadow="card"
+                  opacity={isUnlocked ? 1 : 0.5}
+                  filter={isUnlocked ? 'none' : 'grayscale(100%)'}
+                >
+                  <CardBody py={{ base: 2, md: 3 }} px={{ base: 2, md: 4 }}>
+                    <VStack spacing={1}>
+                      <Text fontSize={{ base: 'xl', md: '2xl' }}>{achievement.icon}</Text>
+                      <Text fontSize={{ base: '2xs', md: 'xs', lg: 'sm' }} fontWeight="medium" textAlign="center" noOfLines={1}>
+                        {achievement.title}
+                      </Text>
+                      <Text fontSize={{ base: '2xs', md: 'xs' }} color="gray.500" textAlign="center" noOfLines={2}>
+                        {achievement.description}
+                      </Text>
+                    </VStack>
+                  </CardBody>
+                </Card>
               )
             })}
-          </Wrap>
+          </SimpleGrid>
         </Box>
 
         {/* Summary Stats */}
         <Card bg={cardBg} shadow="card">
-          <CardBody>
-            <Heading size="md" mb={4}>
+          <CardBody px={{ base: 3, md: 5 }}>
+            <Heading size="sm" mb={4}>
               {t.progress.exercisesCompleted}
             </Heading>
-            <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+            <Grid templateColumns="repeat(2, 1fr)" gap={{ base: 3, md: 4 }}>
               <Box>
-                <Text color="gray.500" fontSize="sm">
+                <Text color="gray.500" fontSize={{ base: '2xs', md: 'xs', lg: 'sm' }} noOfLines={1}>
                   {t.progress.exercisesCompleted}
                 </Text>
-                <Text fontSize="xl" fontWeight="bold">
+                <Text fontSize={{ base: 'md', lg: 'xl' }} fontWeight="bold">
                   {totalExercisesCompleted}
                 </Text>
               </Box>
               <Box>
-                <Text color="gray.500" fontSize="sm">
+                <Text color="gray.500" fontSize={{ base: '2xs', md: 'xs', lg: 'sm' }} noOfLines={1}>
                   {t.progress.totalTimeSpent}
                 </Text>
-                <Text fontSize="xl" fontWeight="bold">
+                <Text fontSize={{ base: 'md', lg: 'xl' }} fontWeight="bold">
                   {Math.round(dailyProgress.reduce((sum, d) => sum + d.timeSpent, 0))} {t.progress.minutes}
                 </Text>
               </Box>
               <Box>
-                <Text color="gray.500" fontSize="sm">
+                <Text color="gray.500" fontSize={{ base: '2xs', md: 'xs', lg: 'sm' }} noOfLines={1}>
                   {t.progress.correctAnswers}
                 </Text>
-                <Text fontSize="xl" fontWeight="bold">
+                <Text fontSize={{ base: 'md', lg: 'xl' }} fontWeight="bold">
                   {totalCorrect}
                 </Text>
               </Box>
               <Box>
-                <Text color="gray.500" fontSize="sm">
+                <Text color="gray.500" fontSize={{ base: '2xs', md: 'xs', lg: 'sm' }} noOfLines={1}>
                   {t.home.days}
                 </Text>
-                <Text fontSize="xl" fontWeight="bold">
+                <Text fontSize={{ base: 'md', lg: 'xl' }} fontWeight="bold">
                   {dailyProgress.length}
                 </Text>
               </Box>

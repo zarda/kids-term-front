@@ -103,6 +103,14 @@ export interface Translations {
     dailyGoal: string
     words: string
     exerciseTimeLimit: string
+    difficultyLevel: string
+    difficultyHint: string
+    difficulty: {
+      all: string
+      beginner: string
+      intermediate: string
+      advanced: string
+    }
     appearance: string
     darkMode: string
     notifications: string

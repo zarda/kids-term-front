@@ -9,9 +9,9 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: 'English (中文)',
     nativeName: 'English',
     flag: '🇺🇸',
-    wordCount: 40,
+    wordCount: 1400,
     isDownloaded: true, // Pre-installed default
-    version: '1.0.0',
+    version: '0.5.0',
   },
   {
     id: 'zh-ja',
@@ -20,9 +20,9 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: 'Japanese (中文)',
     nativeName: '日本語',
     flag: '🇯🇵',
-    wordCount: 30,
-    isDownloaded: false,
-    version: '1.0.0',
+    wordCount: 1400,
+    isDownloaded: true,
+    version: '0.5.0',
   },
   {
     id: 'zh-ko',
@@ -33,7 +33,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     flag: '🇰🇷',
     wordCount: 30,
     isDownloaded: false,
-    version: '1.0.0',
+    version: '0.1.0',
   },
   {
     id: 'zh-es',
@@ -44,7 +44,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     flag: '🇪🇸',
     wordCount: 30,
     isDownloaded: false,
-    version: '1.0.0',
+    version: '0.1.0',
   },
   {
     id: 'zh-fr',
@@ -55,7 +55,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     flag: '🇫🇷',
     wordCount: 30,
     isDownloaded: false,
-    version: '1.0.0',
+    version: '0.1.0',
   },
   {
     id: 'zh-zh',
@@ -66,7 +66,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     flag: '🇹🇼',
     wordCount: 30,
     isDownloaded: false,
-    version: '1.0.0',
+    version: '0.1.0',
   },
   {
     id: 'en-en',
@@ -77,7 +77,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     flag: '🇺🇸',
     wordCount: 40,
     isDownloaded: false,
-    version: '1.0.0',
+    version: '0.1.0',
   },
   {
     id: 'en-es',
@@ -88,7 +88,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     flag: '🇪🇸',
     wordCount: 35,
     isDownloaded: false,
-    version: '1.0.0',
+    version: '0.1.0',
   },
   {
     id: 'en-fr',
@@ -99,7 +99,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     flag: '🇫🇷',
     wordCount: 30,
     isDownloaded: false,
-    version: '1.0.0',
+    version: '0.1.0',
   },
   {
     id: 'en-de',
@@ -110,7 +110,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     flag: '🇩🇪',
     wordCount: 30,
     isDownloaded: false,
-    version: '1.0.0',
+    version: '0.1.0',
   },
   {
     id: 'en-ja',
@@ -119,8 +119,8 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: 'Japanese (English)',
     nativeName: '日本語',
     flag: '🇯🇵',
-    wordCount: 25,
-    isDownloaded: false,
+    wordCount: 3000,
+    isDownloaded: true,
     version: '1.0.0',
   },
   {
@@ -132,7 +132,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     flag: '🇮🇹',
     wordCount: 25,
     isDownloaded: false,
-    version: '1.0.0',
+    version: '0.1.0',
   },
   {
     id: 'en-pt',
@@ -143,7 +143,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     flag: '🇧🇷',
     wordCount: 25,
     isDownloaded: false,
-    version: '1.0.0',
+    version: '0.1.0',
   },
   {
     id: 'en-ko',
@@ -154,7 +154,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     flag: '🇰🇷',
     wordCount: 25,
     isDownloaded: false,
-    version: '1.0.0',
+    version: '0.1.0',
   },
   {
     id: 'en-zh',
@@ -165,7 +165,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     flag: '🇹🇼',
     wordCount: 25,
     isDownloaded: false,
-    version: '1.0.0',
+    version: '0.1.0',
   },
 ]
 
@@ -177,9 +177,9 @@ export async function downloadLanguagePack(packId: string): Promise<LanguagePack
   // Dynamically import the pack data
   switch (packId) {
     case 'zh-en':
-      return (await import('./zh-en')).default
+      return (await import('./zh-en/index')).default
     case 'zh-ja':
-      return (await import('./zh-ja')).default
+      return (await import('./zh-ja/index')).default
     case 'zh-ko':
       return (await import('./zh-ko')).default
     case 'zh-es':
@@ -197,7 +197,7 @@ export async function downloadLanguagePack(packId: string): Promise<LanguagePack
     case 'en-de':
       return (await import('./de')).default
     case 'en-ja':
-      return (await import('./ja')).default
+      return (await import('./en-ja/index')).default
     case 'en-it':
       return (await import('./it')).default
     case 'en-pt':

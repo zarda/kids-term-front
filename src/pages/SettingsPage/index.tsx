@@ -28,7 +28,6 @@ import {
   useColorModeValue,
   useDisclosure,
   VStack,
-  Badge,
 } from '@chakra-ui/react'
 import { FiDownload, FiCheck, FiTrash2, FiRefreshCw, FiAlertTriangle } from 'react-icons/fi'
 import { useSettingsStore } from '../../store/useSettingsStore'
@@ -40,7 +39,6 @@ export default function SettingsPage() {
   const { colorMode, toggleColorMode } = useColorMode()
   const { t } = useTranslation()
   const cardBg = useColorModeValue('white', 'gray.800')
-  const activePackBg = useColorModeValue('blue.50', 'blue.900')
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = useRef<HTMLButtonElement>(null)
 
@@ -49,12 +47,14 @@ export default function SettingsPage() {
   const autoPlayAudio = useSettingsStore((s) => s.autoPlayAudio)
   const exerciseTimeLimit = useSettingsStore((s) => s.exerciseTimeLimit)
   const notificationsEnabled = useSettingsStore((s) => s.notificationsEnabled)
+  const selectedDifficulty = useSettingsStore((s) => s.selectedDifficulty)
 
   const setSpeechRate = useSettingsStore((s) => s.setSpeechRate)
   const setSpeechVolume = useSettingsStore((s) => s.setSpeechVolume)
   const setAutoPlayAudio = useSettingsStore((s) => s.setAutoPlayAudio)
   const setExerciseTimeLimit = useSettingsStore((s) => s.setExerciseTimeLimit)
   const setNotificationsEnabled = useSettingsStore((s) => s.setNotificationsEnabled)
+  const setSelectedDifficulty = useSettingsStore((s) => s.setSelectedDifficulty)
 
   const dailyGoal = useProgressStore((s) => s.dailyGoal)
   const setDailyGoal = useProgressStore((s) => s.setDailyGoal)
@@ -69,8 +69,6 @@ export default function SettingsPage() {
   const setActivePack = useLanguagePackStore((s) => s.setActivePack)
   const refreshPacks = useLanguagePackStore((s) => s.refreshPacks)
 
-  const activePack = availablePacks.find((p) => p.id === activePackId)
-
   return (
     <Box pb={8}>
       <VStack align="stretch" spacing={6}>
@@ -80,23 +78,16 @@ export default function SettingsPage() {
         <Card bg={cardBg} shadow="card">
           <CardBody>
             <VStack align="stretch" spacing={4}>
-              <HStack justify="space-between">
-                <HStack spacing={2}>
-                  <Heading size="md">{t.settings.languagePacks}</Heading>
-                  <IconButton
-                    aria-label={t.common.refresh}
-                    icon={<FiRefreshCw />}
-                    size="sm"
-                    variant="ghost"
-                    isLoading={isRefreshing}
-                    onClick={refreshPacks}
-                  />
-                </HStack>
-                {activePack && (
-                  <Badge colorScheme="blue" fontSize="sm">
-                    {t.common.learning}: {activePack.flag} {activePack.name}
-                  </Badge>
-                )}
+              <HStack spacing={2}>
+                <Heading size="md">{t.settings.languagePacks}</Heading>
+                <IconButton
+                  aria-label={t.common.refresh}
+                  icon={<FiRefreshCw />}
+                  size="sm"
+                  variant="ghost"
+                  isLoading={isRefreshing}
+                  onClick={refreshPacks}
+                />
               </HStack>
 
               <Text fontSize="sm" color="gray.500">
@@ -112,12 +103,13 @@ export default function SettingsPage() {
                     <Card
                       key={pack.id}
                       variant="outline"
-                      borderColor={isActive ? 'brand.500' : 'gray.200'}
+                      borderColor={isActive ? 'green.400' : 'gray.200'}
                       borderWidth={isActive ? 2 : 1}
-                      bg={isActive ? activePackBg : 'transparent'}
+                      bg={isActive ? 'green.50' : 'transparent'}
                       cursor={pack.isDownloaded ? 'pointer' : 'default'}
                       onClick={() => pack.isDownloaded && setActivePack(pack.id)}
-                      _hover={pack.isDownloaded ? { borderColor: 'brand.400' } : {}}
+                      _hover={pack.isDownloaded ? { borderColor: isActive ? 'green.500' : 'brand.400' } : {}}
+                      _dark={isActive ? { bg: 'green.900', borderColor: 'green.500' } : {}}
                       transition="all 0.2s"
                     >
                       <CardBody py={3} px={4}>
@@ -125,15 +117,10 @@ export default function SettingsPage() {
                           <HStack spacing={3}>
                             <Text fontSize="2xl">{pack.flag}</Text>
                             <VStack align="start" spacing={0}>
-                              <HStack>
-                                <Text fontWeight="medium">{pack.name}</Text>
-                                {isActive && (
-                                  <Badge colorScheme="green" size="sm">
-                                    {t.common.active}
-                                  </Badge>
-                                )}
-                              </HStack>
-                              <Text fontSize="xs" color="gray.500">
+                              <Text fontWeight={isActive ? 'bold' : 'medium'} color={isActive ? 'green.700' : undefined} _dark={isActive ? { color: 'green.200' } : {}}>
+                                {pack.name}
+                              </Text>
+                              <Text fontSize="xs" color={isActive ? 'green.600' : 'gray.500'} _dark={isActive ? { color: 'green.300' } : {}}>
                                 {pack.nativeName} • {pack.wordCount} {t.settings.words}
                               </Text>
                             </VStack>
@@ -302,6 +289,26 @@ export default function SettingsPage() {
                   </SliderTrack>
                   <SliderThumb boxSize={5} />
                 </Slider>
+              </FormControl>
+
+              <FormControl>
+                <FormLabel mb={2}>{t.settings.difficultyLevel}</FormLabel>
+                <SimpleGrid columns={2} spacing={2}>
+                  {(['all', 'beginner', 'intermediate', 'advanced'] as const).map((level) => (
+                    <Button
+                      key={level}
+                      size="sm"
+                      variant={selectedDifficulty === level ? 'solid' : 'outline'}
+                      colorScheme={selectedDifficulty === level ? 'blue' : 'gray'}
+                      onClick={() => setSelectedDifficulty(level)}
+                    >
+                      {t.settings.difficulty[level]}
+                    </Button>
+                  ))}
+                </SimpleGrid>
+                <Text fontSize="xs" color="gray.500" mt={2}>
+                  {t.settings.difficultyHint}
+                </Text>
               </FormControl>
             </VStack>
           </CardBody>

@@ -167,8 +167,14 @@ export default function PracticePage() {
           <Heading size="lg">{t.practice.title}</Heading>
 
           {activePack && (
-            <Badge colorScheme="blue" fontSize="md" px={3} py={1}>
-              {activePack.flag} {t.practice.practicing} {activePack.name}
+            <Badge
+              colorScheme="blue"
+              fontSize={{ base: 'xs', md: 'sm' }}
+              px={{ base: 2, md: 3 }}
+              py={1}
+              maxW={{ base: '250px', md: '350px' }}
+            >
+              {activePack.flag} {activePack.name}
             </Badge>
           )}
 
@@ -288,7 +294,7 @@ export default function PracticePage() {
               <Text fontSize="xl" fontWeight="medium" textAlign="center">
                 {exerciseType === 'listening'
                   ? t.practice.listenAndSelect
-                  : `${t.practice.whatDoesMean} ${currentExercise.question}?`}
+                  : t.practice.whatDoesMean.replace('{term}', currentExercise.question)}
               </Text>
               {exerciseType !== 'listening' && word && (
                 <Text color="gray.500">{word.pronunciation}</Text>

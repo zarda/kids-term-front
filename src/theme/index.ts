@@ -26,17 +26,20 @@ const theme = extendTheme({
     heading: `'Nunito', 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif`,
     body: `'Nunito', 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif`,
   },
+  // Responsive font sizes - smaller on mobile, larger on desktop
+  // Base sizes are for mobile-first, components use responsive props for larger screens
   fontSizes: {
-    xs: '0.875rem',
-    sm: '1rem',
-    md: '1.125rem',
-    lg: '1.25rem',
-    xl: '1.5rem',
-    '2xl': '1.875rem',
-    '3xl': '2.25rem',
-    '4xl': '3rem',
-    '5xl': '3.75rem',
-    '6xl': '4.5rem',
+    '2xs': '0.625rem', // 10px - extra small for mobile nav labels
+    xs: '0.75rem',    // 12px - was 14px
+    sm: '0.875rem',   // 14px - was 16px
+    md: '1rem',       // 16px - was 18px
+    lg: '1.125rem',   // 18px - was 20px
+    xl: '1.25rem',    // 20px - was 24px
+    '2xl': '1.5rem',  // 24px - was 30px
+    '3xl': '1.875rem', // 30px - was 36px
+    '4xl': '2.25rem', // 36px - was 48px
+    '5xl': '3rem',    // 48px - was 60px
+    '6xl': '3.75rem', // 60px - was 72px
   },
   styles: {
     global: {
@@ -55,25 +58,28 @@ const theme = extendTheme({
         fontWeight: 'bold',
         borderRadius: '2xl',
         letterSpacing: '0.02em',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
       },
       sizes: {
         sm: {
-          minH: '44px',
-          minW: '44px',
-          px: 4,
-          fontSize: 'md',
+          minH: { base: '40px', md: '44px' },
+          minW: { base: '40px', md: '44px' },
+          px: { base: 3, md: 4 },
+          fontSize: { base: 'sm', md: 'md' },
         },
         md: {
-          minH: '52px',
-          minW: '52px',
-          px: 6,
-          fontSize: 'lg',
+          minH: { base: '44px', md: '52px' },
+          minW: { base: '44px', md: '52px' },
+          px: { base: 4, md: 6 },
+          fontSize: { base: 'sm', md: 'lg' },
         },
         lg: {
-          minH: '60px',
-          minW: '60px',
-          px: 8,
-          fontSize: 'xl',
+          minH: { base: '52px', md: '60px' },
+          minW: { base: '52px', md: '60px' },
+          px: { base: 6, md: 8 },
+          fontSize: { base: 'md', md: 'xl' },
         },
       },
       variants: {
@@ -175,18 +181,18 @@ const theme = extendTheme({
       sizes: {
         md: {
           field: {
-            minH: '52px',
+            minH: { base: '44px', md: '52px' },
             borderRadius: 'xl',
-            fontSize: 'lg',
-            px: 4,
+            fontSize: { base: 'sm', md: 'lg' },
+            px: { base: 3, md: 4 },
           },
         },
         lg: {
           field: {
-            minH: '60px',
+            minH: { base: '52px', md: '60px' },
             borderRadius: 'xl',
-            fontSize: 'xl',
-            px: 5,
+            fontSize: { base: 'md', md: 'xl' },
+            px: { base: 4, md: 5 },
           },
         },
       },
@@ -213,12 +219,12 @@ const theme = extendTheme({
     IconButton: {
       sizes: {
         md: {
-          minH: '52px',
-          minW: '52px',
+          minH: { base: '44px', md: '52px' },
+          minW: { base: '44px', md: '52px' },
         },
         lg: {
-          minH: '60px',
-          minW: '60px',
+          minH: { base: '52px', md: '60px' },
+          minW: { base: '52px', md: '60px' },
         },
       },
     },
@@ -226,6 +232,14 @@ const theme = extendTheme({
       baseStyle: {
         fontWeight: 'extrabold',
         letterSpacing: '-0.02em',
+      },
+      sizes: {
+        xs: { fontSize: { base: 'sm', md: 'md' } },
+        sm: { fontSize: { base: 'md', md: 'lg' } },
+        md: { fontSize: { base: 'lg', md: 'xl' } },
+        lg: { fontSize: { base: 'xl', md: '2xl' } },
+        xl: { fontSize: { base: '2xl', md: '3xl' } },
+        '2xl': { fontSize: { base: '3xl', md: '4xl' } },
       },
     },
     Text: {
@@ -237,10 +251,10 @@ const theme = extendTheme({
       variants: {
         'soft-rounded': {
           tab: {
-            minH: '52px',
+            minH: { base: '44px', md: '52px' },
             borderRadius: 'xl',
             fontWeight: 'bold',
-            fontSize: 'lg',
+            fontSize: { base: 'sm', md: 'lg' },
             _selected: {
               bg: 'brand.500',
               color: 'white',
@@ -253,17 +267,22 @@ const theme = extendTheme({
     Badge: {
       baseStyle: {
         borderRadius: 'full',
-        px: 3,
+        px: { base: 2, md: 3 },
         py: 1,
         fontWeight: 'bold',
-        fontSize: 'sm',
+        fontSize: { base: 'xs', md: 'sm' },
+        maxW: '100%',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        display: 'inline-block',
       },
     },
     Alert: {
       baseStyle: {
         container: {
           borderRadius: 'xl',
-          fontSize: 'md',
+          fontSize: { base: 'sm', md: 'md' },
         },
       },
     },

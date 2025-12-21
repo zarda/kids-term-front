@@ -37,19 +37,28 @@ export default function BottomTabBar() {
               onClick={() => navigate(item.path)}
               role="button"
               aria-label={label}
+              flex={1}
+              maxW="80px"
             >
               <IconButton
                 aria-label={label}
-                icon={<item.icon size={22} />}
+                icon={<item.icon size={20} />}
                 variant="ghost"
                 color={color}
                 size="sm"
-                minW="44px"
-                minH="44px"
+                minW="40px"
+                minH="40px"
                 _hover={{ bg: 'transparent' }}
                 _active={{ transform: 'scale(0.95)' }}
               />
-              <Text fontSize="xs" color={color} fontWeight={isActive ? 'semibold' : 'normal'}>
+              <Text
+                fontSize="2xs"
+                color={color}
+                fontWeight={isActive ? 'semibold' : 'normal'}
+                textAlign="center"
+                noOfLines={1}
+                maxW="100%"
+              >
                 {label}
               </Text>
             </VStack>
