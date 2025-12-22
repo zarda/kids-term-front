@@ -51,6 +51,10 @@ export interface Translations {
     cardOf: string
     noWords: string
     downloadPack: string
+    resumeFromLast: string
+    jumpToCard: string
+    goToCard: string
+    pronunciationWarning: string
   }
 
   // Practice Page

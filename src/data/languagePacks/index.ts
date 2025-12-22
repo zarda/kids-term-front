@@ -6,7 +6,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     id: 'zh-en',
     sourceLanguage: 'zh',
     targetLanguage: 'en',
-    name: 'English (中文)',
+    name: '英文 (中文)',
     nativeName: 'English',
     flag: '🇺🇸',
     wordCount: 1400,
@@ -17,7 +17,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     id: 'zh-ja',
     sourceLanguage: 'zh',
     targetLanguage: 'ja',
-    name: 'Japanese (中文)',
+    name: '日文 (中文)',
     nativeName: '日本語',
     flag: '🇯🇵',
     wordCount: 1400,
@@ -28,7 +28,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     id: 'zh-ko',
     sourceLanguage: 'zh',
     targetLanguage: 'ko',
-    name: 'Korean (中文)',
+    name: '韓文 (中文)',
     nativeName: '한국어',
     flag: '🇰🇷',
     wordCount: 30,
@@ -39,7 +39,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     id: 'zh-es',
     sourceLanguage: 'zh',
     targetLanguage: 'es',
-    name: 'Spanish (中文)',
+    name: '西班牙文 (中文)',
     nativeName: 'Español',
     flag: '🇪🇸',
     wordCount: 30,
@@ -50,7 +50,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     id: 'zh-fr',
     sourceLanguage: 'zh',
     targetLanguage: 'fr',
-    name: 'French (中文)',
+    name: '法文 (中文)',
     nativeName: 'Français',
     flag: '🇫🇷',
     wordCount: 30,
@@ -61,7 +61,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     id: 'zh-zh',
     sourceLanguage: 'zh',
     targetLanguage: 'zh',
-    name: 'Chinese (中文)',
+    name: '中文  (中文)',
     nativeName: '中文',
     flag: '🇹🇼',
     wordCount: 30,
@@ -75,9 +75,9 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: 'English (English)',
     nativeName: 'English',
     flag: '🇺🇸',
-    wordCount: 40,
-    isDownloaded: false,
-    version: '0.1.0',
+    wordCount: 3000,
+    isDownloaded: true,
+    version: '1.0.0',
   },
   {
     id: 'en-es',
@@ -86,9 +86,9 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: 'Spanish (English)',
     nativeName: 'Español',
     flag: '🇪🇸',
-    wordCount: 35,
-    isDownloaded: false,
-    version: '0.1.0',
+    wordCount: 3000,
+    isDownloaded: true,
+    version: '1.0.0',
   },
   {
     id: 'en-fr',
@@ -97,9 +97,9 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: 'French (English)',
     nativeName: 'Français',
     flag: '🇫🇷',
-    wordCount: 30,
-    isDownloaded: false,
-    version: '0.1.0',
+    wordCount: 3000,
+    isDownloaded: true,
+    version: '1.0.0',
   },
   {
     id: 'en-de',
@@ -108,9 +108,9 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: 'German (English)',
     nativeName: 'Deutsch',
     flag: '🇩🇪',
-    wordCount: 30,
-    isDownloaded: false,
-    version: '0.1.0',
+    wordCount: 3000,
+    isDownloaded: true,
+    version: '1.0.0',
   },
   {
     id: 'en-ja',
@@ -130,9 +130,9 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: 'Italian (English)',
     nativeName: 'Italiano',
     flag: '🇮🇹',
-    wordCount: 25,
-    isDownloaded: false,
-    version: '0.1.0',
+    wordCount: 3000,
+    isDownloaded: true,
+    version: '1.0.0',
   },
   {
     id: 'en-pt',
@@ -141,9 +141,9 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: 'Portuguese (English)',
     nativeName: 'Português',
     flag: '🇧🇷',
-    wordCount: 25,
-    isDownloaded: false,
-    version: '0.1.0',
+    wordCount: 3000,
+    isDownloaded: true,
+    version: '1.0.0',
   },
   {
     id: 'en-ko',
@@ -152,9 +152,9 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: 'Korean (English)',
     nativeName: '한국어',
     flag: '🇰🇷',
-    wordCount: 25,
-    isDownloaded: false,
-    version: '0.1.0',
+    wordCount: 3000,
+    isDownloaded: true,
+    version: '1.0.0',
   },
   {
     id: 'en-zh',
@@ -163,16 +163,13 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: 'Chinese (English)',
     nativeName: '中文',
     flag: '🇹🇼',
-    wordCount: 25,
-    isDownloaded: false,
-    version: '0.1.0',
+    wordCount: 3000,
+    isDownloaded: true,
+    version: '1.0.0',
   },
 ]
 
-// Simulated download function - in real app this would fetch from API
 export async function downloadLanguagePack(packId: string): Promise<LanguagePackData> {
-  // Simulate network delay
-  await new Promise((resolve) => setTimeout(resolve, 1500))
 
   // Dynamically import the pack data
   switch (packId) {
@@ -189,23 +186,23 @@ export async function downloadLanguagePack(packId: string): Promise<LanguagePack
     case 'zh-zh':
       return (await import('./zh-zh')).default
     case 'en-en':
-      return (await import('./en')).default
+      return (await import('./en-en/index')).default
     case 'en-es':
-      return (await import('./es')).default
+      return (await import('./en-es/index')).default
     case 'en-fr':
-      return (await import('./fr')).default
+      return (await import('./en-fr/index')).default
     case 'en-de':
-      return (await import('./de')).default
+      return (await import('./en-de/index')).default
     case 'en-ja':
       return (await import('./en-ja/index')).default
     case 'en-it':
-      return (await import('./it')).default
+      return (await import('./en-it/index')).default
     case 'en-pt':
-      return (await import('./pt')).default
+      return (await import('./en-pt/index')).default
     case 'en-ko':
-      return (await import('./ko')).default
+      return (await import('./en-ko/index')).default
     case 'en-zh':
-      return (await import('./zh')).default
+      return (await import('./en-zh/index')).default
     default:
       throw new Error(`Language pack ${packId} not found`)
   }

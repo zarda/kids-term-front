@@ -11,7 +11,20 @@ const LANG_TO_LOCALE: Record<string, string> = {
   pt: 'pt-BR',
   ja: 'ja-JP',
   ko: 'ko-KR',
-  zh: 'zh-CN',
+  zh: 'zh-TW',
+}
+
+// Preferred high-quality voices (prioritized in order)
+const PREFERRED_VOICES: Record<string, string[]> = {
+  en: ['Google US English', 'Samantha', 'Alex', 'Microsoft Zira'],
+  es: ['Google español', 'Monica', 'Paulina', 'Microsoft Helena'],
+  fr: ['Google français', 'Thomas', 'Amelie', 'Microsoft Hortense'],
+  de: ['Google Deutsch', 'Anna', 'Microsoft Hedda'],
+  it: ['Google italiano', 'Alice', 'Luca', 'Microsoft Elsa'],
+  pt: ['Google português do Brasil', 'Luciana', 'Microsoft Maria'],
+  ja: ['Google 日本語', 'Kyoko', 'O-Ren', 'Microsoft Haruka'],
+  ko: ['Google 한국의', 'Yuna', 'Microsoft Heami'],
+  zh: ['Google 國語', 'Meijia', 'Tingting', 'Microsoft Hanhan'],
 }
 
 interface UseSpeechReturn {
@@ -79,9 +92,13 @@ export function useSpeech(): UseSpeechReturn {
       utterance.rate = speechRate
       utterance.volume = speechVolume
 
-      // Get fresh voices and find matching one
+      // Get fresh voices and find matching one (prefer high-quality voices for tonal languages)
       const currentVoices = window.speechSynthesis.getVoices()
+      const preferredNames = PREFERRED_VOICES[langCode] || []
       const matchingVoice =
+        preferredNames
+          .map((name) => currentVoices.find((v) => v.name.includes(name)))
+          .find((v) => v) ||
         currentVoices.find((v) => v.lang === locale) ||
         currentVoices.find((v) => v.lang.startsWith(langCode)) ||
         currentVoices.find((v) => v.lang.toLowerCase().startsWith(langCode.toLowerCase()))

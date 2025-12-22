@@ -49,6 +49,10 @@ const zh: Translations = {
     cardOf: '/',
     noWords: '暫無單字',
     downloadPack: '下載語言包開始學習',
+    resumeFromLast: '繼續上次進度',
+    jumpToCard: '跳至卡片',
+    goToCard: '前往',
+    pronunciationWarning: '發音由電腦生成，可能不準確',
   },
 
   practice: {

@@ -8,6 +8,9 @@ interface ProgressState extends UserProgress {
   dailyGoal: number
   todayWordsLearned: number
 
+  // Last word index per language pack (packId -> wordIndex)
+  lastWordIndex: Record<string, number>
+
   // Actions
   incrementWordsLearned: (count?: number) => void
   incrementExercisesCompleted: () => void
@@ -18,6 +21,8 @@ interface ProgressState extends UserProgress {
   setDailyGoal: (goal: number) => void
   getTodayProgress: () => DailyProgress | undefined
   resetDailyProgress: () => void
+  setLastWordIndex: (packId: string, index: number) => void
+  getLastWordIndex: (packId: string) => number
 }
 
 const getToday = () => format(new Date(), 'yyyy-MM-dd')
@@ -54,6 +59,7 @@ export const useProgressStore = create<ProgressState>()(
       lastActiveDate: getToday(),
       dailyGoal: 10,
       todayWordsLearned: 0,
+      lastWordIndex: {},
 
       incrementWordsLearned: (count = 1) =>
         set((state) => {
@@ -132,6 +138,15 @@ export const useProgressStore = create<ProgressState>()(
             state.todayWordsLearned = 0
           }
         }),
+
+      setLastWordIndex: (packId, index) =>
+        set((state) => {
+          state.lastWordIndex[packId] = index
+        }),
+
+      getLastWordIndex: (packId) => {
+        return get().lastWordIndex[packId] ?? 0
+      },
     })),
     {
       name: 'kidsterm-progress-v1',

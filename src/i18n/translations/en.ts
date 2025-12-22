@@ -49,6 +49,10 @@ const en: Translations = {
     cardOf: 'of',
     noWords: 'No words available',
     downloadPack: 'Download a language pack to start learning',
+    resumeFromLast: 'Resume from last position',
+    jumpToCard: 'Jump to card',
+    goToCard: 'Go',
+    pronunciationWarning: 'Pronunciation is computer-generated and may not be accurate',
   },
 
   practice: {

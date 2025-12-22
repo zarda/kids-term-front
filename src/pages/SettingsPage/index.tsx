@@ -29,7 +29,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { FiDownload, FiCheck, FiTrash2, FiRefreshCw, FiAlertTriangle } from 'react-icons/fi'
+import { FiDownload, FiTrash2, FiRefreshCw, FiAlertTriangle } from 'react-icons/fi'
 import { useSettingsStore } from '../../store/useSettingsStore'
 import { useProgressStore } from '../../store/useProgressStore'
 import { useLanguagePackStore } from '../../store/useLanguagePackStore'
@@ -129,14 +129,6 @@ export default function SettingsPage() {
                           <HStack>
                             {pack.isDownloaded ? (
                               <>
-                                <IconButton
-                                  aria-label="Selected"
-                                  icon={<FiCheck />}
-                                  size="sm"
-                                  colorScheme="green"
-                                  variant="ghost"
-                                  isDisabled
-                                />
                                 {pack.id !== 'zh-en' && !isActive && (
                                   <IconButton
                                     aria-label={t.common.delete}

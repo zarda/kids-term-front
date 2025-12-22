@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import {
   Box,
   Card,
@@ -12,11 +12,17 @@ import {
   useColorModeValue,
   VStack,
   Badge,
+  Button,
+  Input,
+  InputGroup,
+  Collapse,
+  Tooltip,
 } from '@chakra-ui/react'
 import { animated, useSpring } from 'react-spring'
 import { useDrag } from '@use-gesture/react'
-import { FiChevronLeft, FiChevronRight, FiHeart, FiVolume2 } from 'react-icons/fi'
+import { FiChevronLeft, FiChevronRight, FiHeart, FiVolume2, FiNavigation } from 'react-icons/fi'
 import { useProgressStore } from '../../store/useProgressStore'
+import { useSettingsStore } from '../../store/useSettingsStore'
 import { useSpeech } from '../../hooks/useSpeech'
 import { useTranslation } from '../../hooks/useTranslation'
 import { useActiveLanguagePack } from '../../hooks/useActiveLanguagePack'
@@ -25,14 +31,64 @@ export default function WordLearningPage() {
   const [isFlipped, setIsFlipped] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [favorites, setFavorites] = useState<Set<string>>(new Set())
+  const [showJumpInput, setShowJumpInput] = useState(false)
+  const [jumpValue, setJumpValue] = useState('')
+  const [hasInitialized, setHasInitialized] = useState(false)
   const { t } = useTranslation()
   const cardBg = useColorModeValue('white', 'gray.800')
   const { speak, isSpeaking } = useSpeech()
+  const autoPlayAudio = useSettingsStore((s) => s.autoPlayAudio)
 
   // Get words from active language pack
-  const { words, activePack } = useActiveLanguagePack()
+  const { words, activePack, activePackId } = useActiveLanguagePack()
 
   const incrementWordsLearned = useProgressStore((s) => s.incrementWordsLearned)
+  const setLastWordIndex = useProgressStore((s) => s.setLastWordIndex)
+  const getLastWordIndex = useProgressStore((s) => s.getLastWordIndex)
+
+  // Get saved position for current pack
+  const savedIndex = activePackId ? getLastWordIndex(activePackId) : 0
+  const hasSavedProgress = savedIndex > 0 && savedIndex < words.length
+
+  // Save current position when index changes
+  useEffect(() => {
+    if (activePackId && hasInitialized) {
+      setLastWordIndex(activePackId, currentIndex)
+    }
+  }, [currentIndex, activePackId, setLastWordIndex, hasInitialized])
+
+  // Initialize - don't auto-jump, let user choose
+  useEffect(() => {
+    if (words.length > 0 && !hasInitialized) {
+      setHasInitialized(true)
+    }
+  }, [words.length, hasInitialized])
+
+  // Auto-play pronunciation when word changes
+  useEffect(() => {
+    if (autoPlayAudio && currentWord && activePack && hasInitialized) {
+      speak(currentWord.term, activePack.targetLanguage)
+    }
+  }, [currentIndex, autoPlayAudio, hasInitialized])
+
+  // Jump to saved position
+  const handleResume = useCallback(() => {
+    if (savedIndex > 0 && savedIndex < words.length) {
+      setCurrentIndex(savedIndex)
+      setIsFlipped(false)
+    }
+  }, [savedIndex, words.length])
+
+  // Jump to specific card number
+  const handleJumpToCard = useCallback(() => {
+    const targetIndex = parseInt(jumpValue, 10) - 1 // Convert to 0-based
+    if (!isNaN(targetIndex) && targetIndex >= 0 && targetIndex < words.length) {
+      setCurrentIndex(targetIndex)
+      setIsFlipped(false)
+      setJumpValue('')
+      setShowJumpInput(false)
+    }
+  }, [jumpValue, words.length])
 
   const currentWord = words[currentIndex]
   const progress = words.length > 0 ? ((currentIndex + 1) / words.length) * 100 : 0
@@ -150,14 +206,74 @@ export default function WordLearningPage() {
         {/* Progress */}
         <Box w="100%">
           <HStack justify="space-between" mb={2}>
-            <Text fontSize="sm" color="gray.500">
-              {currentIndex + 1} {t.learn.cardOf} {words.length}
-            </Text>
-            <Text fontSize="sm" color="gray.500">
-              {Math.round(progress)}%
-            </Text>
+            <HStack spacing={2}>
+              <Button
+                size="xs"
+                variant="ghost"
+                color="gray.500"
+                fontWeight="normal"
+                onClick={() => setShowJumpInput(!showJumpInput)}
+                rightIcon={<FiNavigation size={12} />}
+                _hover={{ color: 'blue.500' }}
+              >
+                {currentIndex + 1} {t.learn.cardOf} {words.length}
+              </Button>
+            </HStack>
+            <HStack spacing={2}>
+              {hasSavedProgress && currentIndex === 0 && (
+                <Button
+                  size="xs"
+                  colorScheme="green"
+                  variant="outline"
+                  onClick={handleResume}
+                >
+                  {t.learn.resumeFromLast} ({savedIndex + 1})
+                </Button>
+              )}
+              <Text fontSize="sm" color="gray.500">
+                {Math.round(progress)}%
+              </Text>
+            </HStack>
           </HStack>
           <Progress value={progress} size="sm" borderRadius="full" colorScheme="blue" />
+
+          {/* Jump to card input */}
+          <Collapse in={showJumpInput} animateOpacity>
+            <Box mt={3} p={3} bg={cardBg} borderRadius="md" shadow="sm">
+              <Text fontSize="sm" mb={2} fontWeight="medium">
+                {t.learn.jumpToCard}
+              </Text>
+              <HStack spacing={2}>
+                <InputGroup size="sm" flex={1}>
+                  <Input
+                    type="number"
+                    min={1}
+                    max={words.length}
+                    placeholder={`1 - ${words.length}`}
+                    value={jumpValue}
+                    onChange={(e) => setJumpValue(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleJumpToCard()}
+                    autoFocus
+                  />
+                </InputGroup>
+                <Button
+                  size="sm"
+                  colorScheme="blue"
+                  onClick={handleJumpToCard}
+                  isDisabled={!jumpValue}
+                >
+                  {t.learn.goToCard}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setShowJumpInput(false)}
+                >
+                  {t.common.cancel}
+                </Button>
+              </HStack>
+            </Box>
+          </Collapse>
         </Box>
 
         {/* Flashcard */}
@@ -278,15 +394,25 @@ export default function WordLearningPage() {
             isDisabled={currentIndex === 0}
           />
 
-          <IconButton
-            aria-label={t.learn.pronunciation}
-            icon={<FiVolume2 size={24} />}
-            colorScheme="blue"
-            variant="outline"
-            size="lg"
-            onClick={handleSpeak}
-            isLoading={isSpeaking}
-          />
+          <Tooltip
+            label={t.learn.pronunciationWarning}
+            fontSize="xs"
+            hasArrow
+            placement="top"
+            bg="orange.500"
+            closeDelay={2000}
+            closeOnClick
+          >
+            <IconButton
+              aria-label={t.learn.pronunciation}
+              icon={<FiVolume2 size={24} />}
+              colorScheme="blue"
+              variant="outline"
+              size="lg"
+              onClick={handleSpeak}
+              isLoading={isSpeaking}
+            />
+          </Tooltip>
 
           <IconButton
             aria-label="Toggle favorite"
