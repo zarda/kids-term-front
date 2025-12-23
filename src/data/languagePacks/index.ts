@@ -3,10 +3,10 @@ import type { LanguagePack, LanguagePackData } from '../../types/language.types'
 // Available language packs metadata
 export const availableLanguagePacks: LanguagePack[] = [
   {
-    id: 'zh-en',
-    sourceLanguage: 'zh',
+    id: 'tc-en',
+    sourceLanguage: 'tc',
     targetLanguage: 'en',
-    name: '英文 (中文)',
+    name: '英文 (繁體中文)',
     nativeName: 'English',
     flag: '🇺🇸',
     wordCount: 1400,
@@ -14,10 +14,10 @@ export const availableLanguagePacks: LanguagePack[] = [
     version: '0.5.0',
   },
   {
-    id: 'zh-ja',
-    sourceLanguage: 'zh',
+    id: 'tc-ja',
+    sourceLanguage: 'tc',
     targetLanguage: 'ja',
-    name: '日文 (中文)',
+    name: '日文 (繁體中文)',
     nativeName: '日本語',
     flag: '🇯🇵',
     wordCount: 1400,
@@ -25,10 +25,10 @@ export const availableLanguagePacks: LanguagePack[] = [
     version: '0.5.0',
   },
   {
-    id: 'zh-ko',
-    sourceLanguage: 'zh',
+    id: 'tc-ko',
+    sourceLanguage: 'tc',
     targetLanguage: 'ko',
-    name: '韓文 (中文)',
+    name: '韓文 (繁體中文)',
     nativeName: '한국어',
     flag: '🇰🇷',
     wordCount: 30,
@@ -36,10 +36,10 @@ export const availableLanguagePacks: LanguagePack[] = [
     version: '0.1.0',
   },
   {
-    id: 'zh-es',
-    sourceLanguage: 'zh',
+    id: 'tc-es',
+    sourceLanguage: 'tc',
     targetLanguage: 'es',
-    name: '西班牙文 (中文)',
+    name: '西班牙文 (繁體中文)',
     nativeName: 'Español',
     flag: '🇪🇸',
     wordCount: 30,
@@ -47,10 +47,10 @@ export const availableLanguagePacks: LanguagePack[] = [
     version: '0.1.0',
   },
   {
-    id: 'zh-fr',
-    sourceLanguage: 'zh',
+    id: 'tc-fr',
+    sourceLanguage: 'tc',
     targetLanguage: 'fr',
-    name: '法文 (中文)',
+    name: '法文 (繁體中文)',
     nativeName: 'Français',
     flag: '🇫🇷',
     wordCount: 30,
@@ -58,11 +58,11 @@ export const availableLanguagePacks: LanguagePack[] = [
     version: '0.1.0',
   },
   {
-    id: 'zh-zh',
-    sourceLanguage: 'zh',
-    targetLanguage: 'zh',
-    name: '中文  (中文)',
-    nativeName: '中文',
+    id: 'tc-tc',
+    sourceLanguage: 'tc',
+    targetLanguage: 'tc',
+    name: '繁體中文  (繁體中文)',
+    nativeName: '繁體中文',
     flag: '🇹🇼',
     wordCount: 30,
     isDownloaded: false,
@@ -157,11 +157,11 @@ export const availableLanguagePacks: LanguagePack[] = [
     version: '1.0.0',
   },
   {
-    id: 'en-zh',
+    id: 'en-tc',
     sourceLanguage: 'en',
-    targetLanguage: 'zh',
-    name: 'Chinese (English)',
-    nativeName: '中文',
+    targetLanguage: 'tc',
+    name: 'Traditional Chinese (English)',
+    nativeName: '繁體中文',
     flag: '🇹🇼',
     wordCount: 3000,
     isDownloaded: true,
@@ -173,18 +173,18 @@ export async function downloadLanguagePack(packId: string): Promise<LanguagePack
 
   // Dynamically import the pack data
   switch (packId) {
-    case 'zh-en':
-      return (await import('./zh-en/index')).default
-    case 'zh-ja':
-      return (await import('./zh-ja/index')).default
-    case 'zh-ko':
-      return (await import('./zh-ko')).default
-    case 'zh-es':
-      return (await import('./zh-es')).default
-    case 'zh-fr':
-      return (await import('./zh-fr')).default
-    case 'zh-zh':
-      return (await import('./zh-zh')).default
+    case 'tc-en':
+      return (await import('./tc-en/index')).default
+    case 'tc-ja':
+      return (await import('./tc-ja/index')).default
+    case 'tc-ko':
+      return (await import('./tc-ko')).default
+    case 'tc-es':
+      return (await import('./tc-es')).default
+    case 'tc-fr':
+      return (await import('./tc-fr')).default
+    case 'tc-tc':
+      return (await import('./tc-tc')).default
     case 'en-en':
       return (await import('./en-en/index')).default
     case 'en-es':
@@ -201,8 +201,8 @@ export async function downloadLanguagePack(packId: string): Promise<LanguagePack
       return (await import('./en-pt/index')).default
     case 'en-ko':
       return (await import('./en-ko/index')).default
-    case 'en-zh':
-      return (await import('./en-zh/index')).default
+    case 'en-tc':
+      return (await import('./en-tc/index')).default
     default:
       throw new Error(`Language pack ${packId} not found`)
   }

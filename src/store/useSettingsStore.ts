@@ -38,7 +38,7 @@ interface SettingsState {
 export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
-      sourceLang: 'zh',
+      sourceLang: 'tc',
       targetLang: 'en',
       speechRate: 1.0,
       speechVolume: 1.0,

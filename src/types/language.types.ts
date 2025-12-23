@@ -42,7 +42,7 @@ export const SUPPORTED_LANGUAGES: AvailableLanguage[] = [
   { code: 'pt', name: 'Portuguese', nativeName: 'Português', flag: '🇧🇷' },
   { code: 'ja', name: 'Japanese', nativeName: '日本語', flag: '🇯🇵' },
   { code: 'ko', name: 'Korean', nativeName: '한국어', flag: '🇰🇷' },
-  { code: 'zh', name: 'Chinese', nativeName: '中文', flag: '🇨🇳' },
+  { code: 'tc', name: 'Traditional Chinese', nativeName: '繁體中文', flag: '🇹🇼' },
 ]
 
 export const getLanguageByCode = (code: string): AvailableLanguage | undefined => {

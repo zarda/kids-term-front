@@ -5,7 +5,7 @@ describe('useSettingsStore', () => {
   beforeEach(() => {
     // Reset to default values
     useSettingsStore.setState({
-      sourceLang: 'zh',
+      sourceLang: 'tc',
       targetLang: 'en',
       speechRate: 1.0,
       speechVolume: 1.0,

@@ -37,7 +37,7 @@ export const useLanguagePackStore = create<LanguagePackState>()(
     immer((set, get) => ({
       availablePacks: availableLanguagePacks,
       downloadedData: {},
-      activePackId: 'zh-en', // Default: Chinese speakers learning English
+      activePackId: 'tc-en', // Default: Traditional Chinese speakers learning English
       downloadingPackId: null,
       isRefreshing: false,
       error: null,
@@ -81,7 +81,7 @@ export const useLanguagePackStore = create<LanguagePackState>()(
 
       deletePack: (packId: string) => {
         // Don't allow deleting the active pack or pre-installed default
-        if (packId === get().activePackId || packId === 'zh-en') return
+        if (packId === get().activePackId || packId === 'tc-en') return
 
         set((state) => {
           delete state.downloadedData[packId]
@@ -159,10 +159,10 @@ export const useLanguagePackStore = create<LanguagePackState>()(
       }),
       // Initialize default pack on first load
       onRehydrateStorage: () => async (state) => {
-        if (state && !state.downloadedData['zh-en']) {
-          // Auto-download default pack (Chinese to English)
-          const data = await downloadLanguagePack('zh-en')
-          state.downloadedData['zh-en'] = data
+        if (state && !state.downloadedData['tc-en']) {
+          // Auto-download default pack (Traditional Chinese to English)
+          const data = await downloadLanguagePack('tc-en')
+          state.downloadedData['tc-en'] = data
         }
       },
     }
@@ -172,12 +172,12 @@ export const useLanguagePackStore = create<LanguagePackState>()(
 // Initialize default pack on store creation
 const initializeDefaultPack = async () => {
   const state = useLanguagePackStore.getState()
-  if (!state.downloadedData['zh-en']) {
+  if (!state.downloadedData['tc-en']) {
     try {
-      const data = await downloadLanguagePack('zh-en')
+      const data = await downloadLanguagePack('tc-en')
       useLanguagePackStore.setState((s) => ({
         ...s,
-        downloadedData: { ...s.downloadedData, 'zh-en': data },
+        downloadedData: { ...s.downloadedData, 'tc-en': data },
       }))
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to initialize default language pack'

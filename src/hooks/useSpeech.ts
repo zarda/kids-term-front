@@ -11,7 +11,7 @@ const LANG_TO_LOCALE: Record<string, string> = {
   pt: 'pt-BR',
   ja: 'ja-JP',
   ko: 'ko-KR',
-  zh: 'zh-TW',
+  tc: 'zh-TW',
 }
 
 // Preferred high-quality voices (prioritized in order)
@@ -24,7 +24,7 @@ const PREFERRED_VOICES: Record<string, string[]> = {
   pt: ['Google português do Brasil', 'Luciana', 'Microsoft Maria'],
   ja: ['Google 日本語', 'Kyoko', 'O-Ren', 'Microsoft Haruka'],
   ko: ['Google 한국의', 'Yuna', 'Microsoft Heami'],
-  zh: ['Google 國語', 'Meijia', 'Tingting', 'Microsoft Hanhan'],
+  tc: ['Google 國語', 'Meijia', 'Tingting', 'Microsoft Hanhan'],
 }
 
 interface UseSpeechReturn {

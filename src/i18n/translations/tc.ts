@@ -1,6 +1,6 @@
 import type { Translations } from '../types'
 
-const zh: Translations = {
+const tc: Translations = {
   common: {
     loading: '載入中...',
     error: '錯誤',
@@ -124,4 +124,4 @@ const zh: Translations = {
   },
 }
 
-export default zh
+export default tc

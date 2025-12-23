@@ -3,9 +3,9 @@ import { beginnerWords } from './beginner'
 import { intermediateWords } from './intermediate'
 import { advancedWords } from './advanced'
 
-const enZhPack: LanguagePackData = {
-  id: 'en-zh',
+const enTcPack: LanguagePackData = {
+  id: 'en-tc',
   words: [...beginnerWords, ...intermediateWords, ...advancedWords],
 }
 
-export default enZhPack
+export default enTcPack

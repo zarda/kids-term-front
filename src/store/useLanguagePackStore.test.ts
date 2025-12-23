@@ -33,8 +33,8 @@ describe('useLanguagePackStore', () => {
     useLanguagePackStore.setState({
       availablePacks: [
         {
-          id: 'zh-en',
-          sourceLanguage: 'zh',
+          id: 'tc-en',
+          sourceLanguage: 'tc',
           targetLanguage: 'en',
           name: 'English',
           nativeName: 'English',
@@ -44,8 +44,8 @@ describe('useLanguagePackStore', () => {
           version: '1.0.0',
         },
         {
-          id: 'zh-ja',
-          sourceLanguage: 'zh',
+          id: 'tc-ja',
+          sourceLanguage: 'tc',
           targetLanguage: 'ja',
           name: 'Japanese',
           nativeName: '日本語',
@@ -67,8 +67,8 @@ describe('useLanguagePackStore', () => {
         },
       ],
       downloadedData: {
-        'zh-en': {
-          id: 'zh-en',
+        'tc-en': {
+          id: 'tc-en',
           words: [
             {
               id: 'word-1',
@@ -91,7 +91,7 @@ describe('useLanguagePackStore', () => {
           ],
         },
       },
-      activePackId: 'zh-en',
+      activePackId: 'tc-en',
       downloadingPackId: null,
       isRefreshing: false,
       error: null,
@@ -110,7 +110,7 @@ describe('useLanguagePackStore', () => {
     })
 
     it('should return empty array if active pack has no downloaded data', () => {
-      useLanguagePackStore.setState({ activePackId: 'zh-ja' })
+      useLanguagePackStore.setState({ activePackId: 'tc-ja' })
       const { getActivePackWords } = useLanguagePackStore.getState()
 
       const words = getActivePackWords()
@@ -123,7 +123,7 @@ describe('useLanguagePackStore', () => {
     it('should return pack by id', () => {
       const { getPackById } = useLanguagePackStore.getState()
 
-      const pack = getPackById('zh-en')
+      const pack = getPackById('tc-en')
 
       expect(pack).toBeDefined()
       expect(pack?.name).toBe('English')
@@ -143,13 +143,13 @@ describe('useLanguagePackStore', () => {
     it('should return true for downloaded pack', () => {
       const { isPackDownloaded } = useLanguagePackStore.getState()
 
-      expect(isPackDownloaded('zh-en')).toBe(true)
+      expect(isPackDownloaded('tc-en')).toBe(true)
     })
 
     it('should return false for non-downloaded pack', () => {
       const { isPackDownloaded } = useLanguagePackStore.getState()
 
-      expect(isPackDownloaded('zh-ja')).toBe(false)
+      expect(isPackDownloaded('tc-ja')).toBe(false)
     })
 
     it('should return false for non-existent pack', () => {
@@ -172,10 +172,10 @@ describe('useLanguagePackStore', () => {
     it('should not set active pack when pack is not downloaded', () => {
       const { setActivePack } = useLanguagePackStore.getState()
 
-      setActivePack('zh-ja')
+      setActivePack('tc-ja')
 
       const state = useLanguagePackStore.getState()
-      expect(state.activePackId).toBe('zh-en') // Should remain unchanged
+      expect(state.activePackId).toBe('tc-en') // Should remain unchanged
     })
   })
 
@@ -201,21 +201,21 @@ describe('useLanguagePackStore', () => {
     it('should not delete active pack', () => {
       const { deletePack } = useLanguagePackStore.getState()
 
-      deletePack('zh-en')
+      deletePack('tc-en')
 
       const state = useLanguagePackStore.getState()
-      expect(state.downloadedData['zh-en']).toBeDefined()
+      expect(state.downloadedData['tc-en']).toBeDefined()
     })
 
-    it('should not delete default pack (zh-en)', () => {
+    it('should not delete default pack (tc-en)', () => {
       // Set active pack to something else first
       useLanguagePackStore.setState({ activePackId: 'en-es' })
       const { deletePack } = useLanguagePackStore.getState()
 
-      deletePack('zh-en')
+      deletePack('tc-en')
 
       const state = useLanguagePackStore.getState()
-      expect(state.downloadedData['zh-en']).toBeDefined()
+      expect(state.downloadedData['tc-en']).toBeDefined()
     })
   })
 
@@ -223,33 +223,33 @@ describe('useLanguagePackStore', () => {
     it('should download pack and update state', async () => {
       const { downloadPack } = useLanguagePackStore.getState()
 
-      await downloadPack('zh-ja')
+      await downloadPack('tc-ja')
 
       const state = useLanguagePackStore.getState()
-      expect(state.downloadedData['zh-ja']).toBeDefined()
-      expect(state.downloadedData['zh-ja'].words).toHaveLength(1)
-      expect(state.availablePacks.find((p) => p.id === 'zh-ja')?.isDownloaded).toBe(true)
+      expect(state.downloadedData['tc-ja']).toBeDefined()
+      expect(state.downloadedData['tc-ja'].words).toHaveLength(1)
+      expect(state.availablePacks.find((p) => p.id === 'tc-ja')?.isDownloaded).toBe(true)
       expect(state.downloadingPackId).toBeNull()
     })
 
     it('should not download already downloaded pack', async () => {
       const { downloadPack } = useLanguagePackStore.getState()
-      const originalData = useLanguagePackStore.getState().downloadedData['zh-en']
+      const originalData = useLanguagePackStore.getState().downloadedData['tc-en']
 
-      await downloadPack('zh-en')
+      await downloadPack('tc-en')
 
       const state = useLanguagePackStore.getState()
-      expect(state.downloadedData['zh-en']).toBe(originalData)
+      expect(state.downloadedData['tc-en']).toBe(originalData)
     })
 
     it('should set downloadingPackId during download', async () => {
       const { downloadPack } = useLanguagePackStore.getState()
 
-      const downloadPromise = downloadPack('zh-ja')
+      const downloadPromise = downloadPack('tc-ja')
 
       // Check state during download
       const stateWhileDownloading = useLanguagePackStore.getState()
-      expect(stateWhileDownloading.downloadingPackId).toBe('zh-ja')
+      expect(stateWhileDownloading.downloadingPackId).toBe('tc-ja')
 
       await downloadPromise
 

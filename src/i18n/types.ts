@@ -130,4 +130,4 @@ export interface Translations {
 }
 
 export type TranslationKey = keyof Translations
-export type SupportedLocale = 'en' | 'zh'
+export type SupportedLocale = 'en' | 'tc'

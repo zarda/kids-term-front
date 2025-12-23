@@ -9,8 +9,8 @@ describe('useTranslation', () => {
     useLanguagePackStore.setState({
       availablePacks: [
         {
-          id: 'zh-en',
-          sourceLanguage: 'zh',
+          id: 'tc-en',
+          sourceLanguage: 'tc',
           targetLanguage: 'en',
           name: 'English',
           nativeName: 'English',
@@ -32,7 +32,7 @@ describe('useTranslation', () => {
         },
       ],
       downloadedData: {},
-      activePackId: 'zh-en',
+      activePackId: 'tc-en',
       downloadingPackId: null,
       isRefreshing: false,
       error: null,
@@ -46,10 +46,10 @@ describe('useTranslation', () => {
     expect(result.current.locale).toBeDefined()
   })
 
-  it('should return Chinese (zh) locale when active pack source is zh', () => {
+  it('should return Traditional Chinese (tc) locale when active pack source is tc', () => {
     const { result } = renderHook(() => useTranslation())
 
-    expect(result.current.locale).toBe('zh')
+    expect(result.current.locale).toBe('tc')
   })
 
   it('should return English (en) locale when active pack source is en', () => {
@@ -126,7 +126,7 @@ describe('useTranslation', () => {
   it('should update translations when active pack changes', () => {
     const { result, rerender } = renderHook(() => useTranslation())
 
-    expect(result.current.locale).toBe('zh')
+    expect(result.current.locale).toBe('tc')
 
     // Change active pack to English source
     act(() => {

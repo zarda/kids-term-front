@@ -14,6 +14,14 @@ A mobile-first language learning application to help kids learn words and phrase
 - **Audio:** Web Speech API
 - **Testing:** Playwright (E2E)
 
+## Supported Language Packs
+
+| Source | Target Languages |
+|--------|-----------------|
+| English | Chinese, English, French, German, Italian, Japanese, Korean,, Portuguese Spanish |
+| Chinese (中文) | English, French, German, Japanese, Korean, Spanish |
+| And more... | is upcoming |
+
 ## Features
 
 ### Word Learning
@@ -41,14 +49,6 @@ A mobile-first language learning application to help kids learn words and phrase
 - Learning goals (daily word target)
 - Dark/Light mode
 - Notification reminders
-
-## Supported Language Packs
-
-| Source | Target Languages |
-|--------|-----------------|
-| Chinese (中文) | English, Spanish, French, German, Italian, Portuguese, Japanese, Korean |
-| English | Spanish, French, German, Italian, Portuguese, Japanese, Korean |
-| And more... | 15+ language pairs total |
 
 ## Project Structure
 
