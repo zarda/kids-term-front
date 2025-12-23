@@ -119,6 +119,13 @@ export interface Translations {
     darkMode: string
     notifications: string
     dailyReminders: string
+    reminderTime: string
+    enableNotifications: string
+    testNotification: string
+    permissionGranted: string
+    permissionDenied: string
+    permissionDefault: string
+    notificationsNotSupported: string
     about: string
     version: string
     appDescription: string
@@ -126,6 +133,12 @@ export interface Translations {
     clearAllData: string
     clearAllDataDesc: string
     clearAllDataConfirm: string
+  }
+
+  // Notifications
+  notifications: {
+    reminderTitle: string
+    reminderBody: string
   }
 }
 

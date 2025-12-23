@@ -6,6 +6,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
+  Badge,
   Box,
   Button,
   Card,
@@ -15,6 +16,7 @@ import {
   Heading,
   HStack,
   IconButton,
+  Input,
   Progress,
   SimpleGrid,
   Slider,
@@ -29,11 +31,13 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { FiDownload, FiTrash2, FiRefreshCw, FiAlertTriangle } from 'react-icons/fi'
+import { FiDownload, FiTrash2, FiRefreshCw, FiAlertTriangle, FiBell } from 'react-icons/fi'
+import { useNotifications } from '../../hooks/useNotifications'
 import { useSettingsStore } from '../../store/useSettingsStore'
 import { useProgressStore } from '../../store/useProgressStore'
 import { useLanguagePackStore } from '../../store/useLanguagePackStore'
 import { useTranslation } from '../../hooks/useTranslation'
+import { version } from '../../../package.json'
 
 export default function SettingsPage() {
   const { colorMode, toggleColorMode } = useColorMode()
@@ -47,6 +51,7 @@ export default function SettingsPage() {
   const autoPlayAudio = useSettingsStore((s) => s.autoPlayAudio)
   const exerciseTimeLimit = useSettingsStore((s) => s.exerciseTimeLimit)
   const notificationsEnabled = useSettingsStore((s) => s.notificationsEnabled)
+  const reminderTime = useSettingsStore((s) => s.reminderTime)
   const selectedDifficulty = useSettingsStore((s) => s.selectedDifficulty)
 
   const setSpeechRate = useSettingsStore((s) => s.setSpeechRate)
@@ -54,7 +59,10 @@ export default function SettingsPage() {
   const setAutoPlayAudio = useSettingsStore((s) => s.setAutoPlayAudio)
   const setExerciseTimeLimit = useSettingsStore((s) => s.setExerciseTimeLimit)
   const setNotificationsEnabled = useSettingsStore((s) => s.setNotificationsEnabled)
+  const setReminderTime = useSettingsStore((s) => s.setReminderTime)
   const setSelectedDifficulty = useSettingsStore((s) => s.setSelectedDifficulty)
+
+  const { isSupported, permission, requestPermission, sendNotification } = useNotifications()
 
   const dailyGoal = useProgressStore((s) => s.dailyGoal)
   const setDailyGoal = useProgressStore((s) => s.setDailyGoal)
@@ -328,7 +336,37 @@ export default function SettingsPage() {
         <Card bg={cardBg} shadow="card">
           <CardBody>
             <VStack align="stretch" spacing={4}>
-              <Heading size="md">{t.settings.notifications}</Heading>
+              <HStack justify="space-between">
+                <Heading size="md">{t.settings.notifications}</Heading>
+                {isSupported && (
+                  <Badge
+                    colorScheme={permission === 'granted' ? 'green' : permission === 'denied' ? 'red' : 'gray'}
+                  >
+                    {permission === 'granted'
+                      ? t.settings.permissionGranted
+                      : permission === 'denied'
+                        ? t.settings.permissionDenied
+                        : t.settings.permissionDefault}
+                  </Badge>
+                )}
+              </HStack>
+
+              {!isSupported && (
+                <Text fontSize="sm" color="orange.500">
+                  {t.settings.notificationsNotSupported}
+                </Text>
+              )}
+
+              {isSupported && permission === 'default' && (
+                <Button
+                  leftIcon={<FiBell />}
+                  colorScheme="blue"
+                  size="sm"
+                  onClick={requestPermission}
+                >
+                  {t.settings.enableNotifications}
+                </Button>
+              )}
 
               <FormControl display="flex" alignItems="center" justifyContent="space-between">
                 <FormLabel mb={0}>{t.settings.dailyReminders}</FormLabel>
@@ -336,8 +374,42 @@ export default function SettingsPage() {
                   isChecked={notificationsEnabled}
                   onChange={(e) => setNotificationsEnabled(e.target.checked)}
                   colorScheme="blue"
+                  isDisabled={!isSupported || permission !== 'granted'}
                 />
               </FormControl>
+
+              {notificationsEnabled && permission === 'granted' && (
+                <>
+                  <FormControl>
+                    <FormLabel>{t.settings.reminderTime}</FormLabel>
+                    <Input
+                      type="time"
+                      value={reminderTime}
+                      onChange={(e) => setReminderTime(e.target.value)}
+                      size="md"
+                      maxW="180px"
+                      sx={{
+                        '&::-webkit-calendar-picker-indicator': {
+                          marginLeft: '4px',
+                        },
+                      }}
+                    />
+                  </FormControl>
+
+                  <Button
+                    leftIcon={<FiBell />}
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      sendNotification(t.notifications.reminderTitle, {
+                        body: t.notifications.reminderBody,
+                      })
+                    }
+                  >
+                    {t.settings.testNotification}
+                  </Button>
+                </>
+              )}
             </VStack>
           </CardBody>
         </Card>
@@ -347,9 +419,12 @@ export default function SettingsPage() {
           <CardBody>
             <VStack align="stretch" spacing={2}>
               <Heading size="md">{t.settings.about}</Heading>
-              <Text color="gray.500">{t.settings.version} v0.1.3</Text>
+              <Text color="gray.500">{t.settings.version} v{version}</Text>
               <Text fontSize="sm" color="gray.500">
                 {t.settings.appDescription}
+              </Text>
+              <Text fontSize="xs" color="gray.400">
+                © {new Date().getFullYear()} Hengtai Jan. All rights reserved.
               </Text>
             </VStack>
           </CardBody>

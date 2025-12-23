@@ -114,6 +114,13 @@ const tc: Translations = {
     darkMode: '深色模式',
     notifications: '通知',
     dailyReminders: '每日提醒',
+    reminderTime: '提醒時間',
+    enableNotifications: '啟用通知',
+    testNotification: '測試通知',
+    permissionGranted: '已啟用',
+    permissionDenied: '已封鎖',
+    permissionDefault: '未設定',
+    notificationsNotSupported: '此瀏覽器不支援通知功能',
     about: '關於',
     version: 'KidsTerm',
     appDescription: '語言學習應用程式',
@@ -121,6 +128,11 @@ const tc: Translations = {
     clearAllData: '清除所有資料',
     clearAllDataDesc: '這將刪除您的所有進度、設定和已下載的語言包。',
     clearAllDataConfirm: '確定要執行嗎？此操作無法復原。',
+  },
+
+  notifications: {
+    reminderTitle: '學習時間到！',
+    reminderBody: '別忘了今天練習單字喔！',
   },
 }
 

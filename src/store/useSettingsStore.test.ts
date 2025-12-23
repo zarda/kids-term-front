@@ -14,6 +14,7 @@ describe('useSettingsStore', () => {
       dailyGoal: 10,
       notificationsEnabled: true,
       reminderTime: '09:00',
+      lastNotificationDate: null,
     })
   })
 
@@ -94,6 +95,23 @@ describe('useSettingsStore', () => {
       setReminderTime('18:30')
 
       expect(useSettingsStore.getState().reminderTime).toBe('18:30')
+    })
+
+    it('should set last notification date', () => {
+      const { setLastNotificationDate } = useSettingsStore.getState()
+
+      setLastNotificationDate('2025-12-23')
+
+      expect(useSettingsStore.getState().lastNotificationDate).toBe('2025-12-23')
+    })
+
+    it('should clear last notification date', () => {
+      const { setLastNotificationDate } = useSettingsStore.getState()
+
+      setLastNotificationDate('2025-12-23')
+      setLastNotificationDate(null)
+
+      expect(useSettingsStore.getState().lastNotificationDate).toBeNull()
     })
   })
 })

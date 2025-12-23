@@ -21,7 +21,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     nativeName: '日本語',
     flag: '🇯🇵',
     wordCount: 1400,
-    isDownloaded: true,
+    isDownloaded: false,
     version: '0.5.0',
   },
   {
@@ -76,7 +76,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     nativeName: 'English',
     flag: '🇺🇸',
     wordCount: 3000,
-    isDownloaded: true,
+    isDownloaded: false,
     version: '1.0.0',
   },
   {
@@ -87,7 +87,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     nativeName: 'Español',
     flag: '🇪🇸',
     wordCount: 3000,
-    isDownloaded: true,
+    isDownloaded: false,
     version: '1.0.0',
   },
   {
@@ -98,7 +98,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     nativeName: 'Français',
     flag: '🇫🇷',
     wordCount: 3000,
-    isDownloaded: true,
+    isDownloaded: false,
     version: '1.0.0',
   },
   {
@@ -109,7 +109,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     nativeName: 'Deutsch',
     flag: '🇩🇪',
     wordCount: 3000,
-    isDownloaded: true,
+    isDownloaded: false,
     version: '1.0.0',
   },
   {
@@ -120,7 +120,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     nativeName: '日本語',
     flag: '🇯🇵',
     wordCount: 3000,
-    isDownloaded: true,
+    isDownloaded: false,
     version: '1.0.0',
   },
   {
@@ -131,7 +131,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     nativeName: 'Italiano',
     flag: '🇮🇹',
     wordCount: 3000,
-    isDownloaded: true,
+    isDownloaded: false,
     version: '1.0.0',
   },
   {
@@ -142,7 +142,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     nativeName: 'Português',
     flag: '🇧🇷',
     wordCount: 3000,
-    isDownloaded: true,
+    isDownloaded: false,
     version: '1.0.0',
   },
   {
@@ -153,7 +153,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     nativeName: '한국어',
     flag: '🇰🇷',
     wordCount: 3000,
-    isDownloaded: true,
+    isDownloaded: false,
     version: '1.0.0',
   },
   {
@@ -164,7 +164,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     nativeName: '繁體中文',
     flag: '🇹🇼',
     wordCount: 3000,
-    isDownloaded: true,
+    isDownloaded: false,
     version: '1.0.0',
   },
 ]

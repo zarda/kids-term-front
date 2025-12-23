@@ -6,40 +6,180 @@ test.describe('Settings Page', () => {
   })
 
   test('should display settings heading', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: 'Settings' })).toBeVisible()
+    // UI shows Chinese text: 設定
+    await expect(page.getByRole('heading', { name: '設定' })).toBeVisible()
   })
 
   test('should display language pack section', async ({ page }) => {
-    await expect(page.locator('text=Language Pack')).toBeVisible()
-    await expect(page.locator('text=Chinese → English')).toBeVisible()
+    // UI shows Chinese: 語言包
+    await expect(page.getByRole('heading', { name: '語言包' })).toBeVisible()
+    // Check for default language pack
+    await expect(page.locator('text=英文 (繁體中文)')).toBeVisible()
   })
 
   test('should display audio settings', async ({ page }) => {
-    await expect(page.locator('text=Audio Settings')).toBeVisible()
-    await expect(page.locator('text=Speech Rate')).toBeVisible()
-    await expect(page.locator('text=Volume')).toBeVisible()
+    // UI shows Chinese: 音訊, 語速, 音量
+    await expect(page.getByRole('heading', { name: '音訊' })).toBeVisible()
+    await expect(page.locator('text=語速')).toBeVisible()
+    await expect(page.locator('text=音量')).toBeVisible()
   })
 
-  test('should display practice settings', async ({ page }) => {
-    await expect(page.locator('text=Practice Settings')).toBeVisible()
-    await expect(page.locator('text=Daily Goal')).toBeVisible()
-    await expect(page.locator('text=Exercise Time Limit')).toBeVisible()
+  test('should display learning settings', async ({ page }) => {
+    // UI shows Chinese: 學習, 每日目標, 練習時間限制
+    await expect(page.getByRole('heading', { name: '學習' })).toBeVisible()
+    await expect(page.locator('text=每日目標')).toBeVisible()
+    await expect(page.locator('text=練習時間限制')).toBeVisible()
   })
 
   test('should display notification settings', async ({ page }) => {
-    await expect(page.locator('text=Notifications')).toBeVisible()
-    await expect(page.locator('text=Daily Reminder')).toBeVisible()
+    // UI shows Chinese: 通知, 每日提醒
+    await expect(page.getByRole('heading', { name: '通知' })).toBeVisible()
+    await expect(page.locator('text=每日提醒')).toBeVisible()
   })
 
   test('should toggle auto-play audio', async ({ page }) => {
-    const toggle = page.locator('text=Auto-play Audio').locator('..').getByRole('checkbox')
-    await toggle.click()
-    // Toggle should be interactive
-    await expect(toggle).toBeDefined()
+    // UI shows Chinese: 自動播放發音
+    // Use the label to click since Chakra Switch label intercepts pointer events
+    const toggleLabel = page.locator('label').filter({ has: page.getByRole('checkbox', { name: '自動播放發音' }) })
+    const checkbox = page.getByRole('checkbox', { name: '自動播放發音' })
+    await expect(checkbox).toBeVisible()
+    const wasChecked = await checkbox.isChecked()
+    await toggleLabel.click()
+    // Toggle should change state
+    await expect(checkbox).toBeChecked({ checked: !wasChecked })
   })
 
   test('should adjust speech rate slider', async ({ page }) => {
-    const slider = page.locator('text=Speech Rate').locator('..').getByRole('slider')
+    // UI shows Chinese: 語速
+    const slider = page.locator('text=語速').locator('..').locator('..').getByRole('slider')
     await expect(slider).toBeVisible()
+  })
+})
+
+test.describe('Notification Settings', () => {
+  test.beforeEach(async ({ page, context }) => {
+    // Grant notification permission before navigating
+    await context.grantPermissions(['notifications'])
+    // Mock Notification.permission to return 'granted'
+    await page.addInitScript(() => {
+      Object.defineProperty(Notification, 'permission', {
+        get: () => 'granted',
+        configurable: true,
+      })
+    })
+    await page.goto('/settings')
+  })
+
+  test('should display notification section with permission status', async ({ page }) => {
+    // UI shows Chinese: 通知, 已啟用
+    await expect(page.getByRole('heading', { name: '通知' })).toBeVisible()
+    // Should show "已啟用" (Enabled) badge when permission is granted
+    await expect(page.locator('text=已啟用')).toBeVisible()
+  })
+
+  test('should display daily reminders toggle', async ({ page }) => {
+    // UI shows Chinese: 每日提醒
+    await expect(page.locator('text=每日提醒')).toBeVisible()
+    const toggle = page.getByRole('checkbox', { name: '每日提醒' })
+    await expect(toggle).toBeVisible()
+    await expect(toggle).not.toBeDisabled()
+  })
+
+  test('should show reminder time picker when notifications enabled', async ({ page }) => {
+    // UI shows Chinese: 每日提醒, 提醒時間
+    const toggleLabel = page.locator('label').filter({ has: page.getByRole('checkbox', { name: '每日提醒' }) })
+    const toggle = page.getByRole('checkbox', { name: '每日提醒' })
+    const isChecked = await toggle.isChecked()
+
+    if (!isChecked) {
+      await toggleLabel.click()
+    }
+
+    // Should show time picker (提醒時間)
+    await expect(page.locator('text=提醒時間')).toBeVisible()
+    await expect(page.locator('input[type="time"]')).toBeVisible()
+  })
+
+  test('should show test notification button when enabled', async ({ page }) => {
+    // UI shows Chinese: 測試通知
+    const toggleLabel = page.locator('label').filter({ has: page.getByRole('checkbox', { name: '每日提醒' }) })
+    const toggle = page.getByRole('checkbox', { name: '每日提醒' })
+    const isChecked = await toggle.isChecked()
+
+    if (!isChecked) {
+      await toggleLabel.click()
+    }
+
+    await expect(page.getByRole('button', { name: '測試通知' })).toBeVisible()
+  })
+
+  test('should allow changing reminder time', async ({ page }) => {
+    const toggleLabel = page.locator('label').filter({ has: page.getByRole('checkbox', { name: '每日提醒' }) })
+    const toggle = page.getByRole('checkbox', { name: '每日提醒' })
+    const isChecked = await toggle.isChecked()
+
+    if (!isChecked) {
+      await toggleLabel.click()
+    }
+
+    const timeInput = page.locator('input[type="time"]')
+    await timeInput.fill('18:30')
+
+    await expect(timeInput).toHaveValue('18:30')
+  })
+
+  test('should hide time picker and test button when notifications disabled', async ({ page }) => {
+    // First ensure toggle is on
+    const toggleLabel = page.locator('label').filter({ has: page.getByRole('checkbox', { name: '每日提醒' }) })
+    const toggle = page.getByRole('checkbox', { name: '每日提醒' })
+    const isChecked = await toggle.isChecked()
+
+    if (!isChecked) {
+      await toggleLabel.click()
+    }
+
+    // Verify time picker is visible
+    await expect(page.locator('input[type="time"]')).toBeVisible()
+
+    // Now disable notifications
+    await toggleLabel.click()
+
+    // Time picker and test button should be hidden
+    await expect(page.locator('input[type="time"]')).not.toBeVisible()
+    await expect(page.getByRole('button', { name: '測試通知' })).not.toBeVisible()
+  })
+
+  test('should persist notification settings after page reload', async ({ page }) => {
+    // Ensure toggle is on and set a specific time
+    const toggleLabel = page.locator('label').filter({ has: page.getByRole('checkbox', { name: '每日提醒' }) })
+    const toggle = page.getByRole('checkbox', { name: '每日提醒' })
+    const isChecked = await toggle.isChecked()
+
+    if (!isChecked) {
+      await toggleLabel.click()
+    }
+
+    const timeInput = page.locator('input[type="time"]')
+    await timeInput.fill('20:00')
+
+    // Reload the page
+    await page.reload()
+
+    // Settings should persist
+    await expect(page.locator('input[type="time"]')).toHaveValue('20:00')
+  })
+})
+
+test.describe('Notification Settings - Permission Denied', () => {
+  test('should show blocked status when permission denied', async ({ page, context }) => {
+    // Deny notification permission
+    await context.clearPermissions()
+
+    await page.goto('/settings')
+
+    // UI shows Chinese: 每日提醒
+    // The switch should be disabled when permission is not granted
+    const toggle = page.getByRole('checkbox', { name: '每日提醒' })
+    await expect(toggle).toBeDisabled()
   })
 })

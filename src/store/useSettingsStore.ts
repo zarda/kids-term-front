@@ -21,6 +21,7 @@ interface SettingsState {
   // Notification settings
   notificationsEnabled: boolean
   reminderTime: string // HH:mm format
+  lastNotificationDate: string | null // yyyy-MM-dd format
 
   // Actions
   setSourceLang: (lang: string) => void
@@ -33,6 +34,7 @@ interface SettingsState {
   setSelectedDifficulty: (difficulty: DifficultyLevel) => void
   setNotificationsEnabled: (enabled: boolean) => void
   setReminderTime: (time: string) => void
+  setLastNotificationDate: (date: string | null) => void
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -48,6 +50,7 @@ export const useSettingsStore = create<SettingsState>()(
       selectedDifficulty: 'all',
       notificationsEnabled: true,
       reminderTime: '09:00',
+      lastNotificationDate: null,
 
       setSourceLang: (lang) => set({ sourceLang: lang }),
       setTargetLang: (lang) => set({ targetLang: lang }),
@@ -59,6 +62,7 @@ export const useSettingsStore = create<SettingsState>()(
       setSelectedDifficulty: (difficulty) => set({ selectedDifficulty: difficulty }),
       setNotificationsEnabled: (enabled) => set({ notificationsEnabled: enabled }),
       setReminderTime: (time) => set({ reminderTime: time }),
+      setLastNotificationDate: (date) => set({ lastNotificationDate: date }),
     }),
     {
       name: 'kidsterm-settings-v1',

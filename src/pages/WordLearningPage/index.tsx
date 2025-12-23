@@ -65,11 +65,13 @@ export default function WordLearningPage() {
   }, [words.length, hasInitialized])
 
   // Auto-play pronunciation when word changes
+  // Don't auto-play when user has saved progress and is at index 0 (waiting to decide to resume)
   useEffect(() => {
-    if (autoPlayAudio && currentWord && activePack && hasInitialized) {
+    const waitingToResume = hasSavedProgress && currentIndex === 0
+    if (autoPlayAudio && currentWord && activePack && hasInitialized && !waitingToResume) {
       speak(currentWord.term, activePack.targetLanguage)
     }
-  }, [currentIndex, autoPlayAudio, hasInitialized])
+  }, [currentIndex, autoPlayAudio, hasInitialized, hasSavedProgress])
 
   // Jump to saved position
   const handleResume = useCallback(() => {

@@ -114,6 +114,13 @@ const en: Translations = {
     darkMode: 'Dark Mode',
     notifications: 'Notifications',
     dailyReminders: 'Daily Reminders',
+    reminderTime: 'Reminder Time',
+    enableNotifications: 'Enable Notifications',
+    testNotification: 'Test Notification',
+    permissionGranted: 'Enabled',
+    permissionDenied: 'Blocked',
+    permissionDefault: 'Not Set',
+    notificationsNotSupported: 'Notifications are not supported in this browser',
     about: 'About',
     version: 'KidsTerm',
     appDescription: 'A mobile-first language learning application',
@@ -121,6 +128,11 @@ const en: Translations = {
     clearAllData: 'Clear All Data',
     clearAllDataDesc: 'This will delete all your progress, settings, and downloaded language packs.',
     clearAllDataConfirm: 'Are you sure? This action cannot be undone.',
+  },
+
+  notifications: {
+    reminderTitle: 'Time to Learn!',
+    reminderBody: "Don't forget to practice your vocabulary today!",
   },
 }
 
