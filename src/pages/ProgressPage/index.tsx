@@ -160,6 +160,7 @@ export default function ProgressPage() {
           <SimpleGrid columns={{ base: 2, md: 3, lg: 4 }} spacing={{ base: 2, md: 3 }}>
             {achievements.map((achievement) => {
               const isUnlocked = unlockedAchievements.includes(achievement.id)
+              const achievementTranslation = t.achievements[achievement.id as keyof typeof t.achievements]
               return (
                 <Card
                   key={achievement.id}
@@ -172,10 +173,10 @@ export default function ProgressPage() {
                     <VStack spacing={1}>
                       <Text fontSize={{ base: 'xl', md: '2xl' }}>{achievement.icon}</Text>
                       <Text fontSize={{ base: '2xs', md: 'xs', lg: 'sm' }} fontWeight="medium" textAlign="center" noOfLines={1}>
-                        {achievement.title}
+                        {achievementTranslation?.title}
                       </Text>
                       <Text fontSize={{ base: '2xs', md: 'xs' }} color="gray.500" textAlign="center" noOfLines={2}>
-                        {achievement.description}
+                        {achievementTranslation?.description}
                       </Text>
                     </VStack>
                   </CardBody>

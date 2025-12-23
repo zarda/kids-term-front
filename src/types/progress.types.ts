@@ -9,12 +9,9 @@ export interface DailyProgress {
 
 export interface Achievement {
   id: string
-  title: string
-  description: string
   icon: string
   requirement: number
   type: 'streak' | 'words' | 'exercises' | 'accuracy' | 'time'
-  unlockedAt?: string
 }
 
 export interface UserProgress {

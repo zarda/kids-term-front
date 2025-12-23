@@ -14,6 +14,8 @@ describe('useProgressStore', () => {
       lastActiveDate: new Date().toISOString().split('T')[0],
       dailyGoal: 10,
       todayWordsLearned: 0,
+      consecutiveCorrectAnswers: 0,
+      lastUnlockedAchievement: null,
     })
   })
 
@@ -167,6 +169,88 @@ describe('useProgressStore', () => {
 
       expect(progress).toBeDefined()
       expect(progress?.wordsLearned).toBe(3)
+    })
+  })
+
+  describe('achievement auto-unlocking', () => {
+    it('should unlock words-1 achievement when learning first word', () => {
+      const { incrementWordsLearned } = useProgressStore.getState()
+
+      incrementWordsLearned(1)
+
+      const state = useProgressStore.getState()
+      expect(state.achievements).toContain('words-1')
+      expect(state.lastUnlockedAchievement).toBe('words-1')
+    })
+
+    it('should unlock words-10 achievement when reaching 10 words', () => {
+      const { incrementWordsLearned } = useProgressStore.getState()
+
+      incrementWordsLearned(10)
+
+      const state = useProgressStore.getState()
+      expect(state.achievements).toContain('words-10')
+    })
+
+    it('should unlock exercises-1 achievement when completing first exercise', () => {
+      const { incrementExercisesCompleted } = useProgressStore.getState()
+
+      incrementExercisesCompleted()
+
+      const state = useProgressStore.getState()
+      expect(state.achievements).toContain('exercises-1')
+    })
+
+    it('should unlock accuracy-perfect-3 after 3 consecutive correct answers', () => {
+      const { recordCorrectAnswer } = useProgressStore.getState()
+
+      recordCorrectAnswer()
+      recordCorrectAnswer()
+      recordCorrectAnswer()
+
+      const state = useProgressStore.getState()
+      expect(state.consecutiveCorrectAnswers).toBe(3)
+      expect(state.achievements).toContain('accuracy-perfect-3')
+    })
+
+    it('should reset consecutive correct answers on incorrect answer', () => {
+      const { recordCorrectAnswer, recordIncorrectAnswer } = useProgressStore.getState()
+
+      recordCorrectAnswer()
+      recordCorrectAnswer()
+      recordIncorrectAnswer()
+
+      const state = useProgressStore.getState()
+      expect(state.consecutiveCorrectAnswers).toBe(0)
+    })
+
+    it('should not duplicate achievements', () => {
+      const { incrementWordsLearned } = useProgressStore.getState()
+
+      incrementWordsLearned(10)
+      incrementWordsLearned(5) // Still above 10
+
+      const state = useProgressStore.getState()
+      expect(state.achievements.filter((a) => a === 'words-10').length).toBe(1)
+    })
+
+    it('should unlock time-5 achievement after 5 minutes spent', () => {
+      const { addTimeSpent } = useProgressStore.getState()
+
+      addTimeSpent(5)
+
+      const state = useProgressStore.getState()
+      expect(state.achievements).toContain('time-5')
+    })
+
+    it('should clear lastUnlockedAchievement when requested', () => {
+      const { incrementWordsLearned, clearLastUnlockedAchievement } = useProgressStore.getState()
+
+      incrementWordsLearned(1)
+      expect(useProgressStore.getState().lastUnlockedAchievement).toBe('words-1')
+
+      clearLastUnlockedAchievement()
+      expect(useProgressStore.getState().lastUnlockedAchievement).toBeNull()
     })
   })
 })

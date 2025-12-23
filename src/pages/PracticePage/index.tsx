@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import {
   Box,
   Button,
@@ -74,7 +74,12 @@ export default function PracticePage() {
 
   const incrementExercisesCompleted = useProgressStore((s) => s.incrementExercisesCompleted)
   const recordCorrectAnswer = useProgressStore((s) => s.recordCorrectAnswer)
+  const recordIncorrectAnswer = useProgressStore((s) => s.recordIncorrectAnswer)
+  const addTimeSpent = useProgressStore((s) => s.addTimeSpent)
   const exerciseTimeLimit = useSettingsStore((s) => s.exerciseTimeLimit)
+
+  // Track session start time for time achievements
+  const sessionStartTime = useRef<Date | null>(null)
   const { speak, isSpeaking } = useSpeech()
 
   const { timeLeft, isRunning, start, reset, formatTime } = useTimer(exerciseTimeLimit)
@@ -110,9 +115,11 @@ export default function PracticePage() {
 
       if (isCorrect) {
         recordCorrectAnswer()
+      } else {
+        recordIncorrectAnswer()
       }
     },
-    [showResult, currentExercise, incrementExercisesCompleted, recordCorrectAnswer]
+    [showResult, currentExercise, incrementExercisesCompleted, recordCorrectAnswer, recordIncorrectAnswer]
   )
 
   // Auto-submit on timeout
@@ -135,6 +142,7 @@ export default function PracticePage() {
     setExerciseType(type)
     setSessionStarted(true)
     setScore({ correct: 0, total: 0 })
+    sessionStartTime.current = new Date()
     const exercise = generateExercise(words, type)
     setCurrentExercise(exercise)
     reset(exerciseTimeLimit)
@@ -142,6 +150,17 @@ export default function PracticePage() {
   }
 
   const endSession = () => {
+    // Calculate and record time spent
+    if (sessionStartTime.current) {
+      const minutesSpent = Math.round(
+        (new Date().getTime() - sessionStartTime.current.getTime()) / 60000
+      )
+      if (minutesSpent > 0) {
+        addTimeSpent(minutesSpent)
+      }
+      sessionStartTime.current = null
+    }
+
     setSessionStarted(false)
     setCurrentExercise(null)
     reset()

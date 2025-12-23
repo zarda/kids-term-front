@@ -89,9 +89,73 @@ export interface Translations {
     minutes: string
     weeklyProgress: string
     achievements: string
+    achievementUnlocked: string
     noAchievements: string
     resetProgress: string
     resetConfirm: string
+  }
+
+  // Achievements
+  achievements: {
+    // Streak
+    'streak-1': { title: string; description: string }
+    'streak-3': { title: string; description: string }
+    'streak-5': { title: string; description: string }
+    'streak-7': { title: string; description: string }
+    'streak-14': { title: string; description: string }
+    'streak-21': { title: string; description: string }
+    'streak-30': { title: string; description: string }
+    'streak-60': { title: string; description: string }
+    'streak-100': { title: string; description: string }
+    'streak-180': { title: string; description: string }
+    'streak-365': { title: string; description: string }
+    // Words
+    'words-1': { title: string; description: string }
+    'words-5': { title: string; description: string }
+    'words-10': { title: string; description: string }
+    'words-25': { title: string; description: string }
+    'words-50': { title: string; description: string }
+    'words-75': { title: string; description: string }
+    'words-100': { title: string; description: string }
+    'words-150': { title: string; description: string }
+    'words-250': { title: string; description: string }
+    'words-350': { title: string; description: string }
+    'words-500': { title: string; description: string }
+    'words-750': { title: string; description: string }
+    'words-1000': { title: string; description: string }
+    // Exercises
+    'exercises-1': { title: string; description: string }
+    'exercises-5': { title: string; description: string }
+    'exercises-10': { title: string; description: string }
+    'exercises-25': { title: string; description: string }
+    'exercises-50': { title: string; description: string }
+    'exercises-75': { title: string; description: string }
+    'exercises-100': { title: string; description: string }
+    'exercises-150': { title: string; description: string }
+    'exercises-250': { title: string; description: string }
+    'exercises-350': { title: string; description: string }
+    'exercises-500': { title: string; description: string }
+    'exercises-750': { title: string; description: string }
+    'exercises-1000': { title: string; description: string }
+    // Accuracy
+    'accuracy-perfect-3': { title: string; description: string }
+    'accuracy-perfect-5': { title: string; description: string }
+    'accuracy-perfect-10': { title: string; description: string }
+    'accuracy-perfect-15': { title: string; description: string }
+    'accuracy-perfect-25': { title: string; description: string }
+    'accuracy-perfect-50': { title: string; description: string }
+    'accuracy-perfect-100': { title: string; description: string }
+    // Time
+    'time-5': { title: string; description: string }
+    'time-15': { title: string; description: string }
+    'time-30': { title: string; description: string }
+    'time-60': { title: string; description: string }
+    'time-120': { title: string; description: string }
+    'time-300': { title: string; description: string }
+    'time-480': { title: string; description: string }
+    'time-600': { title: string; description: string }
+    'time-1200': { title: string; description: string }
+    'time-3000': { title: string; description: string }
   }
 
   // Settings Page

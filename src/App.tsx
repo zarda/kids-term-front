@@ -3,9 +3,15 @@ import { BrowserRouter } from 'react-router-dom'
 import theme from './theme'
 import AppRoutes from './routes'
 import { useNotificationScheduler } from './hooks/useNotificationScheduler'
+import { useAchievementNotification } from './hooks/useAchievementNotification'
 
 function NotificationScheduler() {
   useNotificationScheduler()
+  return null
+}
+
+function AchievementNotifier() {
+  useAchievementNotification()
   return null
 }
 
@@ -16,6 +22,7 @@ function App() {
       <ChakraProvider theme={theme}>
         <BrowserRouter>
           <NotificationScheduler />
+          <AchievementNotifier />
           <AppRoutes />
         </BrowserRouter>
       </ChakraProvider>
