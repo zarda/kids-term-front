@@ -53,6 +53,8 @@ const en: Translations = {
     jumpToCard: 'Jump to card',
     goToCard: 'Go',
     pronunciationWarning: 'Pronunciation is computer-generated and may not be accurate',
+    swipeHintSkip: 'Skip',
+    swipeHintLearned: 'Learned!',
   },
 
   practice: {
@@ -81,6 +83,7 @@ const en: Translations = {
     exercisesCompleted: 'Exercises Completed',
     correctAnswers: 'Correct Answers',
     currentStreak: 'Current Streak',
+    longestStreak: 'Longest Streak',
     totalTimeSpent: 'Total Time Spent',
     minutes: 'min',
     weeklyProgress: 'Weekly Progress',

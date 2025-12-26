@@ -479,6 +479,7 @@ export default function SettingsPage() {
                   localStorage.removeItem('kidsterm-settings-v1')
                   localStorage.removeItem('kidsterm-language-packs-v1')
                   localStorage.removeItem('kidsterm-progress-v1')
+                  localStorage.removeItem('kidsterm-swipe-hints')
                   // Reload the page to reset all stores
                   window.location.reload()
                 }}

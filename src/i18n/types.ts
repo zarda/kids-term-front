@@ -55,6 +55,8 @@ export interface Translations {
     jumpToCard: string
     goToCard: string
     pronunciationWarning: string
+    swipeHintSkip: string
+    swipeHintLearned: string
   }
 
   // Practice Page
@@ -85,6 +87,7 @@ export interface Translations {
     exercisesCompleted: string
     correctAnswers: string
     currentStreak: string
+    longestStreak: string
     totalTimeSpent: string
     minutes: string
     weeklyProgress: string

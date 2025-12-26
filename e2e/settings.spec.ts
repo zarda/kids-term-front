@@ -183,3 +183,54 @@ test.describe('Notification Settings - Permission Denied', () => {
     await expect(toggle).toBeDisabled()
   })
 })
+
+test.describe('Clear All Data', () => {
+  test('should display danger zone section', async ({ page }) => {
+    await page.goto('/settings')
+    // UI shows Chinese: 危險區域, 清除所有資料
+    await expect(page.getByRole('heading', { name: '危險區域' })).toBeVisible()
+    await expect(page.getByRole('button', { name: '清除所有資料' })).toBeVisible()
+  })
+
+  test('should show confirmation dialog when clicking clear all data', async ({ page }) => {
+    await page.goto('/settings')
+    await page.getByRole('button', { name: '清除所有資料' }).click()
+    // UI shows Chinese: 確定要執行嗎？此操作無法復原。
+    await expect(page.locator('text=確定要執行嗎？此操作無法復原。')).toBeVisible()
+  })
+
+  test('should clear all localStorage keys including swipe hints', async ({ page }) => {
+    await page.goto('/settings')
+
+    // Set up some localStorage data
+    await page.evaluate(() => {
+      localStorage.setItem('kidsterm-settings-v1', JSON.stringify({ test: true }))
+      localStorage.setItem('kidsterm-language-packs-v1', JSON.stringify({ test: true }))
+      localStorage.setItem('kidsterm-progress-v1', JSON.stringify({ test: true }))
+      localStorage.setItem('kidsterm-swipe-hints', JSON.stringify({ date: '2025-12-25', swipeCount: 3 }))
+    })
+
+    // Click clear all data
+    await page.getByRole('button', { name: '清除所有資料' }).click()
+    // Confirm in dialog
+    await page.getByRole('button', { name: '刪除' }).click()
+
+    // Page should reload, so wait for navigation
+    await page.waitForLoadState('networkidle')
+
+    // Verify localStorage is cleared
+    const remainingKeys = await page.evaluate(() => {
+      return {
+        settings: localStorage.getItem('kidsterm-settings-v1'),
+        packs: localStorage.getItem('kidsterm-language-packs-v1'),
+        progress: localStorage.getItem('kidsterm-progress-v1'),
+        swipeHints: localStorage.getItem('kidsterm-swipe-hints'),
+      }
+    })
+
+    expect(remainingKeys.settings).toBeNull()
+    expect(remainingKeys.packs).toBeNull()
+    expect(remainingKeys.progress).toBeNull()
+    expect(remainingKeys.swipeHints).toBeNull()
+  })
+})

@@ -180,7 +180,8 @@ describe('useProgressStore', () => {
 
       const state = useProgressStore.getState()
       expect(state.achievements).toContain('words-1')
-      expect(state.lastUnlockedAchievement).toBe('words-1')
+      // streak-1 is also unlocked on first word learned (first activity)
+      expect(state.achievements).toContain('streak-1')
     })
 
     it('should unlock words-10 achievement when reaching 10 words', () => {
@@ -247,7 +248,8 @@ describe('useProgressStore', () => {
       const { incrementWordsLearned, clearLastUnlockedAchievement } = useProgressStore.getState()
 
       incrementWordsLearned(1)
-      expect(useProgressStore.getState().lastUnlockedAchievement).toBe('words-1')
+      // streak-1 is the last achievement unlocked (after words-1)
+      expect(useProgressStore.getState().lastUnlockedAchievement).toBe('streak-1')
 
       clearLastUnlockedAchievement()
       expect(useProgressStore.getState().lastUnlockedAchievement).toBeNull()

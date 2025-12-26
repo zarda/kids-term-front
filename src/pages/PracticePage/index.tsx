@@ -152,10 +152,11 @@ export default function PracticePage() {
   const endSession = () => {
     // Calculate and record time spent
     if (sessionStartTime.current) {
-      const minutesSpent = Math.round(
-        (new Date().getTime() - sessionStartTime.current.getTime()) / 60000
+      const secondsSpent = Math.floor(
+        (new Date().getTime() - sessionStartTime.current.getTime()) / 10000
       )
-      if (minutesSpent > 0) {
+      if (secondsSpent >= 2) {
+        const minutesSpent = Math.ceil(secondsSpent / 6)
         addTimeSpent(minutesSpent)
       }
       sessionStartTime.current = null

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import {
   Box,
   Card,
@@ -26,6 +26,8 @@ import { useSettingsStore } from '../../store/useSettingsStore'
 import { useSpeech } from '../../hooks/useSpeech'
 import { useTranslation } from '../../hooks/useTranslation'
 import { useActiveLanguagePack } from '../../hooks/useActiveLanguagePack'
+import { useSwipeOnboarding } from '../../hooks/useSwipeOnboarding'
+import { SwipeHintArrows } from './SwipeHintArrows'
 
 export default function WordLearningPage() {
   const [isFlipped, setIsFlipped] = useState(false)
@@ -42,13 +44,35 @@ export default function WordLearningPage() {
   // Get words from active language pack
   const { words, activePack, activePackId } = useActiveLanguagePack()
 
+  // Swipe hint arrows (daily reset)
+  const { showHints, recordSwipe } = useSwipeOnboarding()
+
   const incrementWordsLearned = useProgressStore((s) => s.incrementWordsLearned)
   const setLastWordIndex = useProgressStore((s) => s.setLastWordIndex)
   const getLastWordIndex = useProgressStore((s) => s.getLastWordIndex)
+  const addTimeSpent = useProgressStore((s) => s.addTimeSpent)
+
+  // Track time spent on this page
+  const pageStartTime = useRef<Date>(new Date())
 
   // Get saved position for current pack
   const savedIndex = activePackId ? getLastWordIndex(activePackId) : 0
   const hasSavedProgress = savedIndex > 0 && savedIndex < words.length
+
+  // Record time spent when leaving the page
+  useEffect(() => {
+    pageStartTime.current = new Date()
+
+    return () => {
+      const secondsSpent = Math.floor(
+        (new Date().getTime() - pageStartTime.current.getTime()) / 10000
+      )
+      if (secondsSpent >= 2) {
+        const minutesSpent = Math.ceil(secondsSpent / 6)
+        addTimeSpent(minutesSpent)
+      }
+    }
+  }, [addTimeSpent])
 
   // Save current position when index changes
   useEffect(() => {
@@ -71,6 +95,7 @@ export default function WordLearningPage() {
     if (autoPlayAudio && currentWord && activePack && hasInitialized && !waitingToResume) {
       speak(currentWord.term, activePack.targetLanguage)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, autoPlayAudio, hasInitialized, hasSavedProgress])
 
   // Jump to saved position
@@ -123,6 +148,7 @@ export default function WordLearningPage() {
               // Swiped right - mark as known
               incrementWordsLearned()
             }
+            recordSwipe()
             nextWord()
             setIsFlipped(false)
             api.start({ x: 0, rotate: 0, immediate: true })
@@ -380,10 +406,8 @@ export default function WordLearningPage() {
           </animated.div>
         </Box>
 
-        {/* Swipe instructions */}
-        <Text color="gray.500" fontSize="sm">
-          {t.learn.swipeHint}
-        </Text>
+        {/* Swipe hints - show only at start of each day */}
+        <SwipeHintArrows visible={showHints} />
 
         {/* Controls */}
         <HStack spacing={4}>

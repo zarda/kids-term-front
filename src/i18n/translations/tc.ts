@@ -53,6 +53,8 @@ const tc: Translations = {
     jumpToCard: '跳至卡片',
     goToCard: '前往',
     pronunciationWarning: '發音由電腦生成，可能不準確',
+    swipeHintSkip: '跳過',
+    swipeHintLearned: '已學會！',
   },
 
   practice: {
@@ -81,6 +83,7 @@ const tc: Translations = {
     exercisesCompleted: '完成練習',
     correctAnswers: '正確回答',
     currentStreak: '連續學習',
+    longestStreak: '最佳紀錄',
     totalTimeSpent: '學習時長',
     minutes: '分鐘',
     weeklyProgress: '本週進度',

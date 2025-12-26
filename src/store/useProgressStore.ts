@@ -100,10 +100,28 @@ export const useProgressStore = create<ProgressState>()(
 
           const idx = getOrCreateTodayProgress(state.dailyProgress)
           state.dailyProgress[idx].wordsLearned += count
-          state.lastActiveDate = getToday()
 
           // Check words achievements
           checkAchievements(state, 'words', state.totalWordsLearned)
+
+          // Update streak
+          const today = getToday()
+          const lastActive = state.lastActiveDate
+          if (lastActive !== today || state.currentStreak === 0) {
+            const daysDiff = differenceInDays(parseISO(today), parseISO(lastActive))
+            if (daysDiff === 0 && state.currentStreak === 0) {
+              state.currentStreak = 1
+            } else if (daysDiff === 1) {
+              state.currentStreak += 1
+            } else if (daysDiff > 1) {
+              state.currentStreak = 1
+            }
+            if (state.currentStreak > state.longestStreak) {
+              state.longestStreak = state.currentStreak
+            }
+            state.lastActiveDate = today
+            checkAchievements(state, 'streak', state.currentStreak)
+          }
         }),
 
       incrementExercisesCompleted: () =>
@@ -155,15 +173,23 @@ export const useProgressStore = create<ProgressState>()(
           const today = getToday()
           const lastActive = state.lastActiveDate
 
-          if (lastActive === today) {
-            return // Already updated today
+          // Already updated today
+          if (lastActive === today && state.currentStreak > 0) {
+            return
           }
 
-          const daysDiff = differenceInDays(new Date(), parseISO(lastActive))
+          const daysDiff = differenceInDays(parseISO(today), parseISO(lastActive))
 
-          if (daysDiff === 1) {
+          if (daysDiff === 0) {
+            // First activity today (currentStreak was 0)
+            if (state.currentStreak === 0) {
+              state.currentStreak = 1
+            }
+          } else if (daysDiff === 1) {
+            // Consecutive day
             state.currentStreak += 1
-          } else if (daysDiff > 1) {
+          } else {
+            // Streak broken (daysDiff > 1)
             state.currentStreak = 1
           }
 
@@ -172,8 +198,6 @@ export const useProgressStore = create<ProgressState>()(
           }
 
           state.lastActiveDate = today
-
-          // Check streak achievements
           checkAchievements(state, 'streak', state.currentStreak)
         }),
 

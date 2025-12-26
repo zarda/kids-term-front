@@ -9,9 +9,9 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: '英文 (繁體中文)',
     nativeName: 'English',
     flag: '🇺🇸',
-    wordCount: 1400,
+    wordCount: 3000,
     isDownloaded: true, // Pre-installed default
-    version: '0.5.0',
+    version: '1.0.0',
   },
   {
     id: 'tc-ja',
@@ -20,9 +20,9 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: '日文 (繁體中文)',
     nativeName: '日本語',
     flag: '🇯🇵',
-    wordCount: 1400,
+    wordCount: 3000,
     isDownloaded: false,
-    version: '0.5.0',
+    version: '1.0.0',
   },
   {
     id: 'tc-ko',
@@ -31,9 +31,20 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: '韓文 (繁體中文)',
     nativeName: '한국어',
     flag: '🇰🇷',
-    wordCount: 30,
+    wordCount: 3000,
     isDownloaded: false,
-    version: '0.1.0',
+    version: '1.0.0',
+  },
+  {
+    id: 'tc-de',
+    sourceLanguage: 'tc',
+    targetLanguage: 'de',
+    name: '德文 (繁體中文)',
+    nativeName: 'Deutsch',
+    flag: '🇩🇪',
+    wordCount: 3000,
+    isDownloaded: false,
+    version: '1.0.0',
   },
   {
     id: 'tc-es',
@@ -42,9 +53,9 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: '西班牙文 (繁體中文)',
     nativeName: 'Español',
     flag: '🇪🇸',
-    wordCount: 30,
+    wordCount: 3000,
     isDownloaded: false,
-    version: '0.1.0',
+    version: '1.0.0',
   },
   {
     id: 'tc-fr',
@@ -53,9 +64,20 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: '法文 (繁體中文)',
     nativeName: 'Français',
     flag: '🇫🇷',
-    wordCount: 30,
+    wordCount: 3000,
     isDownloaded: false,
-    version: '0.1.0',
+    version: '1.0.0',
+  },
+  {
+    id: 'tc-it',
+    sourceLanguage: 'tc',
+    targetLanguage: 'it',
+    name: '義大利文 (繁體中文)',
+    nativeName: 'Italiano',
+    flag: '🇮🇹',
+    wordCount: 3000,
+    isDownloaded: false,
+    version: '1.0.0',
   },
   {
     id: 'tc-tc',
@@ -64,9 +86,20 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: '繁體中文  (繁體中文)',
     nativeName: '繁體中文',
     flag: '🇹🇼',
-    wordCount: 30,
+    wordCount: 3000,
     isDownloaded: false,
-    version: '0.1.0',
+    version: '1.0.0',
+  },
+  {
+    id: 'tc-pt',
+    sourceLanguage: 'tc',
+    targetLanguage: 'pt',
+    name: '葡萄牙文 (繁體中文)',
+    nativeName: 'Português',
+    flag: '🇧🇷',
+    wordCount: 3000,
+    isDownloaded: false,
+    version: '1.0.0',
   },
   {
     id: 'en-en',
@@ -178,13 +211,19 @@ export async function downloadLanguagePack(packId: string): Promise<LanguagePack
     case 'tc-ja':
       return (await import('./tc-ja/index')).default
     case 'tc-ko':
-      return (await import('./tc-ko')).default
+      return (await import('./tc-ko/index')).default
+    case 'tc-de':
+      return (await import('./tc-de/index')).default
     case 'tc-es':
-      return (await import('./tc-es')).default
+      return (await import('./tc-es/index')).default
     case 'tc-fr':
-      return (await import('./tc-fr')).default
+      return (await import('./tc-fr/index')).default
+    case 'tc-it':
+      return (await import('./tc-it/index')).default
     case 'tc-tc':
-      return (await import('./tc-tc')).default
+      return (await import('./tc-tc/index')).default
+    case 'tc-pt':
+      return (await import('./tc-pt/index')).default
     case 'en-en':
       return (await import('./en-en/index')).default
     case 'en-es':

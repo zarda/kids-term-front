@@ -84,7 +84,7 @@ export default function ProgressPage() {
                 <StatLabel>
                   <HStack spacing={1}>
                     <Icon as={FiTrendingUp} color="purple.500" boxSize={{ base: 3, lg: 4 }} flexShrink={0} />
-                    <Text fontSize={{ base: '2xs', md: 'xs', lg: 'sm' }} noOfLines={1}>{t.home.streak}</Text>
+                    <Text fontSize={{ base: '2xs', md: 'xs', lg: 'sm' }} noOfLines={1}>{t.progress.longestStreak}</Text>
                   </HStack>
                 </StatLabel>
                 <StatNumber fontSize={{ base: 'md', md: 'lg', lg: 'xl' }}>{longestStreak} {t.home.days}</StatNumber>
