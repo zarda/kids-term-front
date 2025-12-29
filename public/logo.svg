@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#A855F7"/>
+      <stop offset="100%" style="stop-color:#6366F1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100" height="100" rx="20" fill="url(#bg)"/>
+
+  <!-- Scattered language characters (faded) -->
+  <g fill="white" opacity="0.25" font-family="Arial, sans-serif" font-weight="bold">
+    <text x="8" y="18" font-size="11">あ</text>
+    <text x="45" y="14" font-size="9">ñ</text>
+    <text x="82" y="20" font-size="10">한</text>
+    <text x="6" y="50" font-size="10">中</text>
+    <text x="85" y="48" font-size="9">ö</text>
+    <text x="12" y="80" font-size="9">é</text>
+    <text x="78" y="75" font-size="10">日</text>
+    <text x="8" y="95" font-size="8">ç</text>
+    <text x="85" y="92" font-size="9">の</text>
+  </g>
+
+  <!-- Letter tile A (pink) -->
+  <rect x="20" y="28" width="24" height="28" rx="5" fill="#F472B6"/>
+  <text x="32" y="49" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">A</text>
+
+  <!-- Letter tile B (yellow) -->
+  <rect x="56" y="28" width="24" height="28" rx="5" fill="#FBBF24"/>
+  <text x="68" y="49" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">B</text>
+
+  <!-- Letter tile C (green) -->
+  <rect x="38" y="62" width="24" height="28" rx="5" fill="#34D399"/>
+  <text x="50" y="83" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">C</text>
+</svg>
