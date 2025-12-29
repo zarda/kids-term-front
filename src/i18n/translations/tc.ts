@@ -19,9 +19,35 @@ const tc: Translations = {
   nav: {
     home: '首頁',
     learn: '學習',
+    games: '遊戲',
     practice: '練習',
     progress: '進度',
     settings: '設定',
+  },
+
+  games: {
+    title: '遊戲',
+    subtitle: '在遊戲中學習單字！',
+    scramble: '字母重組',
+    scrambleDesc: '重新排列字母組成單字',
+    matching: '配對遊戲',
+    matchingDesc: '找出單字和釋義的配對',
+    score: '分數',
+    highScore: '最高分',
+    attempts: '嘗試次數',
+    pairs: '配對',
+    hint: '提示',
+    playAgain: '再玩一次',
+    perfect: '完美！',
+    complete: '完成！',
+    newGame: '新遊戲',
+    correct: '正確！',
+    tryAgain: '再試一次',
+    nextWord: '下一個單字',
+    gameOver: '遊戲結束',
+    wordsCompleted: '完成的單字',
+    pairsFound: '找到的配對',
+    stars: '星星',
   },
 
   home: {
@@ -155,6 +181,15 @@ const tc: Translations = {
     'time-600': { title: '馬拉松學習者', description: '學習10小時' },
     'time-1200': { title: '時間大師', description: '學習20小時' },
     'time-3000': { title: '50小時傳奇', description: '學習50小時' },
+    // 遊戲成就
+    'games-1': { title: '第一場遊戲！', description: '完成第一場遊戲' },
+    'games-10': { title: '遊戲愛好者', description: '完成10場遊戲' },
+    'games-50': { title: '遊戲大師', description: '完成50場遊戲' },
+    'games-100': { title: '遊戲冠軍', description: '完成100場遊戲' },
+    // 完美遊戲成就
+    'perfect-3': { title: '三星達人', description: '完成3場完美遊戲' },
+    'perfect-10': { title: '完美主義者', description: '完成10場完美遊戲' },
+    'perfect-25': { title: '無懈可擊', description: '完成25場完美遊戲' },
   },
 
   settings: {

@@ -19,9 +19,35 @@ const ja: Translations = {
   nav: {
     home: 'ホーム',
     learn: '学習',
+    games: 'ゲーム',
     practice: '練習',
     progress: '進捗',
     settings: '設定',
+  },
+
+  games: {
+    title: 'ゲーム',
+    subtitle: '楽しみながら語彙を学ぼう！',
+    scramble: '文字並べ替え',
+    scrambleDesc: '文字を並べ替えて単語を作ろう',
+    matching: 'マッチングゲーム',
+    matchingDesc: '単語と意味のペアを見つけよう',
+    score: 'スコア',
+    highScore: 'ハイスコア',
+    attempts: '試行回数',
+    pairs: 'ペア',
+    hint: 'ヒント',
+    playAgain: 'もう一度',
+    perfect: '完璧！',
+    complete: '完了！',
+    newGame: '新しいゲーム',
+    correct: '正解！',
+    tryAgain: 'もう一度',
+    nextWord: '次の単語',
+    gameOver: 'ゲームオーバー',
+    wordsCompleted: '完了した単語',
+    pairsFound: '見つけたペア',
+    stars: 'スター',
   },
 
   home: {
@@ -155,6 +181,15 @@ const ja: Translations = {
     'time-600': { title: 'マラソン学習者', description: '10時間学習' },
     'time-1200': { title: 'タイムマスター', description: '20時間学習' },
     'time-3000': { title: '50時間レジェンド', description: '50時間学習' },
+    // ゲーム実績
+    'games-1': { title: '初ゲーム！', description: '最初のゲームを完了' },
+    'games-10': { title: 'ゲーム好き', description: '10回ゲームを完了' },
+    'games-50': { title: 'ゲームマスター', description: '50回ゲームを完了' },
+    'games-100': { title: 'ゲームチャンピオン', description: '100回ゲームを完了' },
+    // 完璧なゲーム実績
+    'perfect-3': { title: 'トリプルスター', description: '3回完璧なゲームを達成' },
+    'perfect-10': { title: 'パーフェクショニスト', description: '10回完璧なゲームを達成' },
+    'perfect-25': { title: '完璧無欠', description: '25回完璧なゲームを達成' },
   },
 
   settings: {

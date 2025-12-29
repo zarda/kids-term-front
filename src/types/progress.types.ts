@@ -11,7 +11,7 @@ export interface Achievement {
   id: string
   icon: string
   requirement: number
-  type: 'streak' | 'words' | 'exercises' | 'accuracy' | 'time'
+  type: 'streak' | 'words' | 'exercises' | 'accuracy' | 'time' | 'games' | 'perfect'
 }
 
 export interface UserProgress {

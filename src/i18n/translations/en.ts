@@ -19,9 +19,35 @@ const en: Translations = {
   nav: {
     home: 'Home',
     learn: 'Learn',
+    games: 'Games',
     practice: 'Practice',
     progress: 'Progress',
     settings: 'Settings',
+  },
+
+  games: {
+    title: 'Games',
+    subtitle: 'Have fun while learning vocabulary!',
+    scramble: 'Word Scramble',
+    scrambleDesc: 'Unscramble the letters to form words',
+    matching: 'Matching Game',
+    matchingDesc: 'Find matching pairs of words and definitions',
+    score: 'Score',
+    highScore: 'High Score',
+    attempts: 'Attempts',
+    pairs: 'Pairs',
+    hint: 'Hint',
+    playAgain: 'Play Again',
+    perfect: 'Perfect!',
+    complete: 'Complete!',
+    newGame: 'New Game',
+    correct: 'Correct!',
+    tryAgain: 'Try Again',
+    nextWord: 'Next Word',
+    gameOver: 'Game Over',
+    wordsCompleted: 'Words Completed',
+    pairsFound: 'Pairs Found',
+    stars: 'Stars',
   },
 
   home: {
@@ -155,6 +181,15 @@ const en: Translations = {
     'time-600': { title: 'Marathon Learner', description: 'Spend 10 hours learning' },
     'time-1200': { title: 'Time Master', description: 'Spend 20 hours learning' },
     'time-3000': { title: '50 Hour Legend', description: 'Spend 50 hours learning' },
+    // Games achievements
+    'games-1': { title: 'First Game!', description: 'Complete your first game' },
+    'games-10': { title: 'Game Lover', description: 'Complete 10 games' },
+    'games-50': { title: 'Game Master', description: 'Complete 50 games' },
+    'games-100': { title: 'Game Champion', description: 'Complete 100 games' },
+    // Perfect games achievements
+    'perfect-3': { title: 'Triple Star', description: 'Complete 3 perfect games' },
+    'perfect-10': { title: 'Perfectionist', description: 'Complete 10 perfect games' },
+    'perfect-25': { title: 'Flawless', description: 'Complete 25 perfect games' },
   },
 
   settings: {

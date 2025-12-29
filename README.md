@@ -18,8 +18,9 @@ A mobile-first language learning application designed to help kids learn vocabul
 
 | Source | Target Languages |
 |--------|-----------------|
-| English | Chinese, French, German, Italian, Japanese, Korean, Portuguese, Spanish |
-| Chinese (中文) | English, French, German, Italian, Japanese, Korean, Portuguese, Spanish |
+| English | English, French, German, Italian, Japanese, Korean, Portuguese, Spanish, Traditional Chinese |
+| Japanese (日本語) | English, French, German, Italian, Japanese, Korean, Portuguese, Spanish, Traditional Chinese |
+| Traditional Chinese (繁體中文) | English, French, German, Italian, Japanese, Korean, Portuguese, Spanish, Traditional Chinese |
 
 Each language pack includes **beginner**, **intermediate**, and **advanced** difficulty levels.
 
@@ -40,15 +41,23 @@ Each language pack includes **beginner**, **intermediate**, and **advanced** dif
 - Timed exercises (configurable 10-60 seconds)
 - Score tracking and session summaries
 
+### Games
+- **Word Scramble**: Unscramble letters to form words with hints and audio support
+- **Matching Game**: Memory card matching with terms and definitions (6 pairs)
+- Progress tracking and perfect game detection
+- Star ratings based on performance
+
 ### Progress & Analytics
 - Daily streak tracking (current and longest)
 - Weekly progress charts
-- 50+ achievement badges across categories:
+- 57 achievement badges across categories:
   - Streak milestones (1-365 days)
   - Words learned (1-1000 words)
   - Exercises completed (1-1000 exercises)
   - Perfect accuracy (3-100 consecutive correct)
   - Time spent (5-3000 minutes)
+  - Games played (1-100 games)
+  - Perfect games (3-25 games)
 - Detailed statistics (accuracy, time spent, words mastered)
 
 ### Settings
@@ -72,11 +81,12 @@ src/
 │   ├── HomePage/        # Dashboard with daily stats
 │   ├── WordLearningPage/# Flashcard learning
 │   ├── PracticePage/    # Exercise practice
+│   ├── GamesPage/       # Word Scramble & Matching games
 │   ├── ProgressPage/    # Statistics and achievements
 │   └── SettingsPage/    # User preferences
 ├── store/               # Zustand stores (with persistence)
 ├── hooks/               # Custom hooks (useSpeech, useTimer, useSwipeGesture, etc.)
-├── i18n/                # Internationalization (EN, TC)
+├── i18n/                # Internationalization (EN, JA, TC)
 ├── data/                # Language packs (28+ combinations)
 ├── types/               # TypeScript interfaces
 └── theme/               # Chakra UI theme customization

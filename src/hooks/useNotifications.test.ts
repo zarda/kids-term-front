@@ -38,11 +38,14 @@ describe('useNotifications', () => {
     })
 
     it('should return null when sending notification', () => {
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
       const { result } = renderHook(() => useNotifications())
 
       const notification = result.current.sendNotification('Test', { body: 'Test body' })
 
       expect(notification).toBeNull()
+      expect(consoleSpy).toHaveBeenCalledWith('Notifications not supported in this browser')
+      consoleSpy.mockRestore()
     })
   })
 
@@ -110,6 +113,7 @@ describe('useNotifications', () => {
     })
 
     it('should not send notification when permission is not granted', () => {
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
       Object.defineProperty(mockNotification, 'permission', {
         value: 'denied',
         writable: true,
@@ -122,6 +126,8 @@ describe('useNotifications', () => {
 
       expect(notification).toBeNull()
       expect(mockNotification).not.toHaveBeenCalled()
+      expect(consoleSpy).toHaveBeenCalledWith('Notification permission not granted:', 'denied')
+      consoleSpy.mockRestore()
     })
   })
 })

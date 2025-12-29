@@ -87,10 +87,16 @@ describe('useLocalStorage', () => {
   })
 
   it('should return initial value on JSON parse error', () => {
+    const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
     localStorage.setItem('test-key', 'invalid-json')
 
     const { result } = renderHook(() => useLocalStorage('test-key', 'initial'))
 
     expect(result.current[0]).toBe('initial')
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Error reading localStorage key "test-key":',
+      expect.any(SyntaxError)
+    )
+    consoleSpy.mockRestore()
   })
 })

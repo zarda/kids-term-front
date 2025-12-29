@@ -19,9 +19,36 @@ export interface Translations {
   nav: {
     home: string
     learn: string
+    games: string
     practice: string
     progress: string
     settings: string
+  }
+
+  // Games Page
+  games: {
+    title: string
+    subtitle: string
+    scramble: string
+    scrambleDesc: string
+    matching: string
+    matchingDesc: string
+    score: string
+    highScore: string
+    attempts: string
+    pairs: string
+    hint: string
+    playAgain: string
+    perfect: string
+    complete: string
+    newGame: string
+    correct: string
+    tryAgain: string
+    nextWord: string
+    gameOver: string
+    wordsCompleted: string
+    pairsFound: string
+    stars: string
   }
 
   // Home Page
@@ -160,6 +187,15 @@ export interface Translations {
     'time-600': { title: string; description: string }
     'time-1200': { title: string; description: string }
     'time-3000': { title: string; description: string }
+    // Games
+    'games-1': { title: string; description: string }
+    'games-10': { title: string; description: string }
+    'games-50': { title: string; description: string }
+    'games-100': { title: string; description: string }
+    // Perfect
+    'perfect-3': { title: string; description: string }
+    'perfect-10': { title: string; description: string }
+    'perfect-25': { title: string; description: string }
   }
 
   // Settings Page

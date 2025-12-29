@@ -16,6 +16,8 @@ describe('useProgressStore', () => {
       todayWordsLearned: 0,
       consecutiveCorrectAnswers: 0,
       lastUnlockedAchievement: null,
+      gamesPlayed: 0,
+      perfectGames: 0,
     })
   })
 
@@ -253,6 +255,91 @@ describe('useProgressStore', () => {
 
       clearLastUnlockedAchievement()
       expect(useProgressStore.getState().lastUnlockedAchievement).toBeNull()
+    })
+  })
+
+  describe('incrementGamesPlayed', () => {
+    it('should increment games played count', () => {
+      const { incrementGamesPlayed } = useProgressStore.getState()
+
+      incrementGamesPlayed()
+
+      const state = useProgressStore.getState()
+      expect(state.gamesPlayed).toBe(1)
+    })
+
+    it('should accumulate games played', () => {
+      const { incrementGamesPlayed } = useProgressStore.getState()
+
+      incrementGamesPlayed()
+      incrementGamesPlayed()
+      incrementGamesPlayed()
+
+      const state = useProgressStore.getState()
+      expect(state.gamesPlayed).toBe(3)
+    })
+
+    it('should unlock games-1 achievement on first game', () => {
+      const { incrementGamesPlayed } = useProgressStore.getState()
+
+      incrementGamesPlayed()
+
+      const state = useProgressStore.getState()
+      expect(state.achievements).toContain('games-1')
+    })
+
+    it('should unlock games-10 achievement after 10 games', () => {
+      const { incrementGamesPlayed } = useProgressStore.getState()
+
+      for (let i = 0; i < 10; i++) {
+        incrementGamesPlayed()
+      }
+
+      const state = useProgressStore.getState()
+      expect(state.achievements).toContain('games-10')
+    })
+  })
+
+  describe('incrementPerfectGames', () => {
+    it('should increment perfect games count', () => {
+      const { incrementPerfectGames } = useProgressStore.getState()
+
+      incrementPerfectGames()
+
+      const state = useProgressStore.getState()
+      expect(state.perfectGames).toBe(1)
+    })
+
+    it('should accumulate perfect games', () => {
+      const { incrementPerfectGames } = useProgressStore.getState()
+
+      incrementPerfectGames()
+      incrementPerfectGames()
+
+      const state = useProgressStore.getState()
+      expect(state.perfectGames).toBe(2)
+    })
+
+    it('should unlock perfect-3 achievement after 3 perfect games', () => {
+      const { incrementPerfectGames } = useProgressStore.getState()
+
+      incrementPerfectGames()
+      incrementPerfectGames()
+      incrementPerfectGames()
+
+      const state = useProgressStore.getState()
+      expect(state.achievements).toContain('perfect-3')
+    })
+
+    it('should unlock perfect-10 achievement after 10 perfect games', () => {
+      const { incrementPerfectGames } = useProgressStore.getState()
+
+      for (let i = 0; i < 10; i++) {
+        incrementPerfectGames()
+      }
+
+      const state = useProgressStore.getState()
+      expect(state.achievements).toContain('perfect-10')
     })
   })
 })

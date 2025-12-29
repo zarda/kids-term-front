@@ -22,39 +22,8 @@ import { useTimer } from '../../hooks/useTimer'
 import { useSpeech } from '../../hooks/useSpeech'
 import { useTranslation } from '../../hooks/useTranslation'
 import { useActiveLanguagePack } from '../../hooks/useActiveLanguagePack'
+import { generateExercise, type Exercise } from '../../utils/exerciseGenerator'
 import type { ExerciseType } from '../../types/exercise.types'
-import type { LanguageWord } from '../../types/language.types'
-
-interface Exercise {
-  id: string
-  type: ExerciseType
-  wordId: string
-  question: string
-  options: string[]
-  correctAnswer: string
-  timeLimit: number
-}
-
-function generateExercise(words: LanguageWord[], type: ExerciseType): Exercise | null {
-  if (words.length < 4) return null
-
-  const targetWord = words[Math.floor(Math.random() * words.length)]
-  const otherWords = words.filter((w) => w.id !== targetWord.id)
-  const shuffled = otherWords.sort(() => Math.random() - 0.5).slice(0, 3)
-  const options = [...shuffled.map((w) => w.definition), targetWord.definition].sort(
-    () => Math.random() - 0.5
-  )
-
-  return {
-    id: `ex-${Date.now()}`,
-    type,
-    wordId: targetWord.id,
-    question: `"${targetWord.term}"`,
-    options,
-    correctAnswer: targetWord.definition,
-    timeLimit: 30,
-  }
-}
 
 export default function PracticePage() {
   const [sessionStarted, setSessionStarted] = useState(false)

@@ -9,6 +9,9 @@ const WordLearningPage = lazy(() => import('../pages/WordLearningPage'))
 const PracticePage = lazy(() => import('../pages/PracticePage'))
 const ProgressPage = lazy(() => import('../pages/ProgressPage'))
 const SettingsPage = lazy(() => import('../pages/SettingsPage'))
+const GamesPage = lazy(() => import('../pages/GamesPage'))
+const WordScramblePage = lazy(() => import('../pages/GamesPage/WordScramble'))
+const MatchingGamePage = lazy(() => import('../pages/GamesPage/MatchingGame'))
 
 const LoadingFallback = () => (
   <Center h="100vh">
@@ -23,6 +26,9 @@ export default function AppRoutes() {
         <Route path="/" element={<AppShell />}>
           <Route index element={<HomePage />} />
           <Route path="learn" element={<WordLearningPage />} />
+          <Route path="games" element={<GamesPage />} />
+          <Route path="games/scramble" element={<WordScramblePage />} />
+          <Route path="games/matching" element={<MatchingGamePage />} />
           <Route path="practice" element={<PracticePage />} />
           <Route path="progress" element={<ProgressPage />} />
           <Route path="settings" element={<SettingsPage />} />

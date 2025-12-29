@@ -18,6 +18,10 @@ interface ProgressState extends UserProgress {
   // Achievement notification
   lastUnlockedAchievement: string | null
 
+  // Games tracking
+  gamesPlayed: number
+  perfectGames: number
+
   // Actions
   incrementWordsLearned: (count?: number) => void
   incrementExercisesCompleted: () => void
@@ -32,6 +36,8 @@ interface ProgressState extends UserProgress {
   setLastWordIndex: (packId: string, index: number) => void
   getLastWordIndex: (packId: string) => number
   clearLastUnlockedAchievement: () => void
+  incrementGamesPlayed: () => void
+  incrementPerfectGames: () => void
 }
 
 const getToday = () => format(new Date(), 'yyyy-MM-dd')
@@ -92,6 +98,8 @@ export const useProgressStore = create<ProgressState>()(
       lastWordIndex: {},
       consecutiveCorrectAnswers: 0,
       lastUnlockedAchievement: null,
+      gamesPlayed: 0,
+      perfectGames: 0,
 
       incrementWordsLearned: (count = 1) =>
         set((state) => {
@@ -237,6 +245,20 @@ export const useProgressStore = create<ProgressState>()(
       clearLastUnlockedAchievement: () =>
         set((state) => {
           state.lastUnlockedAchievement = null
+        }),
+
+      incrementGamesPlayed: () =>
+        set((state) => {
+          state.gamesPlayed += 1
+          // Check games achievements
+          checkAchievements(state, 'games', state.gamesPlayed)
+        }),
+
+      incrementPerfectGames: () =>
+        set((state) => {
+          state.perfectGames += 1
+          // Check perfect games achievements
+          checkAchievements(state, 'perfect', state.perfectGames)
         }),
     })),
     {

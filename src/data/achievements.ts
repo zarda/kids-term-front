@@ -64,6 +64,17 @@ export const achievements: Achievement[] = [
   { id: 'time-600', icon: '🕐', requirement: 600, type: 'time' },
   { id: 'time-1200', icon: '🕰️', requirement: 1200, type: 'time' },
   { id: 'time-3000', icon: '⚡', requirement: 3000, type: 'time' },
+
+  // Games played achievements
+  { id: 'games-1', icon: '🎮', requirement: 1, type: 'games' },
+  { id: 'games-10', icon: '🕹️', requirement: 10, type: 'games' },
+  { id: 'games-50', icon: '🎲', requirement: 50, type: 'games' },
+  { id: 'games-100', icon: '🏆', requirement: 100, type: 'games' },
+
+  // Perfect games achievements
+  { id: 'perfect-3', icon: '⭐', requirement: 3, type: 'perfect' },
+  { id: 'perfect-10', icon: '🌟', requirement: 10, type: 'perfect' },
+  { id: 'perfect-25', icon: '💫', requirement: 25, type: 'perfect' },
 ]
 
 export const getAchievementById = (id: string): Achievement | undefined => {
