@@ -1,9 +1,11 @@
 import {
   Box,
   Flex,
-  Heading,
+  HStack,
   IconButton,
+  Image,
   Progress,
+  Text,
   useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react'
@@ -36,14 +38,17 @@ export default function TopNav() {
         maxW="1400px"
         mx="auto"
       >
-        <Heading
-          size="md"
-          bgGradient="linear(to-r, brand.500, accent.500)"
-          bgClip="text"
-          fontWeight="bold"
-        >
-          KidsTerm
-        </Heading>
+        <HStack spacing={2}>
+          <Image src="/logo.svg" alt="KidsTerm" boxSize="32px" />
+          <Text
+            fontSize="lg"
+            fontWeight="bold"
+            bgGradient="linear(to-r, brand.500, accent.500)"
+            bgClip="text"
+          >
+            KidsTerm
+          </Text>
+        </HStack>
 
         <Flex align="center" gap={4}>
           <Box w={{ base: '100px', md: '200px' }}>

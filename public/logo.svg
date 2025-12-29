@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#A855F7"/>
+      <stop offset="0%" style="stop-color:#3B82F6"/>
       <stop offset="100%" style="stop-color:#6366F1"/>
     </linearGradient>
   </defs>
@@ -11,26 +11,26 @@
 
   <!-- Scattered language characters (faded) -->
   <g fill="white" opacity="0.25" font-family="Arial, sans-serif" font-weight="bold">
-    <text x="8" y="18" font-size="11">あ</text>
-    <text x="45" y="14" font-size="9">ñ</text>
-    <text x="82" y="20" font-size="10">한</text>
-    <text x="6" y="50" font-size="10">中</text>
-    <text x="85" y="48" font-size="9">ö</text>
-    <text x="12" y="80" font-size="9">é</text>
-    <text x="78" y="75" font-size="10">日</text>
-    <text x="8" y="95" font-size="8">ç</text>
-    <text x="85" y="92" font-size="9">の</text>
+    <text x="10" y="16" font-size="10">A</text>
+    <text x="46" y="14" font-size="9">B</text>
+    <text x="82" y="16" font-size="10">C</text>
+    <text x="6" y="42" font-size="9">ñ</text>
+    <text x="86" y="42" font-size="9">ö</text>
+    <text x="8" y="68" font-size="9">é</text>
+    <text x="82" y="68" font-size="10">한</text>
+    <text x="10" y="92" font-size="10">あ</text>
+    <text x="82" y="92" font-size="10">日</text>
   </g>
 
-  <!-- Letter tile A (pink) -->
-  <rect x="20" y="28" width="24" height="28" rx="5" fill="#F472B6"/>
-  <text x="32" y="49" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">A</text>
+  <!-- Letter tile 中 (pink) - left -->
+  <rect x="16" y="18" width="28" height="32" rx="6" fill="#F472B6"/>
+  <text x="30" y="42" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="white" text-anchor="middle">中</text>
 
-  <!-- Letter tile B (yellow) -->
-  <rect x="56" y="28" width="24" height="28" rx="5" fill="#FBBF24"/>
-  <text x="68" y="49" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">B</text>
+  <!-- Letter tile の (yellow) - right -->
+  <rect x="56" y="18" width="28" height="32" rx="6" fill="#FBBF24"/>
+  <text x="70" y="42" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="white" text-anchor="middle">の</text>
 
-  <!-- Letter tile C (green) -->
-  <rect x="38" y="62" width="24" height="28" rx="5" fill="#34D399"/>
-  <text x="50" y="83" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">C</text>
+  <!-- Letter tile W (green) - bottom -->
+  <rect x="36" y="56" width="28" height="32" rx="6" fill="#34D399"/>
+  <text x="50" y="79" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="white" text-anchor="middle">W</text>
 </svg>
