@@ -29,6 +29,7 @@ export interface Translations {
     welcome: string
     todayProgress: string
     wordsLearned: string
+    packProgress: string
     streak: string
     days: string
     continueLeaning: string
@@ -210,4 +211,4 @@ export interface Translations {
 }
 
 export type TranslationKey = keyof Translations
-export type SupportedLocale = 'en' | 'tc'
+export type SupportedLocale = 'en' | 'tc' | 'ja'

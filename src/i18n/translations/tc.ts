@@ -28,6 +28,7 @@ const tc: Translations = {
     welcome: '歡迎回來！',
     todayProgress: '今日進度',
     wordsLearned: '已學單字',
+    packProgress: '課程進度',
     streak: '連續學習',
     days: '天',
     continueLeaning: '繼續學習',

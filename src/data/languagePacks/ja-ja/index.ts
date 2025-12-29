@@ -1,0 +1,11 @@
+import type { LanguagePackData } from '../../../types/language.types'
+import { beginnerWords } from './beginner'
+import { intermediateWords } from './intermediate'
+import { advancedWords } from './advanced'
+
+const jaJaPack: LanguagePackData = {
+  id: 'ja-ja',
+  words: [...beginnerWords, ...intermediateWords, ...advancedWords],
+}
+
+export default jaJaPack

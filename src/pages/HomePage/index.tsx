@@ -114,7 +114,7 @@ export default function HomePage() {
                 <StatLabel>
                   <HStack spacing={1}>
                     <Icon as={FiTarget} color="green.500" boxSize={{ base: 3, lg: 4 }} flexShrink={0} />
-                    <Text fontSize={{ base: '2xs', md: 'xs', lg: 'sm' }} noOfLines={1}>{t.home.wordsLearned}</Text>
+                    <Text fontSize={{ base: '2xs', md: 'xs', lg: 'sm' }} noOfLines={1}>{t.home.packProgress}</Text>
                   </HStack>
                 </StatLabel>
                 <StatNumber fontSize={{ base: 'lg', md: 'xl' }}>{totalWordsLearned} / {words.length}</StatNumber>

@@ -28,6 +28,7 @@ const en: Translations = {
     welcome: 'Welcome back!',
     todayProgress: "Today's Progress",
     wordsLearned: 'Words Learned',
+    packProgress: 'Pack Progress',
     streak: 'Streak',
     days: 'days',
     continueLeaning: 'Continue Learning',

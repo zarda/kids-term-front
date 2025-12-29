@@ -200,6 +200,105 @@ export const availableLanguagePacks: LanguagePack[] = [
     isDownloaded: false,
     version: '1.0.0',
   },
+  {
+    id: 'ja-en',
+    sourceLanguage: 'ja',
+    targetLanguage: 'en',
+    name: '英語 (日本語)',
+    nativeName: 'English',
+    flag: '🇺🇸',
+    wordCount: 3000,
+    isDownloaded: false,
+    version: '1.0.0',
+  },
+  {
+    id: 'ja-tc',
+    sourceLanguage: 'ja',
+    targetLanguage: 'tc',
+    name: '中国語 (日本語)',
+    nativeName: '繁體中文',
+    flag: '🇹🇼',
+    wordCount: 3000,
+    isDownloaded: false,
+    version: '1.0.0',
+  },
+  {
+    id: 'ja-ko',
+    sourceLanguage: 'ja',
+    targetLanguage: 'ko',
+    name: '韓国語 (日本語)',
+    nativeName: '한국어',
+    flag: '🇰🇷',
+    wordCount: 3000,
+    isDownloaded: false,
+    version: '1.0.0',
+  },
+  {
+    id: 'ja-ja',
+    sourceLanguage: 'ja',
+    targetLanguage: 'ja',
+    name: '日本語 (日本語)',
+    nativeName: '日本語',
+    flag: '🇯🇵',
+    wordCount: 3000,
+    isDownloaded: false,
+    version: '1.0.0',
+  },
+  {
+    id: 'ja-fr',
+    sourceLanguage: 'ja',
+    targetLanguage: 'fr',
+    name: 'フランス語 (日本語)',
+    nativeName: 'Français',
+    flag: '🇫🇷',
+    wordCount: 3000,
+    isDownloaded: false,
+    version: '1.0.0',
+  },
+  {
+    id: 'ja-it',
+    sourceLanguage: 'ja',
+    targetLanguage: 'it',
+    name: 'イタリア語 (日本語)',
+    nativeName: 'Italiano',
+    flag: '🇮🇹',
+    wordCount: 3000,
+    isDownloaded: false,
+    version: '1.0.0',
+  },
+  {
+    id: 'ja-de',
+    sourceLanguage: 'ja',
+    targetLanguage: 'de',
+    name: 'ドイツ語 (日本語)',
+    nativeName: 'Deutsch',
+    flag: '🇩🇪',
+    wordCount: 3000,
+    isDownloaded: false,
+    version: '1.0.0',
+  },
+  {
+    id: 'ja-es',
+    sourceLanguage: 'ja',
+    targetLanguage: 'es',
+    name: 'スペイン語 (日本語)',
+    nativeName: 'Español',
+    flag: '🇪🇸',
+    wordCount: 3000,
+    isDownloaded: false,
+    version: '1.0.0',
+  },
+  {
+    id: 'ja-pt',
+    sourceLanguage: 'ja',
+    targetLanguage: 'pt',
+    name: 'ポルトガル語 (日本語)',
+    nativeName: 'Português',
+    flag: '🇧🇷',
+    wordCount: 3000,
+    isDownloaded: false,
+    version: '1.0.0',
+  },
 ]
 
 export async function downloadLanguagePack(packId: string): Promise<LanguagePackData> {
@@ -242,6 +341,24 @@ export async function downloadLanguagePack(packId: string): Promise<LanguagePack
       return (await import('./en-ko/index')).default
     case 'en-tc':
       return (await import('./en-tc/index')).default
+    case 'ja-en':
+      return (await import('./ja-en/index')).default
+    case 'ja-tc':
+      return (await import('./ja-tc/index')).default
+    case 'ja-ko':
+      return (await import('./ja-ko/index')).default
+    case 'ja-ja':
+      return (await import('./ja-ja/index')).default
+    case 'ja-fr':
+      return (await import('./ja-fr/index')).default
+    case 'ja-it':
+      return (await import('./ja-it/index')).default
+    case 'ja-de':
+      return (await import('./ja-de/index')).default
+    case 'ja-es':
+      return (await import('./ja-es/index')).default
+    case 'ja-pt':
+      return (await import('./ja-pt/index')).default
     default:
       throw new Error(`Language pack ${packId} not found`)
   }

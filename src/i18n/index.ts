@@ -1,10 +1,12 @@
 import type { Translations, SupportedLocale } from './types'
 import en from './translations/en'
 import tc from './translations/tc'
+import ja from './translations/ja'
 
 export const translations: Record<SupportedLocale, Translations> = {
   en,
   tc,
+  ja,
 }
 
 export function getTranslations(locale: string): Translations {
@@ -15,6 +17,8 @@ export function getTranslations(locale: string): Translations {
     tc: 'tc',
     'zh-TW': 'tc',
     'zh-Hant': 'tc',
+    ja: 'ja',
+    'ja-JP': 'ja',
   }
 
   const mappedLocale = localeMap[locale] || 'en'
