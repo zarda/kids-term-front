@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import {
   Box,
   Button,
+  ButtonGroup,
   Card,
   CardBody,
   CircularProgress,
@@ -11,13 +12,15 @@ import {
   Icon,
   SimpleGrid,
   Text,
+  Tooltip,
   useColorModeValue,
   VStack,
   Badge,
 } from '@chakra-ui/react'
-import { FiCheck, FiX, FiVolume2 } from 'react-icons/fi'
+import { FiCheck, FiX, FiVolume2, FiHeart } from 'react-icons/fi'
 import { useProgressStore } from '../../store/useProgressStore'
 import { useSettingsStore } from '../../store/useSettingsStore'
+import { useFavoritesStore } from '../../store/useFavoritesStore'
 import { useTimer } from '../../hooks/useTimer'
 import { useSpeech } from '../../hooks/useSpeech'
 import { useTranslation } from '../../hooks/useTranslation'
@@ -32,6 +35,7 @@ export default function PracticePage() {
   const [showResult, setShowResult] = useState(false)
   const [score, setScore] = useState({ correct: 0, total: 0 })
   const [exerciseType, setExerciseType] = useState<ExerciseType>('multiple-choice')
+  const [useFavoritesOnly, setUseFavoritesOnly] = useState(false)
 
   const { t } = useTranslation()
   const cardBg = useColorModeValue('white', 'gray.800')
@@ -39,7 +43,21 @@ export default function PracticePage() {
   const incorrectBg = useColorModeValue('red.50', 'red.900')
 
   // Get words from active language pack
-  const { words, activePack } = useActiveLanguagePack()
+  const { words, activePack, activePackId } = useActiveLanguagePack()
+
+  // Favorites
+  const getFavorites = useFavoritesStore((s) => s.getFavorites)
+  const favoriteIds = useMemo(
+    () => (activePackId ? getFavorites(activePackId) : []),
+    [activePackId, getFavorites]
+  )
+  const favoritesCount = favoriteIds.length
+
+  // Filter words based on favorites mode
+  const practiceWords = useMemo(() => {
+    if (!useFavoritesOnly) return words
+    return words.filter((word) => favoriteIds.includes(word.id))
+  }, [useFavoritesOnly, words, favoriteIds])
 
   const incrementExercisesCompleted = useProgressStore((s) => s.incrementExercisesCompleted)
   const recordCorrectAnswer = useProgressStore((s) => s.recordCorrectAnswer)
@@ -54,18 +72,18 @@ export default function PracticePage() {
   const { timeLeft, isRunning, start, reset, formatTime } = useTimer(exerciseTimeLimit)
 
   const getWordById = useCallback(
-    (id: string) => words.find((w) => w.id === id),
-    [words]
+    (id: string) => practiceWords.find((w) => w.id === id),
+    [practiceWords]
   )
 
   const loadNextExercise = useCallback(() => {
-    const exercise = generateExercise(words, exerciseType)
+    const exercise = generateExercise(practiceWords, exerciseType)
     setCurrentExercise(exercise)
     setSelectedAnswer(null)
     setShowResult(false)
     reset(exerciseTimeLimit)
     start()
-  }, [words, exerciseType, exerciseTimeLimit, reset, start])
+  }, [practiceWords, exerciseType, exerciseTimeLimit, reset, start])
 
   const handleAnswer = useCallback(
     (answer: string) => {
@@ -112,7 +130,7 @@ export default function PracticePage() {
     setSessionStarted(true)
     setScore({ correct: 0, total: 0 })
     sessionStartTime.current = new Date()
-    const exercise = generateExercise(words, type)
+    const exercise = generateExercise(practiceWords, type)
     setCurrentExercise(exercise)
     reset(exerciseTimeLimit)
     start()
@@ -137,6 +155,9 @@ export default function PracticePage() {
   }
 
   // Check if we have enough words
+  const hasEnoughWords = practiceWords.length >= 4
+  const hasEnoughFavorites = favoritesCount >= 4
+
   if (words.length < 4) {
     return (
       <VStack py={10} spacing={4}>
@@ -144,6 +165,21 @@ export default function PracticePage() {
         <Text color="gray.500" textAlign="center">
           {t.practice.notEnoughWordsDesc}
         </Text>
+      </VStack>
+    )
+  }
+
+  // Show message when favorites mode is on but not enough favorites
+  if (useFavoritesOnly && !hasEnoughWords) {
+    return (
+      <VStack py={10} spacing={4}>
+        <Heading size="md">{t.favorites.notEnoughFavorites}</Heading>
+        <Text color="gray.500" textAlign="center">
+          {t.favorites.favoritesCount.replace('{count}', String(favoritesCount))}
+        </Text>
+        <Button colorScheme="blue" onClick={() => setUseFavoritesOnly(false)}>
+          {t.favorites.allWords}
+        </Button>
       </VStack>
     )
   }
@@ -170,6 +206,34 @@ export default function PracticePage() {
           <Text color="gray.500" textAlign="center">
             {t.practice.subtitle}
           </Text>
+
+          {/* Favorites Toggle */}
+          {favoritesCount > 0 && (
+            <ButtonGroup size="sm" isAttached variant="outline">
+              <Button
+                colorScheme={!useFavoritesOnly ? 'blue' : 'gray'}
+                variant={!useFavoritesOnly ? 'solid' : 'outline'}
+                onClick={() => setUseFavoritesOnly(false)}
+              >
+                {t.favorites.allWords}
+              </Button>
+              <Tooltip
+                label={!hasEnoughFavorites ? t.favorites.notEnoughFavorites : ''}
+                isDisabled={hasEnoughFavorites}
+              >
+                <Button
+                  colorScheme={useFavoritesOnly ? 'red' : 'gray'}
+                  variant={useFavoritesOnly ? 'solid' : 'outline'}
+                  onClick={() => hasEnoughFavorites && setUseFavoritesOnly(true)}
+                  leftIcon={<FiHeart />}
+                  opacity={hasEnoughFavorites ? 1 : 0.5}
+                  cursor={hasEnoughFavorites ? 'pointer' : 'not-allowed'}
+                >
+                  {t.favorites.myFavorites} ({favoritesCount})
+                </Button>
+              </Tooltip>
+            </ButtonGroup>
+          )}
 
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} w="100%" maxW="600px">
             <Card

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import {
   Box,
   Button,
@@ -12,11 +12,12 @@ import {
   useColorModeValue,
   Badge,
 } from '@chakra-ui/react'
-import { FiArrowLeft } from 'react-icons/fi'
-import { useNavigate } from 'react-router-dom'
+import { FiArrowLeft, FiHeart } from 'react-icons/fi'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from '../../../hooks/useTranslation'
 import { useActiveLanguagePack } from '../../../hooks/useActiveLanguagePack'
 import { useProgressStore } from '../../../store/useProgressStore'
+import { useFavoritesStore } from '../../../store/useFavoritesStore'
 
 const PAIRS_COUNT = 6
 
@@ -140,8 +141,24 @@ function StarRating({ stars }: { stars: number }) {
 
 export default function MatchingGamePage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const favoritesMode = searchParams.get('favorites') === 'true'
+
   const { t } = useTranslation()
-  const { words, activePack } = useActiveLanguagePack()
+  const { words, activePack, activePackId } = useActiveLanguagePack()
+
+  // Favorites
+  const getFavorites = useFavoritesStore((s) => s.getFavorites)
+  const favoriteIds = useMemo(
+    () => (activePackId ? getFavorites(activePackId) : []),
+    [activePackId, getFavorites]
+  )
+
+  // Filter words based on favorites mode
+  const gameWords = useMemo(() => {
+    if (!favoritesMode) return words
+    return words.filter((word) => favoriteIds.includes(word.id))
+  }, [favoritesMode, words, favoriteIds])
 
   const incrementExercisesCompleted = useProgressStore((s) => s.incrementExercisesCompleted)
   const recordCorrectAnswer = useProgressStore((s) => s.recordCorrectAnswer)
@@ -161,7 +178,7 @@ export default function MatchingGamePage() {
   const [isChecking, setIsChecking] = useState(false)
 
   const initializeGame = useCallback(() => {
-    const shuffledWords = shuffleArray(words).slice(0, PAIRS_COUNT)
+    const shuffledWords = shuffleArray(gameWords).slice(0, PAIRS_COUNT)
     const gameCards: MatchingCard[] = []
 
     shuffledWords.forEach((word) => {
@@ -190,7 +207,7 @@ export default function MatchingGamePage() {
     setGameStarted(true)
     setGameComplete(false)
     setIsChecking(false)
-  }, [words])
+  }, [gameWords])
 
   const handleCardClick = (cardId: string) => {
     if (isChecking) return
@@ -269,12 +286,12 @@ export default function MatchingGamePage() {
   }
 
   // Check if enough words
-  if (words.length < PAIRS_COUNT) {
+  if (gameWords.length < PAIRS_COUNT) {
     return (
       <VStack py={10} spacing={4}>
-        <Heading size="md">{t.practice.notEnoughWords}</Heading>
+        <Heading size="md">{favoritesMode ? t.favorites.notEnoughFavorites : t.practice.notEnoughWords}</Heading>
         <Text color="gray.500" textAlign="center">
-          {t.practice.notEnoughWordsDesc}
+          {favoritesMode ? '' : t.practice.notEnoughWordsDesc}
         </Text>
         <Button onClick={() => navigate('/games')} leftIcon={<FiArrowLeft />}>
           {t.common.back}
@@ -290,11 +307,21 @@ export default function MatchingGamePage() {
         <VStack spacing={6}>
           <Heading size="lg">{t.games.matching}</Heading>
 
-          {activePack && (
-            <Badge colorScheme="blue" fontSize="sm" px={3} py={1}>
-              {activePack.flag} {activePack.name}
-            </Badge>
-          )}
+          <HStack spacing={2}>
+            {activePack && (
+              <Badge colorScheme="blue" fontSize="sm" px={3} py={1}>
+                {activePack.flag} {activePack.name}
+              </Badge>
+            )}
+            {favoritesMode && (
+              <Badge colorScheme="red" fontSize="sm" px={3} py={1}>
+                <HStack spacing={1}>
+                  <FiHeart size={12} />
+                  <Text>{t.favorites.myFavorites}</Text>
+                </HStack>
+              </Badge>
+            )}
+          </HStack>
 
           <Card bg={cardBg} w="100%" maxW="400px">
             <CardBody>

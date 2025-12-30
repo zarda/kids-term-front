@@ -85,6 +85,8 @@ export interface Translations {
     pronunciationWarning: string
     swipeHintSkip: string
     swipeHintLearned: string
+    recentPositions: string
+    cardLabel: string
   }
 
   // Practice Page
@@ -243,6 +245,19 @@ export interface Translations {
   notifications: {
     reminderTitle: string
     reminderBody: string
+  }
+
+  // Favorites
+  favorites: {
+    reviewFavorites: string
+    noFavorites: string
+    favoritesCount: string
+    playWithFavorites: string
+    practiceWithFavorites: string
+    notEnoughFavorites: string
+    allWords: string
+    myFavorites: string
+    toggleFavorite: string
   }
 }
 

@@ -82,6 +82,8 @@ const en: Translations = {
     pronunciationWarning: 'Pronunciation is computer-generated and may not be accurate',
     swipeHintSkip: 'Skip',
     swipeHintLearned: 'Learned!',
+    recentPositions: 'Recent',
+    cardLabel: 'Card',
   },
 
   practice: {
@@ -235,6 +237,18 @@ const en: Translations = {
   notifications: {
     reminderTitle: 'Time to Learn!',
     reminderBody: "Don't forget to practice your vocabulary today!",
+  },
+
+  favorites: {
+    reviewFavorites: 'Review Favorites',
+    noFavorites: 'No favorites yet! Tap the heart on words you love.',
+    favoritesCount: '{count} favorites',
+    playWithFavorites: 'Play with Favorites',
+    practiceWithFavorites: 'Practice with Favorites',
+    notEnoughFavorites: 'Add more favorites to unlock this!',
+    allWords: 'All Words',
+    myFavorites: 'My Favorites',
+    toggleFavorite: 'Toggle favorite',
   },
 }
 

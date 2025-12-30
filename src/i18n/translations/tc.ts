@@ -82,6 +82,8 @@ const tc: Translations = {
     pronunciationWarning: '發音由電腦生成，可能不準確',
     swipeHintSkip: '跳過',
     swipeHintLearned: '已學會！',
+    recentPositions: '最近',
+    cardLabel: '卡片',
   },
 
   practice: {
@@ -235,6 +237,18 @@ const tc: Translations = {
   notifications: {
     reminderTitle: '學習時間到！',
     reminderBody: '別忘了今天練習單字喔！',
+  },
+
+  favorites: {
+    reviewFavorites: '複習收藏',
+    noFavorites: '還沒有收藏！點擊愛心收藏你喜歡的單字。',
+    favoritesCount: '{count} 個收藏',
+    playWithFavorites: '用收藏玩遊戲',
+    practiceWithFavorites: '用收藏練習',
+    notEnoughFavorites: '再多收藏一些單字吧！',
+    allWords: '所有單字',
+    myFavorites: '我的收藏',
+    toggleFavorite: '切換收藏',
   },
 }
 

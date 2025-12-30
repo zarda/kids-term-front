@@ -1,5 +1,6 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import {
+  Badge,
   Box,
   Button,
   Card,
@@ -7,20 +8,20 @@ import {
   Heading,
   HStack,
   Icon,
+  Progress,
   Text,
-  VStack,
   useColorModeValue,
-  Badge,
+  VStack,
   Wrap,
   WrapItem,
-  Progress,
 } from '@chakra-ui/react'
-import { FiVolume2, FiArrowLeft, FiRefreshCw, FiHelpCircle } from 'react-icons/fi'
-import { useNavigate } from 'react-router-dom'
+import { FiVolume2, FiArrowLeft, FiRefreshCw, FiHelpCircle, FiHeart } from 'react-icons/fi'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from '../../../hooks/useTranslation'
 import { useActiveLanguagePack } from '../../../hooks/useActiveLanguagePack'
 import { useSpeech } from '../../../hooks/useSpeech'
 import { useProgressStore } from '../../../store/useProgressStore'
+import { useFavoritesStore } from '../../../store/useFavoritesStore'
 import type { LanguageWord } from '../../../types/language.types'
 
 /** Number of words per game session */
@@ -115,9 +116,24 @@ function Slot({ letter, onClick, isCorrect }: SlotProps) {
 
 export default function WordScramblePage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { t } = useTranslation()
-  const { words, activePack } = useActiveLanguagePack()
+  const { words, activePack, activePackId } = useActiveLanguagePack()
   const { speak, isSpeaking } = useSpeech()
+
+  // Favorites mode
+  const favoritesMode = searchParams.get('favorites') === 'true'
+  const getFavorites = useFavoritesStore((s) => s.getFavorites)
+  const favoriteIds = useMemo(
+    () => (activePackId ? getFavorites(activePackId) : []),
+    [activePackId, getFavorites]
+  )
+
+  // Filter words based on favorites mode
+  const availableWords = useMemo(() => {
+    if (!favoritesMode) return words
+    return words.filter((word) => favoriteIds.includes(word.id))
+  }, [favoritesMode, words, favoriteIds])
 
   const incrementExercisesCompleted = useProgressStore((s) => s.incrementExercisesCompleted)
   const recordCorrectAnswer = useProgressStore((s) => s.recordCorrectAnswer)
@@ -140,7 +156,7 @@ export default function WordScramblePage() {
   const currentWord = gameWords[currentWordIndex]
 
   const initializeGame = useCallback(() => {
-    const shuffledWords = shuffleArray(words).slice(0, TOTAL_WORDS)
+    const shuffledWords = shuffleArray(availableWords).slice(0, TOTAL_WORDS)
     setGameWords(shuffledWords)
     setCurrentWordIndex(0)
     setScore(0)
@@ -155,7 +171,7 @@ export default function WordScramblePage() {
       setPlacedIndices([])
       setIsCorrect(null)
     }
-  }, [words])
+  }, [availableWords])
 
   const setupWord = useCallback((word: LanguageWord) => {
     setScrambledLetters(scrambleWord(word.term))
@@ -262,12 +278,16 @@ export default function WordScramblePage() {
   }
 
   // Check if enough words
-  if (words.length < 4) {
+  if (availableWords.length < 4) {
     return (
       <VStack py={10} spacing={4}>
-        <Heading size="md">{t.practice.notEnoughWords}</Heading>
+        <Heading size="md">
+          {favoritesMode ? t.favorites.notEnoughFavorites : t.practice.notEnoughWords}
+        </Heading>
         <Text color="gray.500" textAlign="center">
-          {t.practice.notEnoughWordsDesc}
+          {favoritesMode
+            ? t.favorites.favoritesCount.replace('{count}', String(favoriteIds.length))
+            : t.practice.notEnoughWordsDesc}
         </Text>
         <Button onClick={() => navigate('/games')} leftIcon={<FiArrowLeft />}>
           {t.common.back}
@@ -286,6 +306,15 @@ export default function WordScramblePage() {
           {activePack && (
             <Badge colorScheme="blue" fontSize="sm" px={3} py={1}>
               {activePack.flag} {activePack.name}
+            </Badge>
+          )}
+
+          {favoritesMode && (
+            <Badge colorScheme="red" fontSize="sm" px={3} py={1}>
+              <HStack spacing={1}>
+                <Icon as={FiHeart} />
+                <Text>{t.favorites.myFavorites} ({favoriteIds.length})</Text>
+              </HStack>
             </Badge>
           )}
 

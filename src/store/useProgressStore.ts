@@ -12,6 +12,9 @@ interface ProgressState extends UserProgress {
   // Last word index per language pack (packId -> wordIndex)
   lastWordIndex: Record<string, number>
 
+  // History of recent word indices (packId -> array of {index, timestamp})
+  wordIndexHistory: Record<string, { index: number; timestamp: number }[]>
+
   // Accuracy tracking
   consecutiveCorrectAnswers: number
 
@@ -35,6 +38,8 @@ interface ProgressState extends UserProgress {
   resetDailyProgress: () => void
   setLastWordIndex: (packId: string, index: number) => void
   getLastWordIndex: (packId: string) => number
+  addToWordIndexHistory: (key: string, index: number) => void
+  getWordIndexHistory: (key: string) => { index: number; timestamp: number }[]
   clearLastUnlockedAchievement: () => void
   incrementGamesPlayed: () => void
   incrementPerfectGames: () => void
@@ -96,6 +101,7 @@ export const useProgressStore = create<ProgressState>()(
       dailyGoal: 10,
       todayWordsLearned: 0,
       lastWordIndex: {},
+      wordIndexHistory: {},
       consecutiveCorrectAnswers: 0,
       lastUnlockedAchievement: null,
       gamesPlayed: 0,
@@ -240,6 +246,24 @@ export const useProgressStore = create<ProgressState>()(
 
       getLastWordIndex: (packId) => {
         return get().lastWordIndex[packId] ?? 0
+      },
+
+      addToWordIndexHistory: (key, index) =>
+        set((state) => {
+          if (!state.wordIndexHistory[key]) {
+            state.wordIndexHistory[key] = []
+          }
+          const history = state.wordIndexHistory[key]
+          // Remove if same index already exists
+          const filtered = history.filter((h) => h.index !== index)
+          // Add new entry at front
+          filtered.unshift({ index, timestamp: Date.now() })
+          // Keep only last 5
+          state.wordIndexHistory[key] = filtered.slice(0, 5)
+        }),
+
+      getWordIndexHistory: (key) => {
+        return get().wordIndexHistory[key] ?? []
       },
 
       clearLastUnlockedAchievement: () =>

@@ -1,17 +1,23 @@
+import { useState } from 'react'
 import {
   Box,
+  Button,
+  ButtonGroup,
   Card,
   CardBody,
   Heading,
   SimpleGrid,
   Text,
+  Tooltip,
   VStack,
   useColorModeValue,
   Badge,
 } from '@chakra-ui/react'
+import { FiHeart } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from '../../hooks/useTranslation'
 import { useActiveLanguagePack } from '../../hooks/useActiveLanguagePack'
+import { useFavoritesStore } from '../../store/useFavoritesStore'
 
 interface GameCardProps {
   emoji: string
@@ -57,7 +63,28 @@ function GameCard({ emoji, title, description, onClick, minWords = 4, currentWor
 export default function GamesPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const { words, activePack } = useActiveLanguagePack()
+  const { words, activePack, activePackId } = useActiveLanguagePack()
+  const [useFavoritesOnly, setUseFavoritesOnly] = useState(false)
+
+  // Favorites
+  const getFavorites = useFavoritesStore((s) => s.getFavorites)
+  const favoriteIds = activePackId ? getFavorites(activePackId) : []
+  const favoritesCount = favoriteIds.length
+
+  // Minimum words for games
+  const hasEnoughFavoritesForScramble = favoritesCount >= 4
+
+  // Current word count based on mode
+  const currentWords = useFavoritesOnly ? favoritesCount : words.length
+
+  // Navigate with favorites param if enabled
+  const navigateToGame = (path: string) => {
+    if (useFavoritesOnly) {
+      navigate(`${path}?favorites=true`)
+    } else {
+      navigate(path)
+    }
+  }
 
   return (
     <Box pb={8}>
@@ -80,23 +107,55 @@ export default function GamesPage() {
           {t.games.subtitle}
         </Text>
 
+        {/* Favorites Toggle */}
+        {favoritesCount > 0 && (
+          <ButtonGroup size="sm" isAttached variant="outline">
+            <Button
+              colorScheme={!useFavoritesOnly ? 'blue' : 'gray'}
+              variant={!useFavoritesOnly ? 'solid' : 'outline'}
+              onClick={() => setUseFavoritesOnly(false)}
+            >
+              {t.favorites.allWords}
+            </Button>
+            <Tooltip
+              label={
+                !hasEnoughFavoritesForScramble
+                  ? t.favorites.notEnoughFavorites
+                  : ''
+              }
+              isDisabled={hasEnoughFavoritesForScramble}
+            >
+              <Button
+                colorScheme={useFavoritesOnly ? 'red' : 'gray'}
+                variant={useFavoritesOnly ? 'solid' : 'outline'}
+                onClick={() => hasEnoughFavoritesForScramble && setUseFavoritesOnly(true)}
+                leftIcon={<FiHeart />}
+                opacity={hasEnoughFavoritesForScramble ? 1 : 0.5}
+                cursor={hasEnoughFavoritesForScramble ? 'pointer' : 'not-allowed'}
+              >
+                {t.favorites.myFavorites} ({favoritesCount})
+              </Button>
+            </Tooltip>
+          </ButtonGroup>
+        )}
+
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} w="100%" maxW="600px">
           <GameCard
             emoji="🔀"
             title={t.games.scramble}
             description={t.games.scrambleDesc}
-            onClick={() => navigate('/games/scramble')}
+            onClick={() => navigateToGame('/games/scramble')}
             minWords={4}
-            currentWords={words.length}
+            currentWords={currentWords}
           />
 
           <GameCard
             emoji="🃏"
             title={t.games.matching}
             description={t.games.matchingDesc}
-            onClick={() => navigate('/games/matching')}
+            onClick={() => navigateToGame('/games/matching')}
             minWords={6}
-            currentWords={words.length}
+            currentWords={currentWords}
           />
         </SimpleGrid>
       </VStack>

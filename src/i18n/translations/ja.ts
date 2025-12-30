@@ -82,6 +82,8 @@ const ja: Translations = {
     pronunciationWarning: '発音はコンピューター生成のため、正確でない場合があります',
     swipeHintSkip: 'スキップ',
     swipeHintLearned: '覚えた！',
+    recentPositions: '最近',
+    cardLabel: 'カード',
   },
 
   practice: {
@@ -235,6 +237,18 @@ const ja: Translations = {
   notifications: {
     reminderTitle: '学習の時間です！',
     reminderBody: '今日の語彙練習を忘れずに！',
+  },
+
+  favorites: {
+    reviewFavorites: 'お気に入りを復習',
+    noFavorites: 'お気に入りがまだありません！気に入った単語のハートをタップしてね。',
+    favoritesCount: '{count}個のお気に入り',
+    playWithFavorites: 'お気に入りで遊ぶ',
+    practiceWithFavorites: 'お気に入りで練習',
+    notEnoughFavorites: 'もっとお気に入りを追加してね！',
+    allWords: 'すべての単語',
+    myFavorites: 'お気に入り',
+    toggleFavorite: 'お気に入り切替',
   },
 }
 

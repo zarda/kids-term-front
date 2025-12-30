@@ -14,6 +14,8 @@ describe('useProgressStore', () => {
       lastActiveDate: new Date().toISOString().split('T')[0],
       dailyGoal: 10,
       todayWordsLearned: 0,
+      lastWordIndex: {},
+      wordIndexHistory: {},
       consecutiveCorrectAnswers: 0,
       lastUnlockedAchievement: null,
       gamesPlayed: 0,
@@ -340,6 +342,127 @@ describe('useProgressStore', () => {
 
       const state = useProgressStore.getState()
       expect(state.achievements).toContain('perfect-10')
+    })
+  })
+
+  describe('lastWordIndex', () => {
+    it('should return 0 for non-existent pack', () => {
+      const { getLastWordIndex } = useProgressStore.getState()
+
+      expect(getLastWordIndex('non-existent-pack')).toBe(0)
+    })
+
+    it('should store and retrieve last word index for a pack', () => {
+      const { setLastWordIndex, getLastWordIndex } = useProgressStore.getState()
+
+      setLastWordIndex('pack-1', 42)
+
+      expect(getLastWordIndex('pack-1')).toBe(42)
+    })
+
+    it('should update existing word index', () => {
+      const { setLastWordIndex, getLastWordIndex } = useProgressStore.getState()
+
+      setLastWordIndex('pack-1', 10)
+      setLastWordIndex('pack-1', 25)
+
+      expect(getLastWordIndex('pack-1')).toBe(25)
+    })
+
+    it('should keep separate indices for different packs', () => {
+      const { setLastWordIndex, getLastWordIndex } = useProgressStore.getState()
+
+      setLastWordIndex('pack-1', 10)
+      setLastWordIndex('pack-2', 20)
+      setLastWordIndex('pack-1:favorites', 5)
+
+      expect(getLastWordIndex('pack-1')).toBe(10)
+      expect(getLastWordIndex('pack-2')).toBe(20)
+      expect(getLastWordIndex('pack-1:favorites')).toBe(5)
+    })
+  })
+
+  describe('wordIndexHistory', () => {
+    it('should return empty array for non-existent key', () => {
+      const { getWordIndexHistory } = useProgressStore.getState()
+
+      expect(getWordIndexHistory('non-existent-key')).toEqual([])
+    })
+
+    it('should add index to history', () => {
+      const { addToWordIndexHistory, getWordIndexHistory } = useProgressStore.getState()
+
+      addToWordIndexHistory('pack-1', 10)
+
+      const history = getWordIndexHistory('pack-1')
+      expect(history.length).toBe(1)
+      expect(history[0].index).toBe(10)
+      expect(history[0].timestamp).toBeDefined()
+    })
+
+    it('should add new entries at the front', () => {
+      const { addToWordIndexHistory, getWordIndexHistory } = useProgressStore.getState()
+
+      addToWordIndexHistory('pack-1', 10)
+      addToWordIndexHistory('pack-1', 20)
+      addToWordIndexHistory('pack-1', 30)
+
+      const history = getWordIndexHistory('pack-1')
+      expect(history[0].index).toBe(30)
+      expect(history[1].index).toBe(20)
+      expect(history[2].index).toBe(10)
+    })
+
+    it('should remove duplicates when adding same index', () => {
+      const { addToWordIndexHistory, getWordIndexHistory } = useProgressStore.getState()
+
+      addToWordIndexHistory('pack-1', 10)
+      addToWordIndexHistory('pack-1', 20)
+      addToWordIndexHistory('pack-1', 10) // duplicate
+
+      const history = getWordIndexHistory('pack-1')
+      expect(history.length).toBe(2)
+      expect(history[0].index).toBe(10)
+      expect(history[1].index).toBe(20)
+    })
+
+    it('should keep only last 5 entries', () => {
+      const { addToWordIndexHistory, getWordIndexHistory } = useProgressStore.getState()
+
+      for (let i = 1; i <= 7; i++) {
+        addToWordIndexHistory('pack-1', i * 10)
+      }
+
+      const history = getWordIndexHistory('pack-1')
+      expect(history.length).toBe(5)
+      expect(history[0].index).toBe(70) // most recent
+      expect(history[4].index).toBe(30) // oldest (6th and 7th trimmed)
+    })
+
+    it('should keep separate histories for different keys', () => {
+      const { addToWordIndexHistory, getWordIndexHistory } = useProgressStore.getState()
+
+      addToWordIndexHistory('pack-1', 10)
+      addToWordIndexHistory('pack-2', 20)
+      addToWordIndexHistory('pack-1:favorites', 5)
+
+      expect(getWordIndexHistory('pack-1')[0].index).toBe(10)
+      expect(getWordIndexHistory('pack-2')[0].index).toBe(20)
+      expect(getWordIndexHistory('pack-1:favorites')[0].index).toBe(5)
+    })
+
+    it('should have timestamps in descending order (most recent first)', () => {
+      const { addToWordIndexHistory, getWordIndexHistory } = useProgressStore.getState()
+
+      addToWordIndexHistory('pack-1', 10)
+      // Small delay to ensure different timestamps
+      addToWordIndexHistory('pack-1', 20)
+      addToWordIndexHistory('pack-1', 30)
+
+      const history = getWordIndexHistory('pack-1')
+      // Most recent should be first
+      expect(history[0].timestamp).toBeGreaterThanOrEqual(history[1].timestamp)
+      expect(history[1].timestamp).toBeGreaterThanOrEqual(history[2].timestamp)
     })
   })
 })

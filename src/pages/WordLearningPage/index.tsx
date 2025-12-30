@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import {
   Box,
   Card,
@@ -17,12 +17,19 @@ import {
   InputGroup,
   Collapse,
   Tooltip,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider,
 } from '@chakra-ui/react'
 import { animated, useSpring } from 'react-spring'
 import { useDrag } from '@use-gesture/react'
-import { FiChevronLeft, FiChevronRight, FiHeart, FiVolume2, FiNavigation } from 'react-icons/fi'
+import { FiChevronLeft, FiChevronRight, FiHeart, FiVolume2, FiNavigation, FiX, FiClock } from 'react-icons/fi'
+import { useSearchParams } from 'react-router-dom'
 import { useProgressStore } from '../../store/useProgressStore'
 import { useSettingsStore } from '../../store/useSettingsStore'
+import { useFavoritesStore } from '../../store/useFavoritesStore'
 import { useSpeech } from '../../hooks/useSpeech'
 import { useTranslation } from '../../hooks/useTranslation'
 import { useActiveLanguagePack } from '../../hooks/useActiveLanguagePack'
@@ -30,9 +37,17 @@ import { useSwipeOnboarding } from '../../hooks/useSwipeOnboarding'
 import { SwipeHintArrows } from './SwipeHintArrows'
 
 export default function WordLearningPage() {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const favoritesMode = searchParams.get('favorites') === 'true'
+
+  // Get words from active language pack (needed early for indexKey)
+  const { words, activePack, activePackId } = useActiveLanguagePack()
+
+  // Create a unique key for storing index - different for favorites vs regular mode
+  const indexKey = activePackId ? (favoritesMode ? `${activePackId}:favorites` : activePackId) : null
+
   const [isFlipped, setIsFlipped] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [favorites, setFavorites] = useState<Set<string>>(new Set())
   const [showJumpInput, setShowJumpInput] = useState(false)
   const [jumpValue, setJumpValue] = useState('')
   const [hasInitialized, setHasInitialized] = useState(false)
@@ -41,8 +56,17 @@ export default function WordLearningPage() {
   const { speak, isSpeaking } = useSpeech()
   const autoPlayAudio = useSettingsStore((s) => s.autoPlayAudio)
 
-  // Get words from active language pack
-  const { words, activePack, activePackId } = useActiveLanguagePack()
+  // Favorites store
+  const toggleFavoriteInStore = useFavoritesStore((s) => s.toggleFavorite)
+  const favoritesByPack = useFavoritesStore((s) => s.favoritesByPack)
+  const getFavorites = useFavoritesStore((s) => s.getFavorites)
+
+  // Filter words based on favorites mode
+  const displayWords = useMemo(() => {
+    if (!favoritesMode || !activePackId) return words
+    const favoriteIds = getFavorites(activePackId)
+    return words.filter((word) => favoriteIds.includes(word.id))
+  }, [favoritesMode, activePackId, words, getFavorites])
 
   // Swipe hint arrows (daily reset)
   const { showHints, recordSwipe } = useSwipeOnboarding()
@@ -51,13 +75,18 @@ export default function WordLearningPage() {
   const setLastWordIndex = useProgressStore((s) => s.setLastWordIndex)
   const getLastWordIndex = useProgressStore((s) => s.getLastWordIndex)
   const addTimeSpent = useProgressStore((s) => s.addTimeSpent)
+  const addToWordIndexHistory = useProgressStore((s) => s.addToWordIndexHistory)
+  const wordIndexHistory = useProgressStore((s) => s.wordIndexHistory)
+
+  // Get history for current key
+  const history = indexKey ? (wordIndexHistory[indexKey] ?? []) : []
 
   // Track time spent on this page
   const pageStartTime = useRef<Date>(new Date())
 
-  // Get saved position for current pack
-  const savedIndex = activePackId ? getLastWordIndex(activePackId) : 0
-  const hasSavedProgress = savedIndex > 0 && savedIndex < words.length
+  // Get saved position for current pack (uses separate keys for favorites vs regular mode)
+  const savedIndex = indexKey ? getLastWordIndex(indexKey) : 0
+  const hasSavedProgress = savedIndex > 0 && savedIndex < displayWords.length
 
   // Record time spent when leaving the page
   useEffect(() => {
@@ -74,19 +103,62 @@ export default function WordLearningPage() {
     }
   }, [addTimeSpent])
 
-  // Save current position when index changes
+  // Track previous index to detect actual navigation
+  const prevIndexRef = useRef<number | null>(null)
+
+  // Save current position when index changes (for resume functionality)
+  // Only save when user actually navigates, not on initial mount
   useEffect(() => {
-    if (activePackId && hasInitialized) {
-      setLastWordIndex(activePackId, currentIndex)
+    if (indexKey && hasInitialized) {
+      // Only save if this is an actual navigation (not first render after init)
+      if (prevIndexRef.current !== null && prevIndexRef.current !== currentIndex) {
+        setLastWordIndex(indexKey, currentIndex)
+      }
+      prevIndexRef.current = currentIndex
     }
-  }, [currentIndex, activePackId, setLastWordIndex, hasInitialized])
+  }, [currentIndex, indexKey, setLastWordIndex, hasInitialized])
+
+  // Use refs to access current values in cleanup functions
+  const currentIndexRef = useRef(currentIndex)
+  const indexKeyRef = useRef(indexKey)
+  const hasInitializedRef = useRef(hasInitialized)
+  useEffect(() => {
+    currentIndexRef.current = currentIndex
+    indexKeyRef.current = indexKey
+    hasInitializedRef.current = hasInitialized
+  }, [currentIndex, indexKey, hasInitialized])
+
+  // Save to history when leaving page (only on unmount)
+  useEffect(() => {
+    return () => {
+      if (indexKeyRef.current && hasInitializedRef.current && currentIndexRef.current > 0) {
+        addToWordIndexHistory(indexKeyRef.current, currentIndexRef.current)
+      }
+    }
+  }, [addToWordIndexHistory])
+
+  // Save to history when switching modes (before mode changes)
+  useEffect(() => {
+    return () => {
+      if (indexKeyRef.current && hasInitializedRef.current && currentIndexRef.current > 0) {
+        addToWordIndexHistory(indexKeyRef.current, currentIndexRef.current)
+      }
+    }
+  }, [favoritesMode, addToWordIndexHistory])
 
   // Initialize - don't auto-jump, let user choose
   useEffect(() => {
-    if (words.length > 0 && !hasInitialized) {
+    if (displayWords.length > 0 && !hasInitialized) {
       setHasInitialized(true)
     }
-  }, [words.length, hasInitialized])
+  }, [displayWords.length, hasInitialized])
+
+  // Reset index when switching modes or when displayWords changes
+  useEffect(() => {
+    setCurrentIndex(0)
+    setIsFlipped(false)
+    prevIndexRef.current = null // Reset tracking so we don't save on mode switch
+  }, [favoritesMode])
 
   // Auto-play pronunciation when word changes
   // Don't auto-play when user has saved progress and is at index 0 (waiting to decide to resume)
@@ -100,25 +172,25 @@ export default function WordLearningPage() {
 
   // Jump to saved position
   const handleResume = useCallback(() => {
-    if (savedIndex > 0 && savedIndex < words.length) {
+    if (savedIndex > 0 && savedIndex < displayWords.length) {
       setCurrentIndex(savedIndex)
       setIsFlipped(false)
     }
-  }, [savedIndex, words.length])
+  }, [savedIndex, displayWords.length])
 
   // Jump to specific card number
   const handleJumpToCard = useCallback(() => {
     const targetIndex = parseInt(jumpValue, 10) - 1 // Convert to 0-based
-    if (!isNaN(targetIndex) && targetIndex >= 0 && targetIndex < words.length) {
+    if (!isNaN(targetIndex) && targetIndex >= 0 && targetIndex < displayWords.length) {
       setCurrentIndex(targetIndex)
       setIsFlipped(false)
       setJumpValue('')
       setShowJumpInput(false)
     }
-  }, [jumpValue, words.length])
+  }, [jumpValue, displayWords.length])
 
-  const currentWord = words[currentIndex]
-  const progress = words.length > 0 ? ((currentIndex + 1) / words.length) * 100 : 0
+  const currentWord = displayWords[currentIndex]
+  const progress = displayWords.length > 0 ? ((currentIndex + 1) / displayWords.length) * 100 : 0
 
   // Card flip animation
   const { transform } = useSpring({
@@ -173,7 +245,7 @@ export default function WordLearningPage() {
   }
 
   const nextWord = () => {
-    if (currentIndex < words.length - 1) {
+    if (currentIndex < displayWords.length - 1) {
       setCurrentIndex(currentIndex + 1)
       setIsFlipped(false)
     }
@@ -187,28 +259,32 @@ export default function WordLearningPage() {
   }
 
   const toggleFavorite = () => {
-    if (!currentWord) return
-    setFavorites((prev) => {
-      const next = new Set(prev)
-      if (next.has(currentWord.id)) {
-        next.delete(currentWord.id)
-      } else {
-        next.add(currentWord.id)
-      }
-      return next
-    })
+    if (!currentWord || !activePackId) return
+    toggleFavoriteInStore(activePackId, currentWord.id)
   }
 
-  if (!currentWord || words.length === 0) {
+  // Exit favorites mode
+  const exitFavoritesMode = () => {
+    setSearchParams({})
+  }
+
+  if (!currentWord || displayWords.length === 0) {
     return (
       <VStack py={10} spacing={4}>
-        <Heading size="md">{t.learn.noWords}</Heading>
-        <Text color="gray.500">{t.learn.downloadPack}</Text>
+        <Heading size="md">{favoritesMode ? t.favorites.noFavorites : t.learn.noWords}</Heading>
+        <Text color="gray.500">{favoritesMode ? '' : t.learn.downloadPack}</Text>
+        {favoritesMode && (
+          <Button colorScheme="blue" onClick={exitFavoritesMode}>
+            {t.favorites.allWords}
+          </Button>
+        )}
       </VStack>
     )
   }
 
-  const isFavorite = favorites.has(currentWord.id)
+  const isFavorite = activePackId && currentWord
+    ? (favoritesByPack[activePackId] ?? []).includes(currentWord.id)
+    : false
 
   // Determine if content is long
   const isLongContent = currentWord.term.length > 30 || currentWord.definition.length > 20
@@ -218,7 +294,7 @@ export default function WordLearningPage() {
       <VStack spacing={6}>
         {/* Header with language info */}
         {activePack && (
-          <HStack w="100%" justify="center">
+          <HStack w="100%" justify="center" spacing={2}>
             <Badge
               colorScheme="blue"
               fontSize={{ base: 'xs', md: 'sm' }}
@@ -228,13 +304,29 @@ export default function WordLearningPage() {
             >
               {activePack.flag} {activePack.name}
             </Badge>
+            {favoritesMode && (
+              <Badge
+                colorScheme="red"
+                fontSize={{ base: 'xs', md: 'sm' }}
+                px={{ base: 2, md: 3 }}
+                py={1}
+                cursor="pointer"
+                onClick={exitFavoritesMode}
+              >
+                <HStack spacing={1}>
+                  <FiHeart size={12} />
+                  <Text>{t.favorites.myFavorites}</Text>
+                  <FiX size={12} />
+                </HStack>
+              </Badge>
+            )}
           </HStack>
         )}
 
         {/* Progress */}
         <Box w="100%">
           <HStack justify="space-between" mb={2}>
-            <HStack spacing={2}>
+            <HStack spacing={1}>
               <Button
                 size="xs"
                 variant="ghost"
@@ -244,8 +336,47 @@ export default function WordLearningPage() {
                 rightIcon={<FiNavigation size={12} />}
                 _hover={{ color: 'blue.500' }}
               >
-                {currentIndex + 1} {t.learn.cardOf} {words.length}
+                {currentIndex + 1} {t.learn.cardOf} {displayWords.length}
               </Button>
+              {history.length > 1 && (
+                <Menu>
+                  <Tooltip label={t.learn.recentPositions} placement="top" hasArrow>
+                    <MenuButton
+                      as={IconButton}
+                      aria-label={t.learn.recentPositions}
+                      icon={<FiClock size={14} />}
+                      size="xs"
+                      variant="ghost"
+                      color="gray.500"
+                      _hover={{ color: 'blue.500' }}
+                    />
+                  </Tooltip>
+                  <MenuList minW="150px">
+                    <Text px={3} py={1} fontSize="xs" fontWeight="bold" color="gray.500">
+                      {t.learn.recentPositions}
+                    </Text>
+                    <MenuDivider />
+                    {history.map((item, idx) => {
+                      const word = displayWords[item.index]
+                      if (!word) return null
+                      return (
+                        <MenuItem
+                          key={idx}
+                          onClick={() => {
+                            setCurrentIndex(item.index)
+                            setIsFlipped(false)
+                          }}
+                          fontSize="sm"
+                          bg={item.index === currentIndex ? 'blue.50' : undefined}
+                          _dark={{ bg: item.index === currentIndex ? 'blue.900' : undefined }}
+                        >
+                          {item.index + 1}. {word.term.length > 15 ? word.term.slice(0, 15) + '...' : word.term}
+                        </MenuItem>
+                      )
+                    })}
+                  </MenuList>
+                </Menu>
+              )}
             </HStack>
             <HStack spacing={2}>
               {hasSavedProgress && currentIndex === 0 && (
@@ -276,8 +407,8 @@ export default function WordLearningPage() {
                   <Input
                     type="number"
                     min={1}
-                    max={words.length}
-                    placeholder={`1 - ${words.length}`}
+                    max={displayWords.length}
+                    placeholder={`1 - ${displayWords.length}`}
                     value={jumpValue}
                     onChange={(e) => setJumpValue(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleJumpToCard()}
@@ -411,14 +542,16 @@ export default function WordLearningPage() {
 
         {/* Controls */}
         <HStack spacing={4}>
-          <IconButton
-            aria-label={t.common.back}
-            icon={<FiChevronLeft size={24} />}
-            variant="ghost"
-            size="lg"
-            onClick={previousWord}
-            isDisabled={currentIndex === 0}
-          />
+          <Tooltip label={t.common.back} placement="top" hasArrow>
+            <IconButton
+              aria-label={t.common.back}
+              icon={<FiChevronLeft size={24} />}
+              variant="ghost"
+              size="lg"
+              onClick={previousWord}
+              isDisabled={currentIndex === 0}
+            />
+          </Tooltip>
 
           <Tooltip
             label={t.learn.pronunciationWarning}
@@ -440,23 +573,27 @@ export default function WordLearningPage() {
             />
           </Tooltip>
 
-          <IconButton
-            aria-label="Toggle favorite"
-            icon={<FiHeart size={24} />}
-            colorScheme={isFavorite ? 'red' : 'gray'}
-            variant={isFavorite ? 'solid' : 'outline'}
-            size="lg"
-            onClick={toggleFavorite}
-          />
+          <Tooltip label={t.favorites.toggleFavorite} placement="top" hasArrow>
+            <IconButton
+              aria-label={t.favorites.toggleFavorite}
+              icon={<FiHeart size={24} />}
+              colorScheme={isFavorite ? 'red' : 'gray'}
+              variant={isFavorite ? 'solid' : 'outline'}
+              size="lg"
+              onClick={toggleFavorite}
+            />
+          </Tooltip>
 
-          <IconButton
-            aria-label={t.common.next}
-            icon={<FiChevronRight size={24} />}
-            variant="ghost"
-            size="lg"
-            onClick={nextWord}
-            isDisabled={currentIndex === words.length - 1}
-          />
+          <Tooltip label={t.common.next} placement="top" hasArrow>
+            <IconButton
+              aria-label={t.common.next}
+              icon={<FiChevronRight size={24} />}
+              variant="ghost"
+              size="lg"
+              onClick={nextWord}
+              isDisabled={currentIndex === displayWords.length - 1}
+            />
+          </Tooltip>
         </HStack>
 
         {/* Category & Difficulty */}

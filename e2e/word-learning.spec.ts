@@ -46,7 +46,7 @@ test.describe('Word Learning Page', () => {
   })
 
   test('should toggle favorite', async ({ page }) => {
-    const favoriteButton = page.getByRole('button', { name: 'Toggle favorite' })
+    const favoriteButton = page.getByRole('button', { name: '切換收藏' })
     await expect(favoriteButton).toBeVisible()
     await favoriteButton.click()
   })
@@ -58,8 +58,8 @@ test.describe('Word Learning Page', () => {
   })
 
   test('should show progress bar', async ({ page }) => {
-    // Progress bar should be visible
-    await expect(page.locator('[role="progressbar"]')).toBeVisible()
+    // Progress bar should be visible (use main region to avoid header progressbar)
+    await expect(page.getByRole('main').getByRole('progressbar')).toBeVisible()
   })
 
   test('should show jump to card feature', async ({ page }) => {
@@ -111,26 +111,283 @@ test.describe('Swipe Hints', () => {
 
 test.describe('Resume Progress', () => {
   test('should show resume button when there is saved progress', async ({ page }) => {
-    // Set up saved progress
-    await page.addInitScript(() => {
+    // Navigate first to set up context
+    await page.goto('/learn')
+
+    // Set up saved progress with lastWordIndex (correct key name per store implementation)
+    await page.evaluate(() => {
       const progressData = {
-        wordsLearned: 5,
-        exercisesCompleted: 0,
-        correctAnswers: 0,
-        streak: 1,
-        lastActiveDate: new Date().toISOString().split('T')[0],
+        currentStreak: 1,
         longestStreak: 1,
-        weeklyProgress: [0, 0, 0, 0, 0, 0, 0],
-        totalTimeSpent: 0,
-        unlockedAchievements: [],
-        lastWordIndices: { 'tc-en': 10 },
-        perfectAnswersInARow: 0,
+        totalWordsLearned: 5,
+        totalExercisesCompleted: 0,
+        dailyProgress: [],
+        achievements: [],
+        lastActiveDate: new Date().toISOString().split('T')[0],
+        dailyGoal: 10,
+        todayWordsLearned: 0,
+        lastWordIndex: { 'tc-en': 10 },
+        wordIndexHistory: {},
+        consecutiveCorrectAnswers: 0,
+        lastUnlockedAchievement: null,
+        gamesPlayed: 0,
+        perfectGames: 0,
       }
       localStorage.setItem('kidsterm-progress-v1', JSON.stringify({ state: progressData, version: 0 }))
     })
-    await page.goto('/learn')
+
+    // Reload to pick up the localStorage
+    await page.reload()
+    await page.waitForLoadState('networkidle')
 
     // UI shows Chinese: 繼續上次進度
-    await expect(page.locator('text=繼續上次進度')).toBeVisible()
+    await expect(page.getByText(/繼續上次進度/)).toBeVisible({ timeout: 5000 })
+  })
+})
+
+test.describe('Favorites Feature', () => {
+  test('should toggle favorite on word', async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.removeItem('kidsterm-favorites-v1')
+      localStorage.removeItem('kidsterm-swipe-hints')
+    })
+    await page.goto('/learn')
+
+    // Find and click the favorite button
+    const favoriteButton = page.getByRole('button', { name: '切換收藏' })
+    await expect(favoriteButton).toBeVisible()
+
+    // Click to add to favorites
+    await favoriteButton.click()
+
+    // The heart icon should now be filled (red)
+    // Check that the button is still visible and clickable
+    await expect(favoriteButton).toBeVisible()
+  })
+
+  test('should persist favorites in localStorage after toggle', async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.removeItem('kidsterm-favorites-v1')
+      localStorage.removeItem('kidsterm-swipe-hints')
+    })
+    await page.goto('/learn')
+
+    // Add a word to favorites
+    const favoriteButton = page.getByRole('button', { name: '切換收藏' })
+    await favoriteButton.click()
+
+    // Wait for localStorage to be updated
+    await page.waitForTimeout(500)
+
+    // The word should be in localStorage
+    const favorites = await page.evaluate(() => {
+      const data = localStorage.getItem('kidsterm-favorites-v1')
+      return data ? JSON.parse(data) : null
+    })
+
+    expect(favorites).not.toBeNull()
+    expect(favorites.state.favoritesByPack).toBeDefined()
+  })
+
+  test('should show favorites toggle after adding 4+ favorites', async ({ page }) => {
+    // Clear localStorage once before starting
+    await page.goto('/learn')
+    await page.evaluate(() => {
+      localStorage.removeItem('kidsterm-favorites-v1')
+      localStorage.removeItem('kidsterm-swipe-hints')
+    })
+    await page.reload()
+    await page.waitForLoadState('networkidle')
+
+    // Add 4 words to favorites
+    for (let i = 0; i < 4; i++) {
+      const favoriteButton = page.getByRole('button', { name: '切換收藏' })
+      await favoriteButton.click()
+      await page.waitForTimeout(200)
+
+      // Go to next card
+      const nextButton = page.getByRole('button', { name: '下一個' })
+      await nextButton.click()
+      await page.waitForTimeout(200)
+    }
+
+    // Navigate to practice page using client-side routing
+    await page.getByRole('button', { name: '練習' }).click()
+    await page.waitForLoadState('networkidle')
+
+    // UI shows Chinese: 所有單字, 我的收藏
+    await expect(page.getByText('所有單字')).toBeVisible({ timeout: 10000 })
+    await expect(page.getByText('我的收藏')).toBeVisible()
+  })
+
+  test('should switch to favorites mode when clicking favorites button', async ({ page }) => {
+    // Clear localStorage once before starting
+    await page.goto('/learn')
+    await page.evaluate(() => {
+      localStorage.removeItem('kidsterm-favorites-v1')
+      localStorage.removeItem('kidsterm-swipe-hints')
+    })
+    await page.reload()
+    await page.waitForLoadState('networkidle')
+
+    // Add 4 words to favorites
+    for (let i = 0; i < 4; i++) {
+      const favoriteButton = page.getByRole('button', { name: '切換收藏' })
+      await favoriteButton.click()
+      await page.waitForTimeout(200)
+
+      const nextButton = page.getByRole('button', { name: '下一個' })
+      await nextButton.click()
+      await page.waitForTimeout(200)
+    }
+
+    // Verify favorites were saved
+    const favCount = await page.evaluate(() => {
+      const data = localStorage.getItem('kidsterm-favorites-v1')
+      if (!data) return 0
+      const parsed = JSON.parse(data)
+      return parsed.state?.favoritesByPack?.['tc-en']?.length ?? 0
+    })
+    expect(favCount).toBe(4)
+
+    // Navigate directly to favorites mode via URL (using client-side by clicking home first then navigating)
+    await page.evaluate(() => {
+      window.location.href = '/learn?favorites=true'
+    })
+    await page.waitForLoadState('networkidle')
+
+    // Should be in favorites mode with only 4 words
+    await expect(page.getByText(/\/ 4$/)).toBeVisible({ timeout: 5000 })
+  })
+})
+
+test.describe('History Bookmark Feature', () => {
+  test('should save position when navigating cards and show resume button', async ({ page }) => {
+    // Clear localStorage once before starting
+    await page.goto('/learn')
+    await page.evaluate(() => {
+      localStorage.removeItem('kidsterm-progress-v1')
+      localStorage.removeItem('kidsterm-swipe-hints')
+    })
+    await page.reload()
+    await page.waitForLoadState('networkidle')
+
+    // Navigate to card 5
+    const nextButton = page.getByRole('button', { name: '下一個' })
+    for (let i = 0; i < 4; i++) {
+      await nextButton.click()
+      await page.waitForTimeout(100)
+    }
+    await expect(page.getByText(/^5 \//)).toBeVisible()
+
+    // Wait for state to be saved
+    await page.waitForTimeout(500)
+
+    // Verify lastWordIndex was saved
+    const savedIndex = await page.evaluate(() => {
+      const data = localStorage.getItem('kidsterm-progress-v1')
+      if (!data) return -1
+      const parsed = JSON.parse(data)
+      return parsed.state?.lastWordIndex?.['tc-en'] ?? -1
+    })
+    expect(savedIndex).toBe(4) // 0-based index for card 5
+
+    // Navigate away using client-side routing (click Settings button)
+    await page.getByRole('button', { name: '設定' }).click()
+    await page.waitForLoadState('networkidle')
+
+    // Verify lastWordIndex persisted after navigation
+    const savedIndexAfterNav = await page.evaluate(() => {
+      const data = localStorage.getItem('kidsterm-progress-v1')
+      if (!data) return -1
+      const parsed = JSON.parse(data)
+      return parsed.state?.lastWordIndex?.['tc-en'] ?? -1
+    })
+    expect(savedIndexAfterNav).toBe(4)
+
+    // Navigate back using client-side routing
+    await page.getByRole('button', { name: '首頁' }).click()
+    await page.waitForLoadState('networkidle')
+    await page.getByRole('button', { name: /繼續學習/ }).click()
+    await page.waitForLoadState('networkidle')
+
+    // Should offer to resume from card 5 (shows index + 1 = 5)
+    await expect(page.getByText(/繼續上次進度/)).toBeVisible({ timeout: 10000 })
+  })
+
+  test('should remember position after page reload', async ({ page }) => {
+    // Clear localStorage once before starting
+    await page.goto('/learn')
+    await page.evaluate(() => {
+      localStorage.removeItem('kidsterm-progress-v1')
+      localStorage.removeItem('kidsterm-swipe-hints')
+    })
+    await page.reload()
+    await page.waitForLoadState('networkidle')
+
+    // Navigate to card 10
+    const nextButton = page.getByRole('button', { name: '下一個' })
+    for (let i = 0; i < 9; i++) {
+      await nextButton.click()
+      await page.waitForTimeout(50)
+    }
+    await expect(page.getByText(/^10 \//)).toBeVisible()
+
+    // Wait for state to be saved
+    await page.waitForTimeout(500)
+
+    // Verify lastWordIndex was saved before reload
+    const savedIndexBeforeReload = await page.evaluate(() => {
+      const data = localStorage.getItem('kidsterm-progress-v1')
+      if (!data) return -1
+      const parsed = JSON.parse(data)
+      return parsed.state?.lastWordIndex?.['tc-en'] ?? -1
+    })
+    expect(savedIndexBeforeReload).toBe(9)
+
+    // Reload the page (this doesn't use addInitScript so localStorage persists)
+    await page.reload()
+    await page.waitForLoadState('networkidle')
+
+    // Should show resume from last position (card 10)
+    await expect(page.getByText(/繼續上次進度/)).toBeVisible({ timeout: 10000 })
+  })
+
+  test('should create history entries when navigating and leaving page', async ({ page }) => {
+    // Clear localStorage once before starting
+    await page.goto('/learn')
+    await page.evaluate(() => {
+      localStorage.removeItem('kidsterm-progress-v1')
+      localStorage.removeItem('kidsterm-swipe-hints')
+    })
+    await page.reload()
+    await page.waitForLoadState('networkidle')
+
+    // Navigate to card 5
+    const nextButton = page.getByRole('button', { name: '下一個' })
+    for (let i = 0; i < 4; i++) {
+      await nextButton.click()
+      await page.waitForTimeout(100)
+    }
+    await expect(page.getByText(/^5 \//)).toBeVisible()
+
+    // Navigate away using client-side routing to trigger history save
+    await page.getByRole('button', { name: '設定' }).click()
+    await page.waitForLoadState('networkidle')
+
+    // Wait for Zustand to persist to localStorage
+    await page.waitForTimeout(500)
+
+    // Check localStorage for history - position should have been saved on unmount
+    const history = await page.evaluate(() => {
+      const data = localStorage.getItem('kidsterm-progress-v1')
+      if (!data) return []
+      const parsed = JSON.parse(data)
+      return parsed.state?.wordIndexHistory?.['tc-en'] || []
+    })
+
+    expect(history).toBeDefined()
+    expect(history.length).toBeGreaterThan(0)
+    expect(history[0].index).toBe(4) // Should have saved position 4 (card 5)
   })
 })

@@ -17,8 +17,9 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
-import { FiBook, FiTarget, FiTrendingUp, FiZap } from 'react-icons/fi'
+import { FiBook, FiHeart, FiTarget, FiTrendingUp, FiZap } from 'react-icons/fi'
 import { useProgressStore } from '../../store/useProgressStore'
+import { useFavoritesStore } from '../../store/useFavoritesStore'
 import { useActiveLanguagePack } from '../../hooks/useActiveLanguagePack'
 import { useTranslation } from '../../hooks/useTranslation'
 
@@ -33,7 +34,9 @@ export default function HomePage() {
   const todayWordsLearned = useProgressStore((s) => s.todayWordsLearned)
   const achievements = useProgressStore((s) => s.achievements)
 
-  const { words } = useActiveLanguagePack()
+  const { words, activePackId } = useActiveLanguagePack()
+  const getFavoritesCount = useFavoritesStore((s) => s.getFavoritesCount)
+  const favoritesCount = activePackId ? getFavoritesCount(activePackId) : 0
 
   const progressPercent = Math.min((todayWordsLearned / dailyGoal) * 100, 100)
   const wordsToGo = Math.max(dailyGoal - todayWordsLearned, 0)
@@ -164,6 +167,23 @@ export default function HomePage() {
             <Text fontSize={{ base: 'sm', md: 'lg' }} noOfLines={1}>{t.home.startPractice}</Text>
           </Button>
         </Grid>
+
+        {/* Review Favorites Button */}
+        {favoritesCount > 0 && (
+          <Button
+            size="lg"
+            h={{ base: '50px', md: '60px' }}
+            variant="outline"
+            colorScheme="red"
+            onClick={() => navigate('/learn?favorites=true')}
+            leftIcon={<FiHeart size={18} />}
+            w="100%"
+          >
+            <Text fontSize={{ base: 'sm', md: 'md' }}>
+              {t.favorites.reviewFavorites} ({favoritesCount})
+            </Text>
+          </Button>
+        )}
       </VStack>
     </Box>
   )
