@@ -109,6 +109,11 @@ export const useProgressStore = create<ProgressState>()(
 
       incrementWordsLearned: (count = 1) =>
         set((state) => {
+          const today = getToday()
+          if (state.lastActiveDate !== today) {
+            state.todayWordsLearned = 0
+          }
+
           state.totalWordsLearned += count
           state.todayWordsLearned += count
 
@@ -119,7 +124,6 @@ export const useProgressStore = create<ProgressState>()(
           checkAchievements(state, 'words', state.totalWordsLearned)
 
           // Update streak
-          const today = getToday()
           const lastActive = state.lastActiveDate
           if (lastActive !== today || state.currentStreak === 0) {
             const daysDiff = differenceInDays(parseISO(today), parseISO(lastActive))
