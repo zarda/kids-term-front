@@ -64,6 +64,44 @@ describe('useProgressStore', () => {
       expect(state.dailyProgress.length).toBe(1)
       expect(state.dailyProgress[0].wordsLearned).toBe(5)
     })
+
+    it('should reset todayWordsLearned when lastActiveDate is from a previous day', () => {
+      useProgressStore.setState({
+        todayWordsLearned: 7,
+        lastActiveDate: '2020-01-01',
+      })
+
+      const { incrementWordsLearned } = useProgressStore.getState()
+      incrementWordsLearned(2)
+
+      const state = useProgressStore.getState()
+      expect(state.todayWordsLearned).toBe(2)
+    })
+  })
+
+  describe('resetDailyProgress', () => {
+    it('should reset todayWordsLearned when lastActiveDate is in the past', () => {
+      useProgressStore.setState({
+        todayWordsLearned: 5,
+        lastActiveDate: '2020-01-01',
+      })
+
+      useProgressStore.getState().resetDailyProgress()
+
+      expect(useProgressStore.getState().todayWordsLearned).toBe(0)
+    })
+
+    it('should be a no-op when lastActiveDate is today', () => {
+      const today = new Date().toISOString().split('T')[0]
+      useProgressStore.setState({
+        todayWordsLearned: 5,
+        lastActiveDate: today,
+      })
+
+      useProgressStore.getState().resetDailyProgress()
+
+      expect(useProgressStore.getState().todayWordsLearned).toBe(5)
+    })
   })
 
   describe('incrementExercisesCompleted', () => {

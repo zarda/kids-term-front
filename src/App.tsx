@@ -4,6 +4,7 @@ import theme from './theme'
 import AppRoutes from './routes'
 import { useNotificationScheduler } from './hooks/useNotificationScheduler'
 import { useAchievementNotification } from './hooks/useAchievementNotification'
+import { useDailyReset } from './hooks/useDailyReset'
 
 function NotificationScheduler() {
   useNotificationScheduler()
@@ -15,12 +16,18 @@ function AchievementNotifier() {
   return null
 }
 
+function DailyReset() {
+  useDailyReset()
+  return null
+}
+
 function App() {
   return (
     <>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <ChakraProvider theme={theme}>
         <BrowserRouter>
+          <DailyReset />
           <NotificationScheduler />
           <AchievementNotifier />
           <AppRoutes />
