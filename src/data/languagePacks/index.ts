@@ -102,6 +102,39 @@ export const availableLanguagePacks: LanguagePack[] = [
     version: '1.0.0',
   },
   {
+    id: 'tc-th',
+    sourceLanguage: 'tc',
+    targetLanguage: 'th',
+    name: '泰文 (繁體中文)',
+    nativeName: 'ไทย',
+    flag: '🇹🇭',
+    wordCount: 30,
+    isDownloaded: false,
+    version: '1.0.0',
+  },
+  {
+    id: 'tc-vi',
+    sourceLanguage: 'tc',
+    targetLanguage: 'vi',
+    name: '越南文 (繁體中文)',
+    nativeName: 'Tiếng Việt',
+    flag: '🇻🇳',
+    wordCount: 30,
+    isDownloaded: false,
+    version: '1.0.0',
+  },
+  {
+    id: 'tc-id',
+    sourceLanguage: 'tc',
+    targetLanguage: 'id',
+    name: '印尼文 (繁體中文)',
+    nativeName: 'Bahasa Indonesia',
+    flag: '🇮🇩',
+    wordCount: 30,
+    isDownloaded: false,
+    version: '1.0.0',
+  },
+  {
     id: 'en-en',
     sourceLanguage: 'en',
     targetLanguage: 'en',
@@ -197,6 +230,39 @@ export const availableLanguagePacks: LanguagePack[] = [
     nativeName: '繁體中文',
     flag: '🇹🇼',
     wordCount: 3000,
+    isDownloaded: false,
+    version: '1.0.0',
+  },
+  {
+    id: 'en-th',
+    sourceLanguage: 'en',
+    targetLanguage: 'th',
+    name: 'Thai (English)',
+    nativeName: 'ไทย',
+    flag: '🇹🇭',
+    wordCount: 30,
+    isDownloaded: false,
+    version: '1.0.0',
+  },
+  {
+    id: 'en-vi',
+    sourceLanguage: 'en',
+    targetLanguage: 'vi',
+    name: 'Vietnamese (English)',
+    nativeName: 'Tiếng Việt',
+    flag: '🇻🇳',
+    wordCount: 30,
+    isDownloaded: false,
+    version: '1.0.0',
+  },
+  {
+    id: 'en-id',
+    sourceLanguage: 'en',
+    targetLanguage: 'id',
+    name: 'Indonesian (English)',
+    nativeName: 'Bahasa Indonesia',
+    flag: '🇮🇩',
+    wordCount: 30,
     isDownloaded: false,
     version: '1.0.0',
   },
@@ -299,6 +365,39 @@ export const availableLanguagePacks: LanguagePack[] = [
     isDownloaded: false,
     version: '1.0.0',
   },
+  {
+    id: 'ja-th',
+    sourceLanguage: 'ja',
+    targetLanguage: 'th',
+    name: 'タイ語 (日本語)',
+    nativeName: 'ไทย',
+    flag: '🇹🇭',
+    wordCount: 30,
+    isDownloaded: false,
+    version: '1.0.0',
+  },
+  {
+    id: 'ja-vi',
+    sourceLanguage: 'ja',
+    targetLanguage: 'vi',
+    name: 'ベトナム語 (日本語)',
+    nativeName: 'Tiếng Việt',
+    flag: '🇻🇳',
+    wordCount: 30,
+    isDownloaded: false,
+    version: '1.0.0',
+  },
+  {
+    id: 'ja-id',
+    sourceLanguage: 'ja',
+    targetLanguage: 'id',
+    name: 'インドネシア語 (日本語)',
+    nativeName: 'Bahasa Indonesia',
+    flag: '🇮🇩',
+    wordCount: 30,
+    isDownloaded: false,
+    version: '1.0.0',
+  },
 ]
 
 export async function downloadLanguagePack(packId: string): Promise<LanguagePackData> {
@@ -359,6 +458,24 @@ export async function downloadLanguagePack(packId: string): Promise<LanguagePack
       return (await import('./ja-es/index')).default
     case 'ja-pt':
       return (await import('./ja-pt/index')).default
+    case 'tc-th':
+      return (await import('./tc-th/index')).default
+    case 'tc-vi':
+      return (await import('./tc-vi/index')).default
+    case 'tc-id':
+      return (await import('./tc-id/index')).default
+    case 'en-th':
+      return (await import('./en-th/index')).default
+    case 'en-vi':
+      return (await import('./en-vi/index')).default
+    case 'en-id':
+      return (await import('./en-id/index')).default
+    case 'ja-th':
+      return (await import('./ja-th/index')).default
+    case 'ja-vi':
+      return (await import('./ja-vi/index')).default
+    case 'ja-id':
+      return (await import('./ja-id/index')).default
     default:
       throw new Error(`Language pack ${packId} not found`)
   }
