@@ -119,7 +119,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: '越南文 (繁體中文)',
     nativeName: 'Tiếng Việt',
     flag: '🇻🇳',
-    wordCount: 1000,
+    wordCount: 1500,
     isDownloaded: false,
     version: '1.0.0',
   },
