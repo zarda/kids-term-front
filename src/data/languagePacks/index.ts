@@ -108,7 +108,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: '泰文 (繁體中文)',
     nativeName: 'ไทย',
     flag: '🇹🇭',
-    wordCount: 1500,
+    wordCount: 2000,
     isDownloaded: false,
     version: '1.0.0',
   },
