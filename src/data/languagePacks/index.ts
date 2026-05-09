@@ -240,7 +240,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: 'Thai (English)',
     nativeName: 'ไทย',
     flag: '🇹🇭',
-    wordCount: 1500,
+    wordCount: 2000,
     isDownloaded: false,
     version: '1.0.0',
   },
