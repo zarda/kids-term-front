@@ -383,7 +383,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: 'ベトナム語 (日本語)',
     nativeName: 'Tiếng Việt',
     flag: '🇻🇳',
-    wordCount: 1500,
+    wordCount: 2000,
     isDownloaded: false,
     version: '1.0.0',
   },
