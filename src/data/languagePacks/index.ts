@@ -262,7 +262,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: 'Indonesian (English)',
     nativeName: 'Bahasa Indonesia',
     flag: '🇮🇩',
-    wordCount: 1000,
+    wordCount: 1500,
     isDownloaded: false,
     version: '1.0.0',
   },
