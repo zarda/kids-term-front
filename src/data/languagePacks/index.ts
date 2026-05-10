@@ -394,7 +394,7 @@ export const availableLanguagePacks: LanguagePack[] = [
     name: 'インドネシア語 (日本語)',
     nativeName: 'Bahasa Indonesia',
     flag: '🇮🇩',
-    wordCount: 2500,
+    wordCount: 3000,
     isDownloaded: false,
     version: '1.0.0',
   },
