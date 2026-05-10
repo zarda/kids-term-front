@@ -840,9 +840,9 @@ export const intermediateWords: LanguageWord[] = [
   { id: 'en-id-i-820', term: 'laboratorium', definition: 'Laboratory', pronunciation: 'la-bo-ra-to-ri-um', examples: ['Laboratorium dilengkapi modern.'], category: 'education', difficulty: 'intermediate' },
   { id: 'en-id-i-821', term: 'profesor', definition: 'Professor', pronunciation: 'pro-fe-sor', examples: ['Profesor mengajar dengan baik.'], category: 'education', difficulty: 'intermediate' },
   { id: 'en-id-i-822', term: 'asisten dosen', definition: 'Teaching assistant', pronunciation: 'a-sis-ten do-sen', examples: ['Asisten dosen membantu kuliah.'], category: 'education', difficulty: 'intermediate' },
-  { id: 'en-id-i-823', term: 'magister', definition: 'Master', pronunciation: 'ma-gis-ter', examples: ['Gelar magister diraih.'], category: 'education', difficulty: 'intermediate' },
+  { id: 'en-id-i-823', term: 'magister', definition: 'Master\'s degree', pronunciation: 'ma-gis-ter', examples: ['Gelar magister diraih.'], category: 'education', difficulty: 'intermediate' },
   { id: 'en-id-i-824', term: 'doktor', definition: 'Doctorate', pronunciation: 'dok-tor', examples: ['Gelar doktor diperoleh.'], category: 'education', difficulty: 'intermediate' },
-  { id: 'en-id-i-825', term: 'sarjana', definition: 'Bachelor', pronunciation: 'sar-ja-na', examples: ['Sarjana muda lulus tahun ini.'], category: 'education', difficulty: 'intermediate' },
+  { id: 'en-id-i-825', term: 'sarjana', definition: 'Bachelor\'s degree', pronunciation: 'sar-ja-na', examples: ['Sarjana muda lulus tahun ini.'], category: 'education', difficulty: 'intermediate' },
   // Real Estate (826-850)
   { id: 'en-id-i-826', term: 'properti', definition: 'Real estate', pronunciation: 'pro-per-ti', examples: ['Properti meningkat nilainya.'], category: 'realestate', difficulty: 'intermediate' },
   { id: 'en-id-i-827', term: 'sewa', definition: 'Rent', pronunciation: 'se-wa', examples: ['Sewa rumah bulanan.'], category: 'realestate', difficulty: 'intermediate' },

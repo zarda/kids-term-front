@@ -18,11 +18,24 @@ A mobile-first language learning application designed to help kids learn vocabul
 
 | Source | Target Languages |
 |--------|-----------------|
-| English | English, French, German, Italian, Japanese, Korean, Portuguese, Spanish, Traditional Chinese |
-| Japanese (日本語) | English, French, German, Italian, Japanese, Korean, Portuguese, Spanish, Traditional Chinese |
-| Traditional Chinese (繁體中文) | English, French, German, Italian, Japanese, Korean, Portuguese, Spanish, Traditional Chinese |
+| English | English, French, German, Italian, Japanese, Korean, Portuguese, Spanish, Traditional Chinese, Thai, Vietnamese, Indonesian |
+| Japanese (日本語) | English, French, German, Italian, Japanese, Korean, Portuguese, Spanish, Traditional Chinese, Thai, Vietnamese, Indonesian |
+| Traditional Chinese (繁體中文) | English, French, German, Italian, Japanese, Korean, Portuguese, Spanish, Traditional Chinese, Thai, Vietnamese, Indonesian |
 
-Each language pack includes **beginner**, **intermediate**, and **advanced** difficulty levels.
+Each language pack includes **beginner**, **intermediate**, and **advanced** difficulty levels with **3,000 entries per pack** (1,000 per level).
+
+### Pack data layout
+
+Each pack lives in `src/data/languagePacks/<source>-<target>/` and is split across three files:
+
+- `beginner.ts` — exports `beginnerWords: LanguageWord[]` (ids `<pack>-b-1` … `<pack>-b-1000`)
+- `intermediate.ts` — exports `intermediateWords: LanguageWord[]` (ids `<pack>-i-1` … `<pack>-i-1000`)
+- `advanced.ts` — exports `advancedWords: LanguageWord[]` (ids `<pack>-a-1` … `<pack>-a-1000`)
+- `index.ts` — combines all three into a single `LanguagePackData` whose `words` array is loaded lazily via `downloadLanguagePack(packId)` in `src/data/languagePacks/index.ts`
+
+Each `LanguageWord` has `{ id, term, definition, pronunciation, examples, category, difficulty }`. The `definition` field always carries the source-language word verbatim (so a `tc-th` entry's definition is the original Traditional Chinese word and its `term` is the Thai translation). Categories and id ordering are inherited from the source-language pack — i.e., `en-th` mirrors `en-ko`'s wordlist; `tc-*` packs mirror `tc-en`; `ja-*` packs mirror `ja-en` (definitions in `'kanji (hiragana)'` form). Pack metadata in `availableLanguagePacks` (id, native name, flag, `wordCount: 3000`) drives the in-app pack picker.
+
+Data integrity (counts, contiguous ids, definition parity with the source pack, metadata `wordCount`, and `downloadLanguagePack` lazy-loading) is enforced by `src/data/languagePacks/asianLanguagePacks.test.ts` (189 assertions across the nine new packs).
 
 ## Features
 

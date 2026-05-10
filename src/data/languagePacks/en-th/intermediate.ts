@@ -840,9 +840,9 @@ export const intermediateWords: LanguageWord[] = [
   { id: 'en-th-i-820', term: 'ห้องปฏิบัติการ', definition: 'Laboratory', pronunciation: 'hɔ̂ɔng-pà-tì-bàt-tì-kaan', examples: ['ห้องปฏิบัติการเคมี'], category: 'education', difficulty: 'intermediate' },
   { id: 'en-th-i-821', term: 'ศาสตราจารย์', definition: 'Professor', pronunciation: 'sàat-sà-traa-jaan', examples: ['ศาสตราจารย์ของเรา'], category: 'education', difficulty: 'intermediate' },
   { id: 'en-th-i-822', term: 'ผู้ช่วยสอน', definition: 'Teaching assistant', pronunciation: 'phûu-chûai-sɔ̌ɔn', examples: ['ผู้ช่วยสอนของอาจารย์'], category: 'education', difficulty: 'intermediate' },
-  { id: 'en-th-i-823', term: 'ปริญญาโท', definition: 'Master', pronunciation: 'pà-rin-yaa-thoo', examples: ['ปริญญาโทของเขา'], category: 'education', difficulty: 'intermediate' },
+  { id: 'en-th-i-823', term: 'ปริญญาโท', definition: 'Master\'s degree', pronunciation: 'pà-rin-yaa-thoo', examples: ['ปริญญาโทของเขา'], category: 'education', difficulty: 'intermediate' },
   { id: 'en-th-i-824', term: 'ปริญญาเอก', definition: 'Doctorate', pronunciation: 'pà-rin-yaa-èek', examples: ['ปริญญาเอกของเธอ'], category: 'education', difficulty: 'intermediate' },
-  { id: 'en-th-i-825', term: 'ปริญญาตรี', definition: 'Bachelor', pronunciation: 'pà-rin-yaa-trii', examples: ['ปริญญาตรีของฉัน'], category: 'education', difficulty: 'intermediate' },
+  { id: 'en-th-i-825', term: 'ปริญญาตรี', definition: 'Bachelor\'s degree', pronunciation: 'pà-rin-yaa-trii', examples: ['ปริญญาตรีของฉัน'], category: 'education', difficulty: 'intermediate' },
   // Real Estate
   { id: 'en-th-i-826', term: 'อสังหาริมทรัพย์', definition: 'Real estate', pronunciation: 'à-sǎng-hǎa-rim-má-sáp', examples: ['อสังหาริมทรัพย์ในเมือง'], category: 'realestate', difficulty: 'intermediate' },
   { id: 'en-th-i-827', term: 'ค่าเช่า', definition: 'Rent', pronunciation: 'khâa-châo', examples: ['ค่าเช่าบ้านเดือนละ'], category: 'realestate', difficulty: 'intermediate' },
