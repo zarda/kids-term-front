@@ -86,6 +86,52 @@ const tc: Translations = {
     cardLabel: '卡片',
   },
 
+  learnHub: {
+    title: '學習新單字',
+    subtitle: '選擇今天想要的學習方式',
+    flashcards: '單字卡',
+    flashcardsDesc: '翻轉卡片學習單字與意思',
+    srs: '智慧複習',
+    srsDesc: '在快忘記前及時複習單字',
+    typing: '拼寫',
+    typingDesc: '根據意思輸入單字',
+    context: '情境填空',
+    contextDesc: '在句子中填入缺少的單字',
+    due: '{count} 個待複習',
+    newCount: '{count} 個新單字',
+    allCaughtUp: '全部複習完成！',
+  },
+
+  srs: {
+    title: '智慧複習',
+    showAnswer: '顯示答案',
+    again: '再一次',
+    good: '記得',
+    easy: '簡單',
+    reviewed: '已複習 {count} 個單字',
+    sessionComplete: '複習完成！',
+    noCards: '目前沒有需要複習的單字，稍後再來吧！',
+  },
+
+  typing: {
+    title: '拼寫',
+    prompt: '輸入符合這個意思的單字：',
+    placeholder: '在此輸入...',
+    check: '檢查',
+    skip: '跳過',
+    reveal: '顯示答案',
+    answerWas: '答案：{term}',
+    sessionComplete: '拼寫完成！',
+    score: '答對 {correct} / {total}',
+  },
+
+  context: {
+    title: '情境填空',
+    prompt: '選擇缺少的單字',
+    sessionComplete: '做得好！',
+    notEnough: '需要 4 個以上含例句的單字才能進行',
+  },
+
   practice: {
     title: '練習模式',
     subtitle: '透過不同的練習類型測試你的字彙量',

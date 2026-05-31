@@ -89,6 +89,56 @@ export interface Translations {
     cardLabel: string
   }
 
+  // Learn hub (method picker at /learn)
+  learnHub: {
+    title: string
+    subtitle: string
+    flashcards: string
+    flashcardsDesc: string
+    srs: string
+    srsDesc: string
+    typing: string
+    typingDesc: string
+    context: string
+    contextDesc: string
+    due: string
+    newCount: string
+    allCaughtUp: string
+  }
+
+  // Spaced Repetition method
+  srs: {
+    title: string
+    showAnswer: string
+    again: string
+    good: string
+    easy: string
+    reviewed: string
+    sessionComplete: string
+    noCards: string
+  }
+
+  // Typing / spelling method
+  typing: {
+    title: string
+    prompt: string
+    placeholder: string
+    check: string
+    skip: string
+    reveal: string
+    answerWas: string
+    sessionComplete: string
+    score: string
+  }
+
+  // Sentence / context (cloze) method
+  context: {
+    title: string
+    prompt: string
+    sessionComplete: string
+    notEnough: string
+  }
+
   // Practice Page
   practice: {
     title: string

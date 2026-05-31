@@ -5,7 +5,11 @@ import AppShell from '../components/common/AppShell'
 
 // Lazy load pages
 const HomePage = lazy(() => import('../pages/HomePage'))
+const LearnHubPage = lazy(() => import('../pages/LearnHubPage'))
 const WordLearningPage = lazy(() => import('../pages/WordLearningPage'))
+const SrsLearningPage = lazy(() => import('../pages/SrsLearningPage'))
+const TypingLearningPage = lazy(() => import('../pages/TypingLearningPage'))
+const ContextLearningPage = lazy(() => import('../pages/ContextLearningPage'))
 const PracticePage = lazy(() => import('../pages/PracticePage'))
 const ProgressPage = lazy(() => import('../pages/ProgressPage'))
 const SettingsPage = lazy(() => import('../pages/SettingsPage'))
@@ -25,7 +29,11 @@ export default function AppRoutes() {
       <Routes>
         <Route path="/" element={<AppShell />}>
           <Route index element={<HomePage />} />
-          <Route path="learn" element={<WordLearningPage />} />
+          <Route path="learn" element={<LearnHubPage />} />
+          <Route path="learn/flashcards" element={<WordLearningPage />} />
+          <Route path="learn/srs" element={<SrsLearningPage />} />
+          <Route path="learn/typing" element={<TypingLearningPage />} />
+          <Route path="learn/context" element={<ContextLearningPage />} />
           <Route path="games" element={<GamesPage />} />
           <Route path="games/scramble" element={<WordScramblePage />} />
           <Route path="games/matching" element={<MatchingGamePage />} />

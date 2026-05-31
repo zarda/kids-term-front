@@ -6,7 +6,7 @@ test.describe('Word Learning Page', () => {
     await page.addInitScript(() => {
       localStorage.removeItem('kidsterm-swipe-hints')
     })
-    await page.goto('/learn')
+    await page.goto('/learn/flashcards')
   })
 
   test('should display flashcard with word', async ({ page }) => {
@@ -76,7 +76,7 @@ test.describe('Swipe Hints', () => {
     await page.addInitScript(() => {
       localStorage.removeItem('kidsterm-swipe-hints')
     })
-    await page.goto('/learn')
+    await page.goto('/learn/flashcards')
 
     // UI shows Chinese: 跳過, 已學會！
     await expect(page.locator('text=跳過')).toBeVisible()
@@ -89,7 +89,7 @@ test.describe('Swipe Hints', () => {
       const today = new Date().toISOString().split('T')[0]
       localStorage.setItem('kidsterm-swipe-hints', JSON.stringify({ date: today, swipeCount: 3 }))
     })
-    await page.goto('/learn')
+    await page.goto('/learn/flashcards')
 
     // Hints should not be visible
     await expect(page.locator('text=跳過')).not.toBeVisible()
@@ -101,7 +101,7 @@ test.describe('Swipe Hints', () => {
     await page.addInitScript(() => {
       localStorage.setItem('kidsterm-swipe-hints', JSON.stringify({ date: '2020-01-01', swipeCount: 10 }))
     })
-    await page.goto('/learn')
+    await page.goto('/learn/flashcards')
 
     // Hints should be visible again because it's a new day
     await expect(page.locator('text=跳過')).toBeVisible()
@@ -112,7 +112,7 @@ test.describe('Swipe Hints', () => {
 test.describe('Resume Progress', () => {
   test('should show resume button when there is saved progress', async ({ page }) => {
     // Navigate first to set up context
-    await page.goto('/learn')
+    await page.goto('/learn/flashcards')
 
     // Set up saved progress with lastWordIndex (correct key name per store implementation)
     await page.evaluate(() => {
@@ -151,7 +151,7 @@ test.describe('Favorites Feature', () => {
       localStorage.removeItem('kidsterm-favorites-v1')
       localStorage.removeItem('kidsterm-swipe-hints')
     })
-    await page.goto('/learn')
+    await page.goto('/learn/flashcards')
 
     // Find and click the favorite button
     const favoriteButton = page.getByRole('button', { name: '切換收藏' })
@@ -170,7 +170,7 @@ test.describe('Favorites Feature', () => {
       localStorage.removeItem('kidsterm-favorites-v1')
       localStorage.removeItem('kidsterm-swipe-hints')
     })
-    await page.goto('/learn')
+    await page.goto('/learn/flashcards')
 
     // Add a word to favorites
     const favoriteButton = page.getByRole('button', { name: '切換收藏' })
@@ -191,7 +191,7 @@ test.describe('Favorites Feature', () => {
 
   test('should show favorites toggle after adding 4+ favorites', async ({ page }) => {
     // Clear localStorage once before starting
-    await page.goto('/learn')
+    await page.goto('/learn/flashcards')
     await page.evaluate(() => {
       localStorage.removeItem('kidsterm-favorites-v1')
       localStorage.removeItem('kidsterm-swipe-hints')
@@ -222,7 +222,7 @@ test.describe('Favorites Feature', () => {
 
   test('should switch to favorites mode when clicking favorites button', async ({ page }) => {
     // Clear localStorage once before starting
-    await page.goto('/learn')
+    await page.goto('/learn/flashcards')
     await page.evaluate(() => {
       localStorage.removeItem('kidsterm-favorites-v1')
       localStorage.removeItem('kidsterm-swipe-hints')
@@ -252,7 +252,7 @@ test.describe('Favorites Feature', () => {
 
     // Navigate directly to favorites mode via URL (using client-side by clicking home first then navigating)
     await page.evaluate(() => {
-      window.location.href = '/learn?favorites=true'
+      window.location.href = '/learn/flashcards?favorites=true'
     })
     await page.waitForLoadState('networkidle')
 
@@ -264,7 +264,7 @@ test.describe('Favorites Feature', () => {
 test.describe('History Bookmark Feature', () => {
   test('should save position when navigating cards and show resume button', async ({ page }) => {
     // Clear localStorage once before starting
-    await page.goto('/learn')
+    await page.goto('/learn/flashcards')
     await page.evaluate(() => {
       localStorage.removeItem('kidsterm-progress-v1')
       localStorage.removeItem('kidsterm-swipe-hints')
@@ -317,7 +317,7 @@ test.describe('History Bookmark Feature', () => {
 
   test('should remember position after page reload', async ({ page }) => {
     // Clear localStorage once before starting
-    await page.goto('/learn')
+    await page.goto('/learn/flashcards')
     await page.evaluate(() => {
       localStorage.removeItem('kidsterm-progress-v1')
       localStorage.removeItem('kidsterm-swipe-hints')
@@ -355,7 +355,7 @@ test.describe('History Bookmark Feature', () => {
 
   test('should create history entries when navigating and leaving page', async ({ page }) => {
     // Clear localStorage once before starting
-    await page.goto('/learn')
+    await page.goto('/learn/flashcards')
     await page.evaluate(() => {
       localStorage.removeItem('kidsterm-progress-v1')
       localStorage.removeItem('kidsterm-swipe-hints')

@@ -86,6 +86,52 @@ const ja: Translations = {
     cardLabel: 'カード',
   },
 
+  learnHub: {
+    title: '新しい単語を学ぶ',
+    subtitle: '今日の学習方法を選びましょう',
+    flashcards: 'フラッシュカード',
+    flashcardsDesc: 'カードをめくって単語と意味を覚える',
+    srs: 'スマート復習',
+    srsDesc: '忘れる前に単語を復習',
+    typing: 'スペル',
+    typingDesc: '意味から単語を入力',
+    context: '文脈で学ぶ',
+    contextDesc: '文中の抜けた単語を埋める',
+    due: '復習 {count} 件',
+    newCount: '新しい単語 {count} 件',
+    allCaughtUp: 'すべて完了！',
+  },
+
+  srs: {
+    title: 'スマート復習',
+    showAnswer: '答えを見る',
+    again: 'もう一度',
+    good: 'できた',
+    easy: '簡単',
+    reviewed: '{count} 個の単語を復習しました',
+    sessionComplete: '復習完了！',
+    noCards: '今は復習する単語がありません。またあとで！',
+  },
+
+  typing: {
+    title: 'スペル',
+    prompt: 'この意味の単語を入力：',
+    placeholder: 'ここに入力...',
+    check: '確認',
+    skip: 'スキップ',
+    reveal: '答えを見る',
+    answerWas: '答え：{term}',
+    sessionComplete: 'スペル完了！',
+    score: '正解 {correct} / {total}',
+  },
+
+  context: {
+    title: '文脈で学ぶ',
+    prompt: '抜けている単語を選ぶ',
+    sessionComplete: 'よくできました！',
+    notEnough: '例文付きの単語が4つ以上必要です',
+  },
+
   practice: {
     title: '練習モード',
     subtitle: 'さまざまな問題形式で語彙力をテストしましょう',

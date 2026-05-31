@@ -39,13 +39,13 @@ Data integrity (counts, contiguous ids, definition parity with the source pack, 
 
 ## Features
 
-### Word Learning
-- Animated 3D flip flashcards with term, pronunciation, definition, and examples
-- Swipe gestures (right = known, left = skip)
-- Text-to-speech pronunciation with multi-language voice support
-- Favorite/bookmark words
-- Progress tracking and resume functionality
-- Jump to specific card number
+### Learning Methods
+Choose how to learn new words from the **Learn hub** (`/learn`). Every method works on the active language pack, can be restricted to your favorites, and feeds the same streak/goal/achievement tracking. New methods are registered in one place (`src/config/learningMethods.ts`). See [docs/learning-methods.md](docs/learning-methods.md) for the full logic and flow diagrams.
+
+- **🃏 Flashcards** — animated 3D flip cards (term, pronunciation, definition, examples) with swipe gestures (right = known, left = skip), text-to-speech, favorites, resume, and jump-to-card
+- **🔁 Smart Review (SRS)** — spaced repetition (simplified SM-2); rate each card *Again / Good / Easy* and it reschedules so you review words right before you forget them
+- **⌨️ Spelling** — read a word's meaning (and hear it), then type the word, with forgiving answer checking
+- **📖 In Context** — fill in the missing word in an example sentence (cloze)
 
 ### Practice Exercises
 - Multiple choice questions
@@ -92,13 +92,19 @@ src/
 │   └── progress/        # Stats and achievement components
 ├── pages/               # Route pages
 │   ├── HomePage/        # Dashboard with daily stats
-│   ├── WordLearningPage/# Flashcard learning
+│   ├── LearnHubPage/    # Learn hub — learning-method picker
+│   ├── WordLearningPage/   # Flashcards method
+│   ├── SrsLearningPage/    # Smart Review (SRS) method
+│   ├── TypingLearningPage/ # Spelling method
+│   ├── ContextLearningPage/# In-context (cloze) method
 │   ├── PracticePage/    # Exercise practice
 │   ├── GamesPage/       # Word Scramble & Matching games
 │   ├── ProgressPage/    # Statistics and achievements
 │   └── SettingsPage/    # User preferences
+├── config/              # App config (navigation, learningMethods registry)
 ├── store/               # Zustand stores (with persistence)
 ├── hooks/               # Custom hooks (useSpeech, useTimer, useSwipeGesture, etc.)
+├── utils/               # Pure logic (srs, answerCheck, clozeGenerator, etc.)
 ├── i18n/                # Internationalization (EN, JA, TC)
 ├── data/                # Language packs (28+ combinations)
 ├── types/               # TypeScript interfaces
@@ -117,8 +123,11 @@ npm run dev
 # Build for production
 npm run build
 
-# Run unit tests
+# Run unit tests (watch mode)
 npm test
+
+# Run unit + smoke tests once, with the coverage gate
+npm run test:coverage
 
 # Run E2E tests
 npx playwright test
@@ -126,6 +135,15 @@ npx playwright test
 # Lint code
 npm run lint
 ```
+
+## Continuous Integration
+
+GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request and on push to `main`:
+
+- **lint** — `npm run lint`
+- **build** — `npm run build`
+- **test** — `npm run test:coverage` (unit + component render smoke tests, with a 100% function-coverage gate on the learning-method logic, configured in `vite.config.ts`)
+- **e2e-smoke** — Playwright smoke verifying the Learn hub and each learning-method route render
 
 ## License
 

@@ -21,17 +21,6 @@ jobs:
       - run: npm ci
       - run: npm run lint
 
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - run: npm ci
-      - run: npx vitest run
-
   build:
     runs-on: ubuntu-latest
     steps:
@@ -42,3 +31,35 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build
+
+  test:
+    # Unit + component render smoke tests, with the 100% function-coverage gate
+    # (vitest v8 coverage; thresholds enforced in vite.config.ts).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run test:coverage
+
+  e2e-smoke:
+    # Playwright smoke: the Learn hub and each learning-method route render.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test learn-hub --project=chromium
+      - uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
