@@ -24,9 +24,11 @@ test.describe('Navigation', () => {
     await expect(page.getByRole('heading', { name: 'Settings' })).toBeVisible()
   })
 
-  test('should navigate to learn page from home', async ({ page }) => {
-    await page.getByRole('button', { name: /Learn Words/i }).click()
-    await expect(page.locator('text=Card 1 of')).toBeVisible()
+  test('should open flashcards from the home continue button', async ({ page }) => {
+    await page
+      .getByRole('button', { name: /Continue Learning|繼續學習|学習を続ける/i })
+      .click()
+    await expect(page).toHaveURL(/\/learn\/flashcards/)
   })
 })
 

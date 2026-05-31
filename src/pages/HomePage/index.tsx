@@ -146,7 +146,7 @@ export default function HomePage() {
             size="lg"
             h={{ base: '60px', md: '80px' }}
             colorScheme="blue"
-            onClick={() => navigate('/learn')}
+            onClick={() => navigate('/learn/flashcards')}
             leftIcon={<FiBook size={20} />}
             px={{ base: 4, md: 6 }}
           >
@@ -175,7 +175,7 @@ export default function HomePage() {
             h={{ base: '50px', md: '60px' }}
             variant="outline"
             colorScheme="red"
-            onClick={() => navigate('/learn?favorites=true')}
+            onClick={() => navigate('/learn/flashcards?favorites=true')}
             leftIcon={<FiHeart size={18} />}
             w="100%"
           >

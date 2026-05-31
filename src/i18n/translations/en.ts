@@ -86,6 +86,52 @@ const en: Translations = {
     cardLabel: 'Card',
   },
 
+  learnHub: {
+    title: 'Learn New Words',
+    subtitle: 'Pick how you want to learn today',
+    flashcards: 'Flashcards',
+    flashcardsDesc: 'Flip cards to learn words and meanings',
+    srs: 'Smart Review',
+    srsDesc: 'Review words right before you forget them',
+    typing: 'Spelling',
+    typingDesc: 'Type the word from its meaning',
+    context: 'In Context',
+    contextDesc: 'Fill the missing word in a sentence',
+    due: '{count} to review',
+    newCount: '{count} new',
+    allCaughtUp: 'All caught up!',
+  },
+
+  srs: {
+    title: 'Smart Review',
+    showAnswer: 'Show Answer',
+    again: 'Again',
+    good: 'Good',
+    easy: 'Easy',
+    reviewed: 'Reviewed {count} words',
+    sessionComplete: 'Review complete!',
+    noCards: 'Nothing to review right now. Come back later!',
+  },
+
+  typing: {
+    title: 'Spelling',
+    prompt: 'Type the word that means:',
+    placeholder: 'Type here...',
+    check: 'Check',
+    skip: 'Skip',
+    reveal: 'Show Answer',
+    answerWas: 'Answer: {term}',
+    sessionComplete: 'Spelling complete!',
+    score: '{correct} / {total} correct',
+  },
+
+  context: {
+    title: 'In Context',
+    prompt: 'Choose the missing word',
+    sessionComplete: 'Nice work!',
+    notEnough: 'Need 4+ words with example sentences to play',
+  },
+
   practice: {
     title: 'Practice Mode',
     subtitle: 'Test your vocabulary with different exercise types',
